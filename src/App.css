@@ -1,0 +1,25 @@
+.bg-theme {
+    background-color: #055812 !important;
+    color: white !important;
+}
+.bg-newsletter {
+    color: #f8f9fa !important;
+    background-color: #e1efe3 !important;
+}
+.newsletter{
+    background: url('./assets/newsletter.png') no-repeat center center;
+    background-size: cover;
+}
+.bg-footer {
+    background-color: #F6F5F2 !important;
+    color: black !important;
+}
+.carousel-indicators .active {
+    background-color: #055812 !important;
+}
+.carousel-indicators button {
+    height: 5px !important;
+    width: 5px !important;
+    border-radius: 50% !important;
+    background-color: black !important;
+}
