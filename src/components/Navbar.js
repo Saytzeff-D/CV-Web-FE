@@ -6,7 +6,7 @@ const Navbar = () => {
     const location = useLocation
   return (
     <div>
-        <nav className="navbar navbar-expand-lg bg-light">
+        <nav className="navbar navbar-expand-lg bg-light fixed-top-md">
             <div className="container-fluid">
                 <a className="navbar-brand" href="#">
                     <img src={Logo} className="img-fluid p-2" width={'65px'} />

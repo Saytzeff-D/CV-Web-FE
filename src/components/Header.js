@@ -36,31 +36,26 @@ const Header = () => {
       </div>
 
       <div className="position-absolute top-50 start-50 translate-middle
-    w-100 px-3 text-center text-white"
+    w-100 px-3 text-white"
      style={{ transform: "translate(-50%, -60%)" }}>
-        <p className="">No 1 Real estate agency</p>
-        <h1 className="fw-bold fs-3 fs-md-1">Find your Dream Property with Us</h1>
+        <div className="d-flex justify-content-center">
+          <div className="col-lg-5">
+            <p className="fw-bold">No 1 Real estate agency</p>
+            <h1 className="fw-bold fs-1 fs-md-1">Find your Dream Property with Us</h1>
+            <div className="input-group mt-4 w-100">
+              <input
+                type="text"
+                className="form-control rounded-0"
+                placeholder="Enter your address • city • zipcode"
+              />
+              <button className="btn btn-black rounded-0 p-3 fw-light" type="button">
+                <i className="fa fa-search fw-light"></i> Search
+              </button>
+            </div>
+          </div>
+        </div>
     </div>
 
-      {/* Controls */}
-      <button
-        className="carousel-control-prev"
-        type="button"
-        data-bs-target="#headerCarousel"
-        data-bs-slide="prev"
-      >
-        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span className="visually-hidden">Previous</span>
-      </button>
-      <button
-        className="carousel-control-next"
-        type="button"
-        data-bs-target="#headerCarousel"
-        data-bs-slide="next"
-      >
-        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-        <span className="visually-hidden">Next</span>
-      </button>
     </div>
   );
 }

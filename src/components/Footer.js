@@ -33,7 +33,7 @@ const Footer = ()=>{
                     </div>
                     <div className="col-md-6 mb-4">
                         <div className="row pb-5">
-                            <div className="col-4">
+                            <div className="col-md-4 col-6">
                                 <p className="fw-bold">Useful Links</p>
                                 <ul className="list-unstyled">
                                     <li><Link to="#" className="text-muted text-decoration-none">About</Link></li>
@@ -42,7 +42,7 @@ const Footer = ()=>{
                                     <li><Link to="#" className="text-muted text-decoration-none">Contact</Link></li>
                                 </ul>
                             </div>
-                            <div className="col-4">
+                            <div className="col-md-4 col-6">
                                 <p className="fw-bold">Category</p>
                                 <ul className="list-unstyled">
                                     <li><Link to="#" className="text-muted text-decoration-none">Land</Link></li>
@@ -51,7 +51,7 @@ const Footer = ()=>{
                                     <li><Link to="#" className="text-muted text-decoration-none">Houses</Link></li>
                                 </ul>
                             </div>
-                            <div className="col-4">
+                            <div className="col-md-4">
                                 <p className="fw-bold">Contact</p>
                                 <ul className="list-unstyled">
                                     <li><Link to="#" className="text-muted text-decoration-none">15A, Lagos Nigeria</Link></li>

@@ -23,3 +23,35 @@
     border-radius: 50% !important;
     background-color: black !important;
 }
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    color: #9be3b7;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.overlay:hover {
+    color: #9be3b7;
+}
+
+.card .position-relative:hover .overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+.btn-black {
+    background-color: #000000 !important;
+    color: white !important;
+}
+@media (min-width: 768px) {
+  .fixed-top-md {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030; /* same as .fixed-top */
+  }
+}
