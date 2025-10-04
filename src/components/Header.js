@@ -6,7 +6,7 @@ import Carousel3 from "../assets/carousel-3.png";
 const Header = () => {
     const images = [Carousel1, Carousel2, Carousel3];
   return (
-    <div id="headerCarousel" className="carousel slide" data-bs-ride="carousel">
+    <div id="headerCarousel" className="carousel slide pt-lg-0 pt-5" data-bs-ride="carousel">
         <div className="carousel-indicators d-none d-md-flex">
             {images.map((image, index) => (
             <button
@@ -40,7 +40,7 @@ const Header = () => {
      style={{ transform: "translate(-50%, -60%)" }}>
         <div className="d-flex justify-content-center">
           <div className="col-lg-5">
-            <p className="fw-bold">No 1 Real estate agency</p>
+            <p className="fw-bold pt-lg-0 pt-5 mt-lg-0 mb-0">No 1 Real estate agency</p>
             <h1 className="fw-bold fs-1 fs-md-1">Find your Dream Property with Us</h1>
             <div className="input-group mt-4 w-100">
               <input
@@ -48,7 +48,7 @@ const Header = () => {
                 className="form-control rounded-0"
                 placeholder="Enter your address • city • zipcode"
               />
-              <button className="btn btn-black rounded-0 p-3 fw-light" type="button">
+              <button className="btn btn-black rounded-0 p-md-3 fw-light" type="button">
                 <i className="fa fa-search fw-light"></i> Search
               </button>
             </div>
