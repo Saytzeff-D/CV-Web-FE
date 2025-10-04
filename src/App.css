@@ -6,6 +6,10 @@
     color: #f8f9fa !important;
     background-color: #e1efe3 !important;
 }
+.active-link {        
+    color: #055812;
+    font-weight: 600 !important;
+}
 .newsletter{
     background: url('./assets/newsletter.png') no-repeat center center;
     background-size: cover;

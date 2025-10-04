@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Logo from '../assets/icon.png'
 
 const Navbar = () => {    
     const [menuOpen, setMenuOpen] = useState(false);
+    const { pathname } = useLocation();
 
   return (
     <div>
@@ -26,17 +27,17 @@ const Navbar = () => {
                         </select>
                     </li>
                     <li className="nav-item px-md-3">
-                        <Link className="nav-link active" aria-current="page" to="/">
+                        <Link className={`nav-link ${pathname === "/" ? "active-link" : ""}`} aria-current="page" to="/">
                             Home
                         </Link>
                     </li>
                     <li className="nav-item px-md-3">
-                        <Link className="nav-link" to="/about">
+                        <Link className={`nav-link ${pathname === "/about" ? "active-link" : ""}`} to="/about">
                             About
                         </Link>
                     </li>
                     <li className="nav-item px-md-3 dropdown">
-                        <Link className="nav-link dropdown-toggle" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <Link className={`nav-link dropdown-toggle ${pathname.startsWith("/buy") ? "active-link" : ""}`} to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Buy
                         </Link>
                         <ul className="dropdown-menu">
@@ -47,7 +48,7 @@ const Navbar = () => {
                         </ul>
                     </li>
                     <li className="nav-item px-md-3 dropdown">
-                        <Link className="nav-link dropdown-toggle" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <Link className={`nav-link dropdown-toggle ${pathname.startsWith("/rent") ? "active-link" : ""}`} to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Rent
                         </Link>
                         <ul className="dropdown-menu">
@@ -58,7 +59,7 @@ const Navbar = () => {
                         </ul>
                     </li>
                     <li className="nav-item px-md-3 dropdown">
-                        <Link className="nav-link dropdown-toggle" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <Link className={`nav-link dropdown-toggle ${pathname.startsWith("/shortlet") ? "active-link" : ""}`} to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Shortlet
                         </Link>
                         <ul className="dropdown-menu">
@@ -69,12 +70,12 @@ const Navbar = () => {
                         </ul>
                     </li>
                     <li className="nav-item px-md-3">
-                        <Link className="nav-link" to={'/blog'}>
+                        <Link className={`nav-link ${pathname === "/blog" ? "active-link" : ""}`} to={'/blog'}>
                             Blog
                         </Link>
                     </li>
                     <li className="nav-item px-md-3">
-                        <Link className="nav-link" to={'/contact'}>
+                        <Link className={`nav-link ${pathname === "/contact" ? "active-link" : ""}`} to={'/contact'}>
                             Contact
                         </Link>
                     </li>
