@@ -1,22 +1,24 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import Logo from '../assets/icon.png'
+import MobileNav from "./MobileNav";
 
-const Navbar = () => {
-    const location = useLocation
+const Navbar = () => {    
+    const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div>
-        <nav className="navbar navbar-expand-lg bg-light fixed-top-md">
+        <nav className="navbar navbar-expand-lg bg-white fixed-top">
             <div className="container-fluid">
                 <a className="navbar-brand" href="#">
-                    <img src={Logo} className="img-fluid p-2" width={'65px'} />
+                    <img src={Logo} className="img-fluid px-lg-1 px-3" width={'65px'} />
                 </a>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation" onClick={() => setMenuOpen(true)}>
+                    <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarScroll">
                 <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
-                    <li className="nav-item ps-md-5 pe-md-3">
+                    <li className="nav-item ps-md-5 pe-md-3 d-lg-block d-none">
                         <select className="form-control form-select bg-theme border-0 rounded-3 text-white">
                             <option selected value="NGN">NGN</option>
                             <option value="1">EUR</option>
@@ -25,57 +27,57 @@ const Navbar = () => {
                         </select>
                     </li>
                     <li className="nav-item px-md-3">
-                        <a className="nav-link active" aria-current="page" href="#">
+                        <Link className="nav-link active" aria-current="page" to="/">
                             Home
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item px-md-3">
-                        <a className="nav-link" href="#">
+                        <Link className="nav-link" to="/about">
                             About
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item px-md-3 dropdown">
-                        <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <Link className="nav-link dropdown-toggle" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Buy
-                        </a>
+                        </Link>
                         <ul className="dropdown-menu">
-                            <li><a className="dropdown-item" href="#">Action</a></li>
-                            <li><a className="dropdown-item" href="#">Another action</a></li>
-                            <li><hr className="dropdown-divider"/></li>
-                            <li><a className="dropdown-item" href="#">Something else here</a></li>
+                            <li><Link className="dropdown-item" to="#">Land for sale</Link></li>
+                            <li><Link className="dropdown-item" to="#">House for sale</Link></li>                            
+                            <li><Link className="dropdown-item" to="#">Hostels for sale</Link></li>
+                            <li><Link className="dropdown-item" to="#">All properties for sale</Link></li>
                         </ul>
                     </li>
                     <li className="nav-item px-md-3 dropdown">
-                        <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <Link className="nav-link dropdown-toggle" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Rent
-                        </a>
+                        </Link>
                         <ul className="dropdown-menu">
-                            <li><a className="dropdown-item" href="#">Action</a></li>
-                            <li><a className="dropdown-item" href="#">Another action</a></li>
+                            <li><Link className="dropdown-item" to="#">Action</Link></li>
+                            <li><Link className="dropdown-item" to="#">Another action</Link></li>
                             <li><hr className="dropdown-divider"/></li>
-                            <li><a className="dropdown-item" href="#">Something else here</a></li>
+                            <li><Link className="dropdown-item" to="#">Something else here</Link></li>
                         </ul>
                     </li>
                     <li className="nav-item px-md-3 dropdown">
-                        <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <Link className="nav-link dropdown-toggle" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Shortlet
-                        </a>
+                        </Link>
                         <ul className="dropdown-menu">
-                            <li><a className="dropdown-item" href="#">Action</a></li>
-                            <li><a className="dropdown-item" href="#">Another action</a></li>
+                            <li><Link className="dropdown-item" to="#">Action</Link></li>
+                            <li><Link className="dropdown-item" to="#">Another action</Link></li>
                             <li><hr className="dropdown-divider"/></li>
-                            <li><a className="dropdown-item" href="#">Something else here</a></li>
+                            <li><Link className="dropdown-item" to="#">Something else here</Link></li>
                         </ul>
                     </li>
                     <li className="nav-item px-md-3">
-                        <a className="nav-link">
+                        <Link className="nav-link" to={'/blog'}>
                             Blog
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item px-md-3">
-                        <a className="nav-link">
+                        <Link className="nav-link" to={'/contact'}>
                             Contact
-                        </a>
+                        </Link>
                     </li>
                 </ul>
                 <div className="d-flex" role="search">
@@ -84,7 +86,7 @@ const Navbar = () => {
                 </div>
                 </div>
             </div>
-            </nav>
+        </nav>        
     </div>
   );
 };
