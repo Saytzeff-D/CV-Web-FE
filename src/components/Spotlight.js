@@ -83,6 +83,24 @@ const Spotlight = () => {
             ))
         }
       </div>
+      <div className="d-flex justify-content-between flex-md-row flex-column text-center mt-5 px-5 py-4">
+        <div className="counter-item my-2 p-3">
+          <span className="counter-number">200+</span><br />
+          <span className="counter-label text-muted">Properties</span>
+        </div>
+        <div className="counter-item my-2 p-3">
+          <span className="counter-number">500</span><br />
+          <span className="counter-label text-muted">Users</span>
+        </div>
+        <div className="counter-item my-2 p-3">
+          <span className="counter-number">24/7</span><br />
+          <span className="counter-label text-muted">Customer Support</span>
+        </div>
+        <div className="counter-item my-2 p-3">
+          <span className="counter-number">100%</span><br />
+          <span className="counter-label text-muted">Trust</span>
+        </div>
+      </div>
     </div>
   );
 }
