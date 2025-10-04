@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from '../assets/icon.png'
-import MobileNav from "./MobileNav";
 
 const Navbar = () => {    
     const [menuOpen, setMenuOpen] = useState(false);
