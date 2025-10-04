@@ -52,10 +52,10 @@ const Navbar = () => {
                             Rent
                         </Link>
                         <ul className="dropdown-menu">
-                            <li><Link className="dropdown-item" to="#">Action</Link></li>
-                            <li><Link className="dropdown-item" to="#">Another action</Link></li>
-                            <li><hr className="dropdown-divider"/></li>
-                            <li><Link className="dropdown-item" to="#">Something else here</Link></li>
+                            <li><Link className="dropdown-item" to="#">Land for rent</Link></li>
+                            <li><Link className="dropdown-item" to="#">House for rent</Link></li>                            
+                            <li><Link className="dropdown-item" to="#">Hostels for rent</Link></li>
+                            <li><Link className="dropdown-item" to="#">All properties for rent</Link></li>
                         </ul>
                     </li>
                     <li className="nav-item px-md-3 dropdown">
@@ -63,10 +63,10 @@ const Navbar = () => {
                             Shortlet
                         </Link>
                         <ul className="dropdown-menu">
-                            <li><Link className="dropdown-item" to="#">Action</Link></li>
-                            <li><Link className="dropdown-item" to="#">Another action</Link></li>
-                            <li><hr className="dropdown-divider"/></li>
-                            <li><Link className="dropdown-item" to="#">Something else here</Link></li>
+                            <li><Link className="dropdown-item" to="#">Shortlet in Oyo</Link></li>
+                            <li><Link className="dropdown-item" to="#">Shortlet in Abuja</Link></li>                            
+                            <li><Link className="dropdown-item" to="#">Shortlet in Lagos</Link></li>
+                            <li><Link className="dropdown-item" to="#">All Shortlet</Link></li>
                         </ul>
                     </li>
                     <li className="nav-item px-md-3">

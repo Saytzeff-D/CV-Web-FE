@@ -2,12 +2,14 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Logo from "../assets/icon.png"
 import AboutImg from "../assets/about.png"
+import { useNavigate } from "react-router-dom";
 
 const About = () => {
+    const navigate = useNavigate()
     return (
         <div>
             <Navbar />
-            <div className="my-md-5 my-3 py-md-5 px-4">
+            <div className="my-5 py-md-5 py-4 px-4">
                 <div className="row w-100">
                     <div className="col-md-8">
                         <p className="gradient-text fw-semibold display-1 py-md-5 about-text">
@@ -82,7 +84,7 @@ const About = () => {
                         <p className="fs-6">
                             We are excited about the opportunity to learn about your business and how we can help you achieve your goals when looking for your ideal property
                         </p>
-                        <button className="btn gradient-text py-3 border rounded-0">
+                        <button onClick={()=>navigate('/contact')} className="btn gradient-text py-3 border rounded-0">
                             Get in touch with us
                         </button>
                     </div>
