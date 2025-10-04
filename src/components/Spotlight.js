@@ -59,7 +59,7 @@ const Spotlight = () => {
       <div ref={sliderRef} className="d-flex flex-row flex-nowrap overflow-auto my-5" style={{ scrollBehavior: "smooth" }}>
         {
             spotArray.map((each, i)=>(
-              <div className="me-4">
+              <div className="me-4" key={i}>
                     <div className="card border-0" style={{ minWidth: "32rem", flexShrink: 0}}>
                         <div className="row g-0">
                             <div className="col-6">

@@ -18,8 +18,8 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarScroll">
                 <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
                     <li className="nav-item ps-md-5 pe-md-3 d-lg-block d-none">
-                        <select className="form-control form-select bg-theme border-0 rounded-3 text-white">
-                            <option selected value="NGN">NGN</option>
+                        <select defaultValue={"NGN"} className="form-control form-select bg-theme border-0 rounded-3 text-white">
+                            <option value="NGN">NGN</option>
                             <option value="1">EUR</option>
                             <option value="2">USD</option>
                             <option value="3">GBP</option>

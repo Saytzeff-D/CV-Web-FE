@@ -39,8 +39,8 @@ const PropertiesForYou = () => {
       </div>
       <div ref={containerRef} className="d-flex flex-row flex-nowrap overflow-auto my-5" style={{ scrollBehavior: "smooth" }}>
         {
-          properties.map((each)=>(
-            <div className="me-3">
+          properties.map((each, i)=>(
+            <div className="me-3" key={i}>
               <div className="card border-0" style={{ minWidth: "16rem" }}>
                 <div className="position-relative overflow-hidden rounded">                
                   <img src={`https://picsum.photos/600/400?random=${each}`} className="card-img-top" alt="Property" />
