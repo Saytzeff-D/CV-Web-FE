@@ -11,7 +11,7 @@ import WhatClientsSay from "../components/WhatClientSay";
 const Home = () => {
     return (
         <div>
-            <Navbar />
+            <Navbar />            
             <Header />
             <PropertiesForYou />
             <ImageSlider />
