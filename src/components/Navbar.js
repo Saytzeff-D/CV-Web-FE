@@ -10,16 +10,16 @@ const Navbar = () => {
     <div>
         <nav className="navbar navbar-expand-lg bg-white fixed-top">
             <div className="container-fluid">
-                <a className="navbar-brand" href="#">
+                <Link className="navbar-brand" to="/">
                     <img src={Logo} className="img-fluid px-lg-1 px-3" width={'65px'} />
-                </a>
+                </Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation" onClick={() => setMenuOpen(true)}>
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarScroll">
                 <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
                     <li className="nav-item ps-md-5 pe-md-3 d-lg-block d-none">
-                        <select defaultValue={"NGN"} className="form-control form-select bg-theme border-0 rounded-3 text-white">
+                        <select defaultValue={"NGN"} className="form-control form-select border-0 rounded-3 text-theme">
                             <option value="NGN">NGN</option>
                             <option value="1">EUR</option>
                             <option value="2">USD</option>
@@ -41,10 +41,10 @@ const Navbar = () => {
                             Buy
                         </Link>
                         <ul className="dropdown-menu">
-                            <li><Link className="dropdown-item" to="#">Land for sale</Link></li>
-                            <li><Link className="dropdown-item" to="#">House for sale</Link></li>                            
-                            <li><Link className="dropdown-item" to="#">Hostels for sale</Link></li>
-                            <li><Link className="dropdown-item" to="#">All properties for sale</Link></li>
+                            <li><Link className="dropdown-item" to="/buy/land">Land for sale</Link></li>
+                            <li><Link className="dropdown-item" to="/buy/house">House for sale</Link></li>                            
+                            <li><Link className="dropdown-item" to="/buy/hostel">Hostels for sale</Link></li>
+                            <li><Link className="dropdown-item" to="/buy/all">All properties for sale</Link></li>
                         </ul>
                     </li>
                     <li className="nav-item px-md-3 dropdown">
@@ -52,10 +52,10 @@ const Navbar = () => {
                             Rent
                         </Link>
                         <ul className="dropdown-menu">
-                            <li><Link className="dropdown-item" to="#">Land for rent</Link></li>
-                            <li><Link className="dropdown-item" to="#">House for rent</Link></li>                            
-                            <li><Link className="dropdown-item" to="#">Hostels for rent</Link></li>
-                            <li><Link className="dropdown-item" to="#">All properties for rent</Link></li>
+                            <li><Link className="dropdown-item" to="/rent/land">Land for rent</Link></li>
+                            <li><Link className="dropdown-item" to="/rent/house">House for rent</Link></li>                            
+                            <li><Link className="dropdown-item" to="/rent/hostel">Hostels for rent</Link></li>
+                            <li><Link className="dropdown-item" to="/rent/all">All properties for rent</Link></li>
                         </ul>
                     </li>
                     <li className="nav-item px-md-3 dropdown">
@@ -63,10 +63,10 @@ const Navbar = () => {
                             Shortlet
                         </Link>
                         <ul className="dropdown-menu">
-                            <li><Link className="dropdown-item" to="#">Shortlet in Oyo</Link></li>
-                            <li><Link className="dropdown-item" to="#">Shortlet in Abuja</Link></li>                            
-                            <li><Link className="dropdown-item" to="#">Shortlet in Lagos</Link></li>
-                            <li><Link className="dropdown-item" to="#">All Shortlet</Link></li>
+                            <li><Link className="dropdown-item" to="/shortlet/oyo">Shortlet in Oyo</Link></li>
+                            <li><Link className="dropdown-item" to="/shortlet/abuja">Shortlet in Abuja</Link></li>                            
+                            <li><Link className="dropdown-item" to="/shortlet/lagos">Shortlet in Lagos</Link></li>
+                            <li><Link className="dropdown-item" to="/shortlet/all">All Shortlet</Link></li>
                         </ul>
                     </li>
                     <li className="nav-item px-md-3">
