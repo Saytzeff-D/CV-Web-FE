@@ -42,5 +42,55 @@
             "rating": 5,
             "img": "https://picsum.photos/600/400?random=1"
         }
+    ],
+    "blogs": [
+        {
+            "id": 1,
+            "img": "https://picsum.photos/600/400?random=2",
+            "category": "Product Management",
+            "date": "Jan 09 2023",
+            "title": "Real Estate in 21st Century",
+            "desc": "At C&V Real Estate Management, we are dedicated to providing exceptional property management services that prioritize client satisfaction."
+        },
+        {
+            "id": 2,
+            "img": "https://picsum.photos/600/400?random=5",
+            "category": "Development",
+            "date": "Feb 15 2023",
+            "title": "How to Invest in Real Estate",
+            "desc": "Investing in real estate can be a lucrative way to build wealth and secure your financial future. Here are some tips to get started."
+        },
+        {
+            "id": 3,
+            "img": "https://picsum.photos/600/400?random=1",
+            "category": "Design",
+            "date": "Mar 22 2023",
+            "title": "Top Home Design Trends of 2023",
+            "desc": "Discover the latest home design trends of 2023 that will transform your living space into a stylish and functional haven."
+        },
+        {
+            "id": 4,
+            "img": "https://picsum.photos/600/400?random=2",
+            "category": "Sales",
+            "date": "2024-05-10",
+            "title": "The Ultimate Guide to Selling Your Home",
+            "desc": "Selling your home can be a complex process. This guide will walk you through each step to ensure a smooth transaction."
+        },
+        {
+            "id": 5,
+            "img": "https://picsum.photos/600/400?random=3",
+            "category": "Buying",
+            "date": "2024-04-15",
+            "title": "Top 10 Tips for First-Time Home Buyers",
+            "desc": "Buying your first home can be daunting. Here are our top 10 tips to help you navigate the process with confidence."         
+        },
+        {
+            "id": 6,
+            "img": "https://picsum.photos/600/400?random=4",
+            "category": "Product Management",
+            "date": "2024-03-30",
+            "title": "How to Choose the Right Neighborhood",
+            "desc": "Choosing the right neighborhood is crucial when buying a home. Learn what factors to consider to find your perfect fit."
+        }
     ]
 }
