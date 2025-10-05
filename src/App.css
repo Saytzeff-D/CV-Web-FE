@@ -2,6 +2,9 @@
     background-color: #055812 !important;
     color: white !important;
 }
+.text-theme {
+    color: #055812 !important;
+}
 .bg-newsletter {
     color: #f8f9fa !important;
     background-color: #e1efe3 !important;
@@ -128,4 +131,8 @@
     background-color: inherit !important;
     box-shadow: none !important;
   }
+}
+.card:hover {
+  transform: translateY(-5px);
+  transition: 0.3s ease;
 }
