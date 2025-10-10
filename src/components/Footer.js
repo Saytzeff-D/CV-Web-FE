@@ -54,9 +54,9 @@ const Footer = ()=>{
                             <div className="col-md-4">
                                 <p className="fw-bold">Contact</p>
                                 <ul className="list-unstyled">
-                                    <li><Link to="#" className="text-muted text-decoration-none">15A, Lagos Nigeria</Link></li>
+                                    <li><Link to="#" className="text-muted text-decoration-none">Lagos, Abuja and Oyo State</Link></li>
                                     <li><Link to="tel:08114590077" className="text-muted text-decoration-none">08114590077</Link></li>
-                                    <li><Link to="mailto:cvproperty@gmail.com" className="text-muted text-decoration-none">cvproperty@gmail.com</Link></li>
+                                    <li><Link to="mailto:cvproperty@gmail.com" className="text-muted text-decoration-none">candvproperty@gmail.com</Link></li>
                                 </ul>
                             </div>
                         </div>
