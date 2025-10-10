@@ -1,8 +1,23 @@
+import { useState } from "react";
 import Footer from "../components/Footer"
 import Navbar from "../components/Navbar"
+import BedsBathDropdown from "../components/BedsBathDropdown";
+import RangeSlider from 'react-range-slider-input';
+import 'react-range-slider-input/dist/style.css';
 
 const Buy = () => {
     const properties = [1,2,3,4, 5,6,7,8,9,10,11,12]
+    const [rangeValue, setRangeValue] = useState(50);
+    const rangeSpan = 50000000 - 50000;
+    const windowSize = 10000000; // Adjust the window size as needed
+    const formatPrice = (value) => {
+        if (value >= 1000000) return `₦${(value / 1000000).toFixed(1)}M`;
+        if (value >= 1000) return `₦${(value / 1000).toFixed(0)}K`;
+        return `₦${value}`;
+    };
+    const midPoint = 50000 + (rangeSpan * rangeValue) / 100;
+    const dynamicMin = Math.max(50000, midPoint - windowSize / 2);
+    const dynamicMax = Math.min(50000000, midPoint + windowSize / 2);
     return (
         <>
         <Navbar />
@@ -30,35 +45,78 @@ const Buy = () => {
                         pointerEvents: "none",
                     }}
                     ></i>
-                </div>
+                </div>                
+
+                {/* <div className="dropdown position-static">
+                    <button className="btn btn-outline border dropdown-toggle d-flex justify-content-between align-items-center px-3" data-bs-toggle="dropdown" style={{ minWidth: "80px" }}>
+                        Type
+                    </button>
+                    <ul className="dropdown-menu filter-drop px-3 py-2 rounded-0">
+                        <li className="form-check">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name="priceRange"
+                                id="price1"
+                            />
+                            <label className="form-check-label ps-2" htmlFor="price1">
+                                For Sale
+                            </label>
+                        </li>
+                        <li className="form-check">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name="priceRange"
+                                id="price2"
+                            />
+                            <label className="form-check-label ps-2" htmlFor="price2">
+                                For Rent
+                            </label>
+                        </li>
+                        <li className="form-check">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name="priceRange"
+                                id="price3"
+                            />
+                            <label className="form-check-label ps-2" htmlFor="price3">
+                                For Shortlet
+                            </label>
+                        </li>
+                    </ul>
+                </div> */}
+
+                <div className="dropdown position-static">
+                    <button className="btn btn-outline border dropdown-toggle d-flex justify-content-between align-items-center px-3" data-bs-toggle="dropdown" style={{ minWidth: "80px" }}>
+                        Price Range
+                    </button>
+                    <ul className="dropdown-menu filter-drop px-3 py-2 rounded-0 border-none" style={{ minWidth: "350px", maxWidth: "500px" }}>
+                        <li>
+                            <div className="d-flex justify-content-between mb-2">
+                            <span className="fw-semibold">Price Range</span>
+                            <span>
+                                {formatPrice(dynamicMin)} - {formatPrice(dynamicMax)}
+                            </span>
+                            </div>
+                            <input
+                                type="range"
+                                className="form-range"
+                                min="50000"
+                                max="50000000"
+                                step="100000"
+                                onChange={(e) => setRangeValue(e.target.value)}
+                            />
+                        </li>
+                    </ul>
+                </div>                
 
                 <div>
-                    <select className="form-select" style={{ minWidth: "80px" }}>
-                    <option>For Sale</option>
-                    <option>For Rent</option>
-                    <option>Shortlet</option>
-                    </select>
+                    <BedsBathDropdown />
                 </div>
 
-                <div>
-                    <select className="form-select" style={{ minWidth: "80px" }}>
-                    <option>Price Range</option>
-                    <option>₦100k - ₦500k</option>
-                    <option>₦500k - ₦1M</option>
-                    <option>₦1M - ₦5M</option>
-                    </select>
-                </div>
-
-                <div>
-                    <select className="form-select" style={{ minWidth: "80px" }}>
-                    <option>Beds & Baths</option>
-                    <option>1 Bed</option>
-                    <option>2 Beds</option>
-                    <option>3+ Beds</option>
-                    </select>
-                </div>
-
-                <div>
+                {/* <div>
                     <select className="form-select" style={{ minWidth: "80px" }}>
                     <option>Size</option>
                     <option>Studio / &lt;50 sqm</option>
@@ -66,6 +124,10 @@ const Buy = () => {
                     <option>100 - 200 sqm</option>
                     <option>&gt; 200 sqm</option>
                     </select>
+                </div> */}
+
+                <div style={{ minWidth: "350px", maxWidth: "500px" }}>
+                    <RangeSlider className="" defaultValue={[14000, 20000]} min={10000} max={50000} />
                 </div>
 
                 <button className="btn btn-outline-secondary">
