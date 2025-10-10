@@ -8,6 +8,7 @@ import Blog from './pages/Blog';
 import Buy from './pages/Buy';
 import Rent from './pages/Rent';
 import Shortlet from './pages/Shortlet';
+import PropertyDetails from './pages/PropertyDetails';
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
         <Route path='/blog' element={<Blog />} />
         <Route path='/buy/:type' element={<Buy />} />        
         <Route path='/rent/:type' element={<Rent />} />        
-        <Route path='/shortlet/:type' element={<Shortlet />} />        
+        <Route path='/shortlet/:type' element={<Shortlet />} />   
+        <Route path='/property/:id' element={<PropertyDetails />} />     
         <Route path='/contact' element={<Contact />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
