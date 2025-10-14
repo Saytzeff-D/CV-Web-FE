@@ -12,6 +12,10 @@ import ApartmentDetails from './pages/user/main/ApartmentDetails';
 import LandDetails from './pages/user/main/LandDetails';
 import CreateAccount from './pages/user/auth/CreateAccount';
 import Login from './pages/user/auth/Login';
+import VerifyEmail from './pages/user/auth/VerifyEmail';
+import ForgotPassword from './pages/user/auth/ForgotPassword';
+import ResetPassword from './pages/user/auth/ResetPassword';
+import AdminDashboard from './pages/admin/dashboard';
 
 function App() {
   return (
@@ -26,9 +30,13 @@ function App() {
         <Route path='/shortlet/:type' element={<Shortlet />} />   
         <Route path='/apartment/:type/:id' element={<ApartmentDetails />} />
         <Route path='/land/:type/:id' element={<LandDetails />} />  
-        <Route path='/create-account' element={<CreateAccount />} />   
+        <Route path='/create-account' element={<CreateAccount />} />  
+        <Route path='/create-account/verify' element={<VerifyEmail />} /> 
         <Route path='/login' element={<Login />} />    
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='/contact' element={<Contact />} />
+        <Route path='/admin/dashboard' element={<AdminDashboard />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
       </BrowserRouter>
