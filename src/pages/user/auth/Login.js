@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../../../components/Navbar";
 import { Link } from "react-router-dom";
 
 const Login = () => {
@@ -134,8 +133,13 @@ const Login = () => {
 
                 <p className="text-center mt-3 mb-0" style={{ fontSize: "13px" }}>
                     No account?{" "}
-                    <Link to={'/create-account'} className="fw-semibold text-decoration-none">
-                        Sign up
+                    <Link to={'/create-account'} className="fw-semibold">
+                        Create Account
+                    </Link>
+                </p>
+                <p className="text-center mt-4" style={{ fontSize: "13px" }}>
+                    <Link to={'/forgot-password'} className="fw-semibold">
+                        Forgot Password
                     </Link>
                 </p>
                 </form>
