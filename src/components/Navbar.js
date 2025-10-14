@@ -83,7 +83,7 @@ const Navbar = () => {
                 </ul>
                 <div className="d-flex" role="search">
                     <button onClick={()=>navigate('/create-account')} className="btn btn-white me-2" type="submit">Sign Up</button>
-                    <button className="btn bg-theme me-2" type="submit">Login</button>
+                    <button onClick={()=>navigate('/login')} className="btn bg-theme me-2" type="submit">Login</button>
                 </div>
                 </div>
             </div>
