@@ -92,5 +92,26 @@
             "title": "How to Choose the Right Neighborhood",
             "desc": "Choosing the right neighborhood is crucial when buying a home. Learn what factors to consider to find your perfect fit."
         }
+    ],
+    "landfeatures": [
+        "Options for both commercial and residential purposes",
+        "Green spaces and eco-friendly architectural designs",
+        "Dedicated water supply system",
+        "Helipad for quick access",
+        "Tech hub and mini library for innovative minds",
+        "Ready-to-build plots",
+        "Reliable electricity supply",
+        "Well-paved roads illuminated by solar-powered streetlights"
+    ],
+    "landmarks": [
+        "Choice City Estate by Lagos State Government",
+        "LASUSTECH (Lagos State University of Science and Technology)",
+        "Caleb University",
+        "Lekki-Epe Expressway",
+        "Lagos Business District",
+        "Easy access via Epe",
+        "Lekki Free Trade Zone",
+        "New NYSC Orientation Camp in Lagos",
+        "Admos Place Eatery"
     ]
 }
