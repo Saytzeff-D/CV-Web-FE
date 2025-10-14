@@ -223,3 +223,25 @@ ul .booking-features::before {
 .border-start-dashed {
   border-left-style: dashed !important;
 }
+.card-custom {
+  background: linear-gradient(135deg, rgba(0, 128, 0, 0.08) 0%, #ffffff 100%);
+  border-top-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border: none;  
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  box-shadow: 0 6px 18px rgba(0, 128, 0, 0.2) !important;
+}
+.card-custom:hover {
+  transform: scale(1.03);
+}
+.bg-admin{
+    background: url('./assets/admin-img.png') repeat center center;
+    background-size: contain;
+    background-attachment: fixed;
+}
+.inner-bg-admin {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)) !important;
+}
