@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from '../assets/icon.png'
 
 const Navbar = () => {    
     const [menuOpen, setMenuOpen] = useState(false);
     const { pathname } = useLocation();
+    const navigate = useNavigate()
 
   return (
     <div>
@@ -81,7 +82,7 @@ const Navbar = () => {
                     </li>
                 </ul>
                 <div className="d-flex" role="search">
-                    <button className="btn btn-light me-2" type="submit">Sign Up</button>
+                    <button onClick={()=>navigate('/create-account')} className="btn btn-white me-2" type="submit">Sign Up</button>
                     <button className="btn bg-theme me-2" type="submit">Login</button>
                 </div>
                 </div>
