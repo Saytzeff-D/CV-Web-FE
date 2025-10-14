@@ -1,7 +1,7 @@
 import React from "react";
-import data from '../data.json';
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import data from '../../../data.json';
+import Navbar from "../../../components/Navbar";
+import Footer from "../../../components/Footer";
 
 const Blog = () => {
   const { blogs } = data;

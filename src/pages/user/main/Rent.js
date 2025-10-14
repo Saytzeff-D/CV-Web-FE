@@ -1,11 +1,14 @@
 import { useState } from "react";
-import Footer from "../components/Footer"
-import Navbar from "../components/Navbar"
-import BedsBathDropdown from "../components/BedsBathDropdown";
+import Footer from "../../../components/Footer"
+import Navbar from "../../../components/Navbar"
+import BedsBathDropdown from "../../../components/BedsBathDropdown";
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
+import FilterProperty from "../../../components/FilterProperty";
+import { Link, useParams } from "react-router-dom";
 
-const Buy = () => {
+const Rent = () => {
+    const { type } = useParams()
     const properties = [1,2,3,4, 5,6,7,8,9,10,11,12]
     const [rangeValue, setRangeValue] = useState(50);
     const rangeSpan = 50000000 - 50000;
@@ -24,7 +27,7 @@ const Buy = () => {
         <div className="container my-5 py-4">
             <hr className="text-theme fw-bold" />
             <p className="fw-semibold">
-                Home / <span className="text-theme">Buy</span>
+                Home / <span className="text-theme">Rent / {type} for rent</span>
             </p>
             <div
                 className="d-flex flex-wrap gap-2 align-items-center mb-4 overflow-auto p-2"
@@ -45,48 +48,7 @@ const Buy = () => {
                         pointerEvents: "none",
                     }}
                     ></i>
-                </div>                
-
-                {/* <div className="dropdown position-static">
-                    <button className="btn btn-outline border dropdown-toggle d-flex justify-content-between align-items-center px-3" data-bs-toggle="dropdown" style={{ minWidth: "80px" }}>
-                        Type
-                    </button>
-                    <ul className="dropdown-menu filter-drop px-3 py-2 rounded-0">
-                        <li className="form-check">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                name="priceRange"
-                                id="price1"
-                            />
-                            <label className="form-check-label ps-2" htmlFor="price1">
-                                For Sale
-                            </label>
-                        </li>
-                        <li className="form-check">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                name="priceRange"
-                                id="price2"
-                            />
-                            <label className="form-check-label ps-2" htmlFor="price2">
-                                For Rent
-                            </label>
-                        </li>
-                        <li className="form-check">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                name="priceRange"
-                                id="price3"
-                            />
-                            <label className="form-check-label ps-2" htmlFor="price3">
-                                For Shortlet
-                            </label>
-                        </li>
-                    </ul>
-                </div> */}
+                </div>
 
                 <div className="dropdown position-static">
                     <button className="btn btn-outline border dropdown-toggle d-flex justify-content-between align-items-center px-3" data-bs-toggle="dropdown" style={{ minWidth: "80px" }}>
@@ -114,25 +76,36 @@ const Buy = () => {
 
                 <div>
                     <BedsBathDropdown />
-                </div>
+                </div>            
 
-                {/* <div>
-                    <select className="form-select" style={{ minWidth: "80px" }}>
-                    <option>Size</option>
-                    <option>Studio / &lt;50 sqm</option>
-                    <option>50 - 100 sqm</option>
-                    <option>100 - 200 sqm</option>
-                    <option>&gt; 200 sqm</option>
-                    </select>
-                </div> */}
+                <div className="dropdown position-static">
+                    <button className="btn btn-outline border dropdown-toggle d-flex justify-content-between align-items-center px-3" data-bs-toggle="dropdown" style={{ minWidth: "80px" }}>
+                        Size
+                    </button>
+                    <ul className="dropdown-menu filter-drop px-3 py-2 rounded-0 border-none" style={{ minWidth: "350px", maxWidth: "500px" }}>
+                        <li>
+                            <div className="d-flex justify-content-between mb-2">
+                            <span className="fw-semibold">Size</span>
+                            <span>
+                                {formatPrice(dynamicMin)} - {formatPrice(dynamicMax)}
+                            </span>
+                            </div>
+                            <RangeSlider className="" defaultValue={[14000, 20000]} min={10000} max={50000} />
+                        </li>
+                    </ul>
+                </div>                
 
-                <div style={{ minWidth: "350px", maxWidth: "500px" }}>
-                    <RangeSlider className="" defaultValue={[14000, 20000]} min={10000} max={50000} />
-                </div>
-
-                <button className="btn btn-outline-secondary">
-                <i className="fa-solid fa-sliders me-2"></i> Filters
+                <button className="btn btn-white border" data-bs-toggle="modal" data-bs-target="#filterModal">
+                    <i className="fa-solid fa-sliders me-2"></i> Filters
                 </button>
+            </div>
+
+            <div className="modal fade" id="filterModal">
+                <div className="modal-dialog modal-dialog-centered modal-md">
+                    <div className="modal-content">                        
+                            <FilterProperty />                        
+                    </div>
+                </div>
             </div>
             <div className="row">
                 {
@@ -147,10 +120,10 @@ const Buy = () => {
                                 <i className="fa fa-heart-o"></i>
                             </button>
 
-                            <a href="#"
+                            <Link to={type === 'land' ? `/land/rent/${i}` : `/apartment/rent/${i}`}
                                 className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
                                 See More
-                            </a>
+                            </Link>
                             </div>
 
                             <div className="card-body px-0 pt-3">
@@ -174,4 +147,4 @@ const Buy = () => {
     )
 }
 
-export default Buy;
+export default Rent;

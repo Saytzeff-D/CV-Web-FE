@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../../../components/Navbar";
+import Footer from "../../../components/Footer";
 import Logo from "../assets/icon.png"
 import AboutImg from "../assets/about.png"
 import { useNavigate } from "react-router-dom";
