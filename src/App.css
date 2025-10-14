@@ -145,6 +145,22 @@
 .border-none {
   border: none !important;
 }
+RangeSlider .range-slider__thumb[data-active] {
+    width: 3px !important;
+    height: 3px !important;
+    background: white !important;
+    border-radius: 50% !important;
+    border: 1px solid black !important;
+    cursor: pointer !important;
+}
+RangeSlider .range-slider__range {
+    width: 12px !important;
+    height: 12px !important;
+    background-color: white !important;
+    border-radius: 50% !important;
+    border: 1px solid black !important;
+    cursor: pointer !important;
+}
 .form-range::-webkit-slider-thumb {
   width: 12px;
   height: 12px;
@@ -186,4 +202,24 @@ input[type="range"] {
   height: 4px;
   background: transparent;
   cursor: pointer;
+}
+.booking {
+  list-style: none; /* Removes default bullet points */
+  padding-left: 0; /* Adjust as needed for spacing */
+}
+
+ul .booking-features::before {
+  content: "✓ "; /* Unicode checkmark character */
+  color: green; /* Optional: style the checkmark color */
+  margin-right: 5px; /* Adjust spacing between checkmark and text */
+}
+.offer-list {
+  list-style: none; /* Removes default bullet points */
+  padding-left: 0; /* Adjust as needed for spacing */
+  display: flex;
+  flex-flow: column wrap;
+  height: 12em;
+}
+.border-start-dashed {
+  border-left-style: dashed !important;
 }
