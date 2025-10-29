@@ -1,16 +1,49 @@
 import React, { useState } from "react";
 import Navbar from "../../../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import { createAccountSchema } from "../../../schemas";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { Alert } from "@mui/material";
 
 const CreateAccount = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isAgent, setIsAgent] = useState(false);
-  const navigate = useNavigate()
+    const uri = useSelector(state=>state.uri)
+    const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
 
-  const register = (e) => {
-    e.preventDefault();
-    navigate('/create-account/verify')
-  }
+    const { handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
+    initialValues: {
+      firstname: '',
+      lastname: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      isAgent: false,
+      professional_type: '',
+      experience_level: '',
+      phone_number: ''
+    },
+    validationSchema: createAccountSchema,
+    onSubmit: (values) => {
+      setError('')
+      setIsSubmitting(true);
+      axios.post(`${uri}auth/register`, values)
+      .then((res)=>{
+        setIsSubmitting(false);
+        console.log(res.data);
+        sessionStorage.setItem('tempUserEmail', values.email);
+        navigate('/create-account/verify')
+      })
+      .catch((err)=>{
+        setIsSubmitting(false);
+        console.log(err);
+        err.response ? setError(err.response.data.message) : setError('An error occurred')
+      })
+    }
+  })  
 
   return (
     <>        
@@ -83,6 +116,11 @@ const CreateAccount = () => {
 
                 {/* Form */}
                 <form>
+                    {error &&
+                        <Alert severity="error" className="mb-3">
+                            {error}
+                        </Alert>
+                    }
                 <div className="row">
                     <div className="col-6 mb-3">
                     <label className="form-label fw-medium" style={{ fontSize: "13px" }}>
@@ -90,7 +128,10 @@ const CreateAccount = () => {
                     </label>
                     <input
                         type="text"
-                        className="form-control"
+                        name="firstname"
+                        className={`form-control ${touched.firstname && errors.firstname ? 'is-invalid' : ''}`}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                         placeholder="Temi"
                         style={{
                         border: "1px solid #e9e9e9",
@@ -105,7 +146,10 @@ const CreateAccount = () => {
                     </label>
                     <input
                         type="text"
-                        className="form-control"
+                        name="lastname"
+                        className={`form-control ${touched.lastname && errors.lastname ? 'is-invalid' : ''}`}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                         placeholder="Falana"
                         style={{
                         border: "1px solid #e9e9e9",
@@ -122,7 +166,10 @@ const CreateAccount = () => {
                     </label>
                     <input
                     type="email"
-                    className="form-control"
+                    name="email"                
+                    className={`form-control ${touched.email && errors.email ? 'is-invalid' : ''}`}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="falanayemi.com"
                     style={{
                         border: "1px solid #e9e9e9",
@@ -137,8 +184,11 @@ const CreateAccount = () => {
                     Password
                     </label>
                     <input
+                    name="password"
                     type={showPassword ? "text" : "password"}
-                    className="form-control"
+                    className={`form-control ${touched.password && errors.password ? 'is-invalid' : ''}`}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="••••••••"
                     style={{
                         border: "1px solid #e9e9e9",
@@ -165,7 +215,10 @@ const CreateAccount = () => {
                     </label>
                     <input
                     type="password"
-                    className="form-control"
+                    name="confirmPassword"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`form-control ${touched.confirmPassword && errors.confirmPassword ? 'is-invalid' : ''}`}
                     placeholder="••••••••"
                     style={{
                         border: "1px solid #e9e9e9",
@@ -180,9 +233,10 @@ const CreateAccount = () => {
                     <input
                     className="form-check-input"
                     type="checkbox"
+                    name="isAgent"
                     id="agentSwitch"
-                    checked={isAgent}
-                    onChange={() => setIsAgent(!isAgent)}
+                    checked={values.isAgent}
+                    onChange={handleChange}
                     style={{
                         width: "42px",
                         height: "22px",
@@ -199,7 +253,7 @@ const CreateAccount = () => {
                 </div>
 
                 {/* CONDITIONAL FIELDS */}
-                {isAgent && (
+                {values.isAgent && (
                     <>
                     <div className="mb-3">
                         <label
@@ -209,17 +263,20 @@ const CreateAccount = () => {
                         Professional Type
                         </label>
                         <select
-                        className="form-select"
+                        name="professional_type"
+                        className={`form-select ${touched.professional_type && errors.professional_type ? 'is-invalid' : ''}`}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                         style={{
                             border: "1px solid #e9e9e9",
                             height: "42px",
                             fontSize: "14px",
                         }}
                         >
-                        <option value="">Select your category</option>
-                        <option>Real Estate Agent</option>
-                        <option>Property Manager</option>
-                        <option>Developer</option>
+                        <option defaultValue value={''}>Select your category</option>
+                        <option value={'Real Estate Agent'}>Real Estate Agent</option>
+                        <option value={'Property Manager'}>Property Manager</option>
+                        <option value={'Developer'}>Developer</option>
                         </select>
                     </div>
 
@@ -231,17 +288,20 @@ const CreateAccount = () => {
                         Experience Level
                         </label>
                         <select
-                        className="form-select"
+                        name="experience_level"
+                        className={`form-select ${touched.experience_level && errors.experience_level ? 'is-invalid' : ''}`}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                         style={{
                             border: "1px solid #e9e9e9",
                             height: "42px",
                             fontSize: "14px",
                         }}
                         >
-                        <option value="">Select level</option>
-                        <option>Beginner</option>
-                        <option>Intermediate</option>
-                        <option>Expert</option>
+                        <option defaultValue value={''}>Select level</option>
+                        <option value={'Beginner'}>Beginner</option>
+                        <option value={'Intermediate'}>Intermediate</option>
+                        <option value={'Expert'}>Expert</option>
                         </select>
                     </div>
                     <div className="mb-4">
@@ -249,8 +309,11 @@ const CreateAccount = () => {
                         Phone Number
                         </label>
                         <input
+                        name="phone_number"
                         type="tel"
-                        className="form-control"
+                        className={`form-control ${touched.phone_number && errors.phone_number ? 'is-invalid' : ''}`}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                         placeholder="+234..."
                         style={{
                             border: "1px solid #e9e9e9",
@@ -264,9 +327,10 @@ const CreateAccount = () => {
 
 
                 <button
-                    onClick={(e) => register(e)}
+                    onClick={handleSubmit}
                     type="submit"
                     className="btn w-100 fw-semibold"
+                    disabled={isSubmitting}
                     style={{
                     backgroundColor: "#004225",
                     color: "#fff",
@@ -274,7 +338,7 @@ const CreateAccount = () => {
                     height: "45px",
                     }}
                 >
-                    Continue
+                    {isSubmitting ? 'Please wait...' : 'Create Account'}
                 </button>
 
                 <p className="text-center mt-3 mb-0" style={{ fontSize: "13px" }}>
