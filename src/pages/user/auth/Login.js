@@ -1,8 +1,38 @@
+import { useFormik } from "formik";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { loginSchema } from "../../../schemas";
+import axios from "axios";
+import { Alert } from "@mui/material";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const uri = useSelector(state=>state.uri)
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    validationSchema: loginSchema,
+    onSubmit: (values) => {
+      setError('')
+      setIsLoading(true)
+      axios.post(`${uri}auth/login`, values)
+      .then((res)=>{
+        console.log(res.data);
+        // Handle successful login
+      })
+      .catch((err)=>{
+        setIsLoading(false)
+        console.log(err);
+        err.response ? setError(err.response.data.message) : setError('An error occurred')
+      })
+    }
+  })
 
   return (
     <>        
@@ -74,14 +104,18 @@ const Login = () => {
                 </div>
 
                 {/* Form */}
-                <form>               
+                <form onSubmit={handleSubmit}>       
+                    {error && <Alert severity="error" className="mb-3">{error}</Alert>}
                 <div className="mb-3">
                     <label className="form-label fw-medium" style={{ fontSize: "13px" }}>
                     Email Address
                     </label>
                     <input
                     type="email"
-                    className="form-control"
+                    name="email"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`form-control ${errors.email && touched.email ? "is-invalid" : ""}`}
                     placeholder="falanayemi.com"
                     style={{
                         border: "1px solid #e9e9e9",
@@ -96,8 +130,11 @@ const Login = () => {
                     Password
                     </label>
                     <input
+                    name="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     type={showPassword ? "text" : "password"}
-                    className="form-control"
+                    className={`form-control ${errors.password && touched.password ? "is-invalid" : ""}`}
                     placeholder="••••••••"
                     style={{
                         border: "1px solid #e9e9e9",
@@ -121,6 +158,7 @@ const Login = () => {
                 <button
                     type="submit"
                     className="btn w-100 fw-semibold"
+                    disabled={isLoading}
                     style={{
                     backgroundColor: "#004225",
                     color: "#fff",
@@ -128,7 +166,7 @@ const Login = () => {
                     height: "45px",
                     }}
                 >
-                    Continue
+                    {isLoading ? 'Please wait...' : 'Login'}
                 </button>
 
                 <p className="text-center mt-3 mb-0" style={{ fontSize: "13px" }}>
