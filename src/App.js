@@ -15,7 +15,10 @@ import Login from './pages/user/auth/Login';
 import VerifyEmail from './pages/user/auth/VerifyEmail';
 import ForgotPassword from './pages/user/auth/ForgotPassword';
 import ResetPassword from './pages/user/auth/ResetPassword';
-import AdminDashboard from './pages/admin/dashboard';
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminLogin from './pages/admin/Login';
+import CreateAdmin from './pages/admin/CreateAdmin';
+import AgentsPage from './pages/admin/Agents';
 
 function App() {
   return (
@@ -36,7 +39,10 @@ function App() {
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='/contact' element={<Contact />} />
+        <Route path='/admin/login' element={<AdminLogin />} />
+        <Route path='/admin/create' element={<CreateAdmin />} />
         <Route path='/admin/dashboard' element={<AdminDashboard />} />
+        <Route path='/admin/view-agents' element={<AgentsPage />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
       </BrowserRouter>
