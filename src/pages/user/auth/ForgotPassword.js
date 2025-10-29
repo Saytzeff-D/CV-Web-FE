@@ -1,9 +1,17 @@
+import { Alert } from "@mui/material";
+import axios from "axios";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {  
+    const uri = useSelector(state=>state.uri)
     const navigate = useNavigate()
     const [checkEmail, setCheckEmail] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [email, setEmail] = useState('')
+    const [code, setCode] = useState('')
+    const [error, setError] = useState('')
 
     const verifyCode = () => {
         navigate('/reset-password')
@@ -11,7 +19,21 @@ const ForgotPassword = () => {
     }
 
     const checkUser = () => {
-        setCheckEmail(true)
+        setError('')
+        if(!email){
+            setError('Please enter your email address')            
+        } else{
+            setIsLoading(true)
+            axios.post(`${uri}auth/forgot-password`, {email})
+            .then((res)=>{
+                setIsLoading(false)
+                console.log(res.data)            
+            })                        
+            .catch((err)=>{
+                setIsLoading(false)
+                err.response ? setError(err.response.data.message) : setError('An error occurred')
+            })
+        }
     }
 
   return (
@@ -40,6 +62,11 @@ const ForgotPassword = () => {
                         >
                             No worries, we’ll send your reset instructions
                         </p>
+                        {error &&
+                            <Alert severity="error" className="mb-3">
+                                {error}
+                            </Alert>
+                        }
                         <div className="mb-3">
                             <label className="form-label fw-medium" style={{ fontSize: "13px" }}>
                             Email Address
@@ -48,6 +75,7 @@ const ForgotPassword = () => {
                             type="email"
                             className="form-control"
                             placeholder="falanayemi.com"
+                            onChange={(e)=>setEmail(e.target.value)}
                             style={{
                                 border: "1px solid #e9e9e9",
                                 height: "42px",
@@ -59,6 +87,7 @@ const ForgotPassword = () => {
                             onClick={checkUser}
                             type="submit"
                             className="btn w-100 fw-semibold mb-4"
+                            disabled={isLoading}
                             style={{
                             backgroundColor: "#004225",
                             color: "#fff",
@@ -66,7 +95,7 @@ const ForgotPassword = () => {
                             height: "45px",
                             }}
                         >
-                            Continue
+                            {isLoading ? 'Please wait...' : 'Continue'}
                         </button>
                     </>                
                     :
@@ -99,6 +128,7 @@ const ForgotPassword = () => {
                                 onClick={verifyCode}
                                 type="submit"
                                 className="btn w-100 fw-semibold"
+                                disabled={isLoading}
                                 style={{
                                 backgroundColor: "#004225",
                                 color: "#fff",
@@ -106,7 +136,7 @@ const ForgotPassword = () => {
                                 height: "45px",
                                 }}
                             >
-                                Continue
+                                {isLoading ? 'Please wait...' : 'Continue'}
                             </button>
 
                             <p className="text-center mt-3 mb-0" style={{ fontSize: "13px" }}> 
