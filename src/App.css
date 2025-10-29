@@ -245,3 +245,12 @@ ul .booking-features::before {
 .inner-bg-admin {
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)) !important;
 }
+.bg-create-admin{
+    background-image: url('./assets/admin-img.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255,255,255,0.8);
+    background-blend-mode: lighten;
+    background-attachment: fixed;
+}
