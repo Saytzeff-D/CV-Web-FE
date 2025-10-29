@@ -113,5 +113,52 @@
         "Lekki Free Trade Zone",
         "New NYSC Orientation Camp in Lagos",
         "Admos Place Eatery"
+    ],
+    "agents": [
+        {
+            "id": 1,
+            "name": "Tawio Alex",
+            "level": "Expert",
+            "listed": 5,
+            "location": "Ogun State",
+            "status": "active",
+            "image": "https://picsum.photos/600/400?random=4"
+        },
+        {
+            "id": 2,
+            "name": "Paul Olaitan",
+            "level": "Intermediate",
+            "listed": 2,
+            "location": "Lagos State",
+            "status": "active",
+            "image": "https://picsum.photos/600/400?random=2"
+        },
+        {
+            "id": 3,
+            "name": "Samuel Mantin",
+            "level": "Intermediate",
+            "listed": 2,
+            "location": "Lagos State",
+            "status": "active",
+            "image": "https://picsum.photos/600/400?random=3"
+        },
+        {
+            "id": 4,
+            "name": "Ojo Samson",
+            "level": "Intermediate",
+            "listed": 2,
+            "location": "Oyo State",
+            "status": "suspended",
+            "image": "https://picsum.photos/600/400?random=4"
+        },
+        {
+            "id": 5,
+            "name": "David Adelolu",
+            "level": "Intermediate",
+            "listed": 2,
+            "location": "Ogun State",
+            "status": "suspended",
+            "image": "https://picsum.photos/600/400?random=5"
+        }
     ]
 }
