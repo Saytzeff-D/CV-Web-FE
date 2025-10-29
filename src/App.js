@@ -15,7 +15,7 @@ import Login from './pages/user/auth/Login';
 import VerifyEmail from './pages/user/auth/VerifyEmail';
 import ForgotPassword from './pages/user/auth/ForgotPassword';
 import ResetPassword from './pages/user/auth/ResetPassword';
-import AdminDashboard from './pages/admin/Dashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/Login';
 import CreateAdmin from './pages/admin/CreateAdmin';
 import AgentsPage from './pages/admin/Agents';
