@@ -1,7 +1,8 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 
 const AdminDashboard = () => {
+    const navigate = useNavigate()
   return (
     <div className="bg-admin">
         <div className="inner-bg-admin">
@@ -16,68 +17,39 @@ const AdminDashboard = () => {
 
             {/* ===== Property / Content Management ===== */}
             <section className="mb-5">
-                <h4 className="fw-semibold mb-4 text-success">
-                Property / Content Management
+                <h4 className="fw-semibold mb-4 text-success text-center">
+                    Property / Content Management
                 </h4>
-                <div className="row g-4 w-100">
-                {[
-                    "Add Property",
-                    "Edit Property",
-                    "Delete Property",
-                    "Add Blog",
-                    "Edit Blog",
-                    "Delete Blog",
-                    "Manage FAQ/About",
-                    "Management Review",
-                ].map((title, i) => (
-                    <div key={i} className="col-6 col-md-3 px-md-5 px-2">
-                    <div
-                        className="card text-center fw-semibold shadow-sm border-success card-custom"                                
-                        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
-                        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                    >
-                        <div className="card-body py-4">
-                        <p className="card-title fw-medium mb-2">{title}</p>
-                        <i className="bi bi-plus-lg text-success fs-5"></i>
-                        </div>
+                <div className="row g-4 w-100">                
+                    <div className="col-6 px-md-5 px-2">
+                        <button className="btn px-5 py-3 rounded-0 btn-success me-3">
+                            Property Management (Add/Edit/Delete)
+                        </button>
                     </div>
+                    <div className="col-6 px-md-5 px-2">
+                        <button className="btn px-5 py-3 rounded-0 btn-success me-3">
+                            Blog Management (Add/Edit/Delete)
+                        </button>                        
                     </div>
-                ))}
                 </div>
             </section>
 
             {/* ===== Agent Management ===== */}
             <section className="mb-5">
-                <h4 className="fw-semibold mb-4 text-success">Agent Management</h4>
-                <div className="row g-4 w-100">
-                {[
-                    "Add / Verify New Agent",
-                    "Suspend / Remove Agent",
-                    "Assign Properties to Agent",
-                    "Accept / Reject Agent Registration",
-                    "Verify Agent Document",
-                    "Flag / Remove Agent Properties",
-                ].map((title, i) => (
-                    <div key={i} className="col-6 col-md-3 px-md-5 px-2">
-                    <div
-                        className="card text-center fw-semibold shadow-sm border-success card-custom"                
-                    >
-                        <div className="card-body py-4">
-                        <p className="card-title fw-medium mb-2">{title}</p>
-                        <i className="bi bi-person-check text-success fs-5"></i>
-                        </div>
-                    </div>
-                    </div>
-                ))}
+                <h4 className="fw-semibold mb-4 text-success text-center">Agent Management</h4>
+                <div className="d-flex justify-content-center">
+                    <button onClick={()=>navigate('/admin/view-agents')} className="btn px-5 py-3 rounded-0 btn-success me-3">
+                        All Agents Section
+                    </button>                                                               
                 </div>
             </section>
 
             {/* ===== Transaction / Payment Management ===== */}
             <section>
-                <h4 className="fw-semibold mb-4 text-success">
+                <h4 className="fw-semibold mb-4 text-success text-center">
                 Transaction / Payment Management
                 </h4>
-                <div className="row g-4 w-100">
+                {/* <div className="row g-4 w-100">
                 {[
                     "Approve / Reject Agent Payment",
                     "Management Property Listing Payment",
@@ -96,7 +68,7 @@ const AdminDashboard = () => {
                     </div>
                     </div>
                 ))}
-                </div>
+                </div> */}
             </section>
             </div>
         </div>
