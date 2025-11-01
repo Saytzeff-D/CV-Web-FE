@@ -254,3 +254,8 @@ ul .booking-features::before {
     background-blend-mode: lighten;
     background-attachment: fixed;
 }
+.map-container {
+    width: 100% !important;
+    height: 400px !important;    
+    overflow: hidden;
+}
