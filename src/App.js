@@ -19,6 +19,8 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/Login';
 import CreateAdmin from './pages/admin/CreateAdmin';
 import AgentsPage from './pages/admin/Agents';
+import PropertyManager from './pages/admin/PropertyManager';
+import AddProperty from './pages/admin/AddProperty';
 
 function App() {
   return (
@@ -42,6 +44,8 @@ function App() {
         <Route path='/admin/login' element={<AdminLogin />} />
         <Route path='/admin/create' element={<CreateAdmin />} />
         <Route path='/admin/dashboard' element={<AdminDashboard />} />
+        <Route path='/admin/property-manager' element={<PropertyManager />} />
+        <Route path='/admin/add-property' element={<AddProperty />} />
         <Route path='/admin/view-agents' element={<AgentsPage />} />
         <Route path='*' element={<NotFound />} />
       </Routes>

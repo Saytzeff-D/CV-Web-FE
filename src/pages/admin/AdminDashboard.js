@@ -22,7 +22,7 @@ const AdminDashboard = () => {
                 </h4>
                 <div className="row g-4 w-100">                
                     <div className="col-6 px-md-5 px-2">
-                        <button className="btn px-5 py-3 rounded-0 btn-success me-3">
+                        <button onClick={() => navigate('/admin/property-manager')} className="btn px-5 py-3 rounded-0 btn-success me-3">
                             Property Management (Add/Edit/Delete)
                         </button>
                     </div>
