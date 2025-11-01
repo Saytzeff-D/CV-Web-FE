@@ -160,5 +160,37 @@
             "status": "suspended",
             "image": "https://picsum.photos/600/400?random=5"
         }
+    ],
+    "properties": [
+        {
+            "id": 1,
+            "image": "https://picsum.photos/600/400?random=10",
+            "title": "Furnished 4bdrm Duplex",
+            "location": "Ikota, Lekki, Lagos",
+            "price": "₦750,000",
+            "beds": 4,
+            "baths": 5,
+            "toilets": 5
+        },
+        {
+            "id": 2,
+            "image": "https://picsum.photos/600/400?random=11",
+            "title": "Furnished 4bdrm Duplex",
+            "location": "Ikota, Lekki, Lagos",
+            "price": "₦450,000",
+            "beds": 4,
+            "baths": 5,
+            "toilets": 5
+        },
+        {
+            "id": 3,
+            "image": "https://picsum.photos/600/400?random=12",
+            "title": "Furnished 4bdrm Duplex",
+            "location": "Ikota, Lekki, Lagos",
+            "price": "₦950,000",
+            "beds": 4,
+            "baths": 5,
+            "toilets": 5
+        }
     ]
 }
