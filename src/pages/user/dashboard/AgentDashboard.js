@@ -1,5 +1,4 @@
 import { useState } from "react";
-import ActiveBookings from "../../../components/client-dashboard/ActiveBookings";
 import SavedProperties from "../../../components/client-dashboard/SavedProperties";
 import Avatar from '../../../assets/avatar.png'
 import Navbar from "../../../components/Navbar";
