@@ -133,7 +133,7 @@ const Step1 = (props) => {
               {
                 fileSize == '' 
                 ? 
-                <i className="fa fa-info-circle text-success small"></i> 
+                <i className="fa fa-info-circle text-success small"></i>
                 : 
                 <p className="small text-success my-0">{fileSize}</p>
               }
