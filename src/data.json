@@ -192,5 +192,92 @@
             "baths": 5,
             "toilets": 5
         }
+    ],
+    "featuredOption" : {
+        "General": [
+            "Air Conditioning",
+            "Wi-Fi",
+            "Security",
+            "24/7 Power Supply",
+            "CCTV",
+            "Parking Space",
+            "Fenced Compound",
+            "Borehole",
+            "Water Heater",
+            "POP Ceiling",
+            "Balcony",
+            "Spacious Compound",
+            "Tiled Floor",
+            "Kitchen Cabinets",
+            "Wardrobe",
+            "Prepaid Meter"
+        ],
+        "House": [
+            "Swimming Pool",
+            "Gym Area",
+            "Interlocking Pavement",
+            "Jacuzzi",
+            "Boys Quarters (BQ)",
+            "Laundry Room",
+            "Walk-In Closet",
+            "Dining Area",
+            "Microwave / Oven",
+            "Refrigerator",
+            "TV / DSTV Cable",
+            "Smoke Detector",
+            "Security Door",
+            "Water Treatment Plant"
+        ],
+        "Hostel": [
+            "Study Room",
+            "Reading Table & Chair",
+            "Shared Kitchen",
+            "Shared Bathroom",
+            "Bed Space",
+            "Bunk Bed",
+            "Closet / Locker",
+            "Common Lounge",
+            "Cleaning Service"
+        ],
+        "Land": [
+            "Dry Land",
+            "Fenced Land",
+            "Corner Piece",
+            "Survey Plan",
+            "Registered Title",
+            "Good Access Road",
+            "Drainage System",
+            "Demarcated Plots"
+        ],
+        "Apartment": [
+            "Smart Home Features",
+            "Solar Power",
+            "Generator House",
+            "Garden / Green Area",
+            "Playground",
+            "Elevator",
+            "Fire Extinguisher",
+            "Reception Area"
+        ]
+    },
+    "recommendedProperties": [
+        {
+            "image": "https://picsum.photos/300/200?random=12",
+            "title": "Furnished 4bdrm Duplex",
+            "location": "Ikota, Lekki, Lagos",
+            "price": "₦750,000"
+        },
+        {
+            "image": "https://picsum.photos/600/400?random=13",
+            "title": "Modern Apartment",
+            "location": "Ajah, Lagos",
+            "price": "₦450,000"
+        },
+        {
+            "image": "https://picsum.photos/300/200?random=14",
+            "title": "Luxury Villa",
+            "location": "Ikeja GRA, Lagos",
+            "price": "₦950,000"
+        }
     ]
 }
