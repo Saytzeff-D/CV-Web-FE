@@ -259,3 +259,6 @@ ul .booking-features::before {
     height: 400px !important;    
     overflow: hidden;
 }
+.cursor-pointer {
+    cursor: pointer !important;
+}
