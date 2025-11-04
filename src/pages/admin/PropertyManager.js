@@ -26,7 +26,7 @@ const PropertyManager = () => {
         <div className='col-md-9'>
             {/* Property List */}
             {properties.map((p) => (
-                <div key={p.id} className="row align-items-center mb-4">
+                <div key={p.id} className="row align-items-center mb-4 w-100">
                 <div className="col-5">
                     <img
                     src={p.image}
@@ -36,7 +36,7 @@ const PropertyManager = () => {
                     />
                 </div>
                 <div className="col-7">
-                    <div className='d-flex justify-content-between'>
+                    <div className='d-flex justify-content-between flex-md-row flex-column'>
                         <div>
                             <h6 className="fw-semibold mb-1">{p.title}</h6>
                             <p className="text-muted small mb-1">{p.location}</p>

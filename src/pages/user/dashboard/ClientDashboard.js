@@ -17,7 +17,7 @@ const ClientDashboard = () => {
             <Navbar />
             <div className="bg-admin">
                 <div className="container-fluid p-0 inner-bg-admin">      
-                    <div className="d-flex pt-5 mt-5 px-5 flex-md-row flex-column">
+                    <div className="d-flex pt-5 mt-5 px-md-5 px-3 flex-md-row flex-column">
                         <div className="me-2">
                             <img
                             src={Avatar}
@@ -67,8 +67,8 @@ const ClientDashboard = () => {
                     {/* Recommended Properties */}
                     <div className="mt-5 py-4">
                         <div className="container">
-                        <h4 className="fw-bold mb-3">Recommended Property</h4>
-                        <div className="row g-3 w-100">
+                        <h4 className="fw-bold mb-3 px-4 px-md-0">Recommended Property</h4>
+                        <div className="row g-3 w-100 px-4 px-md-0">
                             {recommendedProperties.map((property, index) => (
                             <div className="col-md-6 col-lg-3" key={index}>
                                 <div className="card border-0 shadow-sm">

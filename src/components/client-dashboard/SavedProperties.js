@@ -7,7 +7,7 @@ const SavedProperties = () => {
         <>  
             {/* <p className="text-center text-muted">No saved properties yet.</p> */}
             <h4 className="fw-bold mb-3 text-success">Saved Properties</h4>
-            <div className="row g-3 w-100">
+            <div className="row g-3 w-100 px-md-0 px-4">
                 {
                     properties.map((each, i)=>(
                     <div className="col-lg-3 col-md-6" key={i}>

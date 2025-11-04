@@ -29,7 +29,7 @@ const AgentsPage = () => {
         .map((agent) => (
           <div
             key={agent.id}
-            className="d-flex align-items-center justify-content-between p-3 mb-3 bg-white"
+            className="d-flex align-items-center justify-content-between p-3 mb-3 bg-white flex-md-row flex-column"
           >
             <div className="d-flex align-items-center gap-3">
               <img
@@ -60,7 +60,7 @@ const AgentsPage = () => {
               </div>
             </div>
 
-            <div className="d-flex gap-2">
+            <div className="d-flex gap-2 mt-3 mt-md-0">
               <button
                 className="btn btn-success btn-sm"
                 onClick={() => handleAssign(agent)}
@@ -84,7 +84,7 @@ const AgentsPage = () => {
         .map((agent) => (
           <div
             key={agent.id}
-            className="d-flex align-items-center justify-content-between p-3 mb-3 bg-white"
+            className="d-flex align-items-center justify-content-between p-3 mb-3 bg-white flex-md-row flex-column"
           >
             <div className="d-flex align-items-center gap-3">
               <img
@@ -116,7 +116,7 @@ const AgentsPage = () => {
             </div>
 
             <button
-              className="btn btn-success btn-sm"
+              className="btn btn-success btn-sm mt-3 mt-md-0"
               onClick={() => handleRestore(agent)}
             >
               Restore This Agent

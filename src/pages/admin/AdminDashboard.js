@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
 const AdminDashboard = () => {
     const navigate = useNavigate()
@@ -21,12 +22,12 @@ const AdminDashboard = () => {
                     Property / Content Management
                 </h4>
                 <div className="row g-4 w-100">                
-                    <div className="col-6 px-md-5 px-2">
+                    <div className="col-md-6 px-md-5 px-2">
                         <button onClick={() => navigate('/admin/property-manager')} className="btn px-5 py-3 rounded-0 btn-success me-3">
                             Property Management (Add/Edit/Delete)
                         </button>
                     </div>
-                    <div className="col-6 px-md-5 px-2">
+                    <div className="col-md-6 px-md-5 px-2">
                         <button className="btn px-5 py-3 rounded-0 btn-success me-3">
                             Blog Management (Add/Edit/Delete)
                         </button>                        
@@ -72,6 +73,7 @@ const AdminDashboard = () => {
             </section>
             </div>
         </div>
+        <Footer />
     </div>
   );
 }
