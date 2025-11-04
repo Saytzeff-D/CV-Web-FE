@@ -1,26 +1,15 @@
 import { useState } from "react";
 import Footer from "../../../components/Footer"
 import Navbar from "../../../components/Navbar"
-import BedsBathDropdown from "../../../components/BedsBathDropdown";
-import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import FilterProperty from "../../../components/FilterProperty";
 import { Link, useParams } from "react-router-dom";
+import FilterBar from "../../../Filterbar";
 
 const Buy = () => {
     const { type } = useParams()
     const properties = [1,2,3,4, 5,6,7,8,9,10,11,12]
-    const [rangeValue, setRangeValue] = useState(50);
-    const rangeSpan = 50000000 - 50000;
-    const windowSize = 10000000; // Adjust the window size as needed
-    const formatPrice = (value) => {
-        if (value >= 1000000) return `₦${(value / 1000000).toFixed(1)}M`;
-        if (value >= 1000) return `₦${(value / 1000).toFixed(0)}K`;
-        return `₦${value}`;
-    };
-    const midPoint = 50000 + (rangeSpan * rangeValue) / 100;
-    const dynamicMin = Math.max(50000, midPoint - windowSize / 2);
-    const dynamicMax = Math.min(50000000, midPoint + windowSize / 2);
+    
     return (
         <>
         <Navbar />
@@ -29,76 +18,7 @@ const Buy = () => {
             <p className="fw-semibold">
                 Home / <span className="text-theme">Buy / {type} for sale</span>
             </p>
-            <div
-                className="d-flex flex-wrap gap-2 align-items-center mb-4 overflow-auto p-2"
-                style={{ whiteSpace: "nowrap" }}
-            >
-                <div className="position-relative" style={{ minWidth: "350px", flex: "1" }}>
-                    <input
-                    type="text"
-                    className="form-control ps-4 pe-5"
-                    placeholder="Search by address or city"
-                    />
-                    <i
-                    className="fa-solid fa-search position-absolute text-muted"
-                    style={{
-                        right: "15px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        pointerEvents: "none",
-                    }}
-                    ></i>
-                </div>
-
-                <div className="dropdown position-static">
-                    <button className="btn btn-outline border dropdown-toggle d-flex justify-content-between align-items-center px-3" data-bs-toggle="dropdown" style={{ minWidth: "80px" }}>
-                        Price Range
-                    </button>
-                    <ul className="dropdown-menu filter-drop px-3 py-2 rounded-0 border-none" style={{ minWidth: "350px", maxWidth: "500px" }}>
-                        <li>
-                            <div className="d-flex justify-content-between mb-2">
-                            <span className="fw-semibold">Price Range</span>
-                            <span>
-                                {formatPrice(dynamicMin)} - {formatPrice(dynamicMax)}
-                            </span>
-                            </div>
-                            <input
-                                type="range"
-                                className="form-range"
-                                min="50000"
-                                max="50000000"
-                                step="100000"
-                                onChange={(e) => setRangeValue(e.target.value)}
-                            />
-                        </li>
-                    </ul>
-                </div>                
-
-                <div>
-                    <BedsBathDropdown />
-                </div>            
-
-                <div className="dropdown position-static">
-                    <button className="btn btn-outline border dropdown-toggle d-flex justify-content-between align-items-center px-3" data-bs-toggle="dropdown" style={{ minWidth: "80px" }}>
-                        Size
-                    </button>
-                    <ul className="dropdown-menu filter-drop px-3 py-2 rounded-0 border-none" style={{ minWidth: "350px", maxWidth: "500px" }}>
-                        <li>
-                            <div className="d-flex justify-content-between mb-2">
-                            <span className="fw-semibold">Size</span>
-                            <span>
-                                {formatPrice(dynamicMin)} - {formatPrice(dynamicMax)}
-                            </span>
-                            </div>
-                            <RangeSlider className="" defaultValue={[14000, 20000]} min={10000} max={50000} />
-                        </li>
-                    </ul>
-                </div>                
-
-                <button className="btn btn-white border" data-bs-toggle="modal" data-bs-target="#filterModal">
-                    <i className="fa-solid fa-sliders me-2"></i> Filters
-                </button>
-            </div>
+            <FilterBar />
 
             <div className="modal fade" id="filterModal">
                 <div className="modal-dialog modal-dialog-centered modal-md">
