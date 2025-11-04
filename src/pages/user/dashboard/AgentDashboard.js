@@ -1,11 +1,11 @@
 import { useState } from "react";
-import SavedProperties from "../../../components/client-dashboard/SavedProperties";
 import Avatar from '../../../assets/avatar.png'
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 import { Link } from "react-router-dom";
 import Earnings from "../../../components/agent-dashboard/Earnings";
 import ListedProperties from "../../../components/agent-dashboard/ListedProperties";
+import Withdrawal from "../../../components/agent-dashboard/Withdrawal";
 
 const AgentDashboard = () => {    
     const [activeTab, setActiveTab] = useState("earnings");
@@ -15,7 +15,7 @@ const AgentDashboard = () => {
             <Navbar />
             <div className="bg-admin">
                 <div className="container-fluid p-0 inner-bg-admin">      
-                    <div className="d-flex pt-5 mt-5 px-5 flex-md-row flex-column">
+                    <div className="d-flex pt-5 mt-5 px-3 px-md-5 flex-md-row flex-column">
                         <div className="me-2">
                             <img
                             src={Avatar}
@@ -58,7 +58,7 @@ const AgentDashboard = () => {
                         <ListedProperties />
                         )}
                         {activeTab === "withdrawal" && (
-                        <SavedProperties />
+                        <Withdrawal />
                         )}
                     </div>                    
                 </div>
