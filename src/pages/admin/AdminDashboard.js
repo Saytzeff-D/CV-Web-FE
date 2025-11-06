@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import Avatar from '../../assets/avatar.png';
 
 const AdminDashboard = () => {
     const navigate = useNavigate()
@@ -10,11 +11,20 @@ const AdminDashboard = () => {
             <Navbar />
             <div className="container py-5">
             {/* ===== Header ===== */}
-            <header className="mb-5">            
-                <p className="gradient-text fw-semibold display-3 py-md-5 py-3 about-text">
-                    Administrator<br /> Dashboard
-                </p>
-            </header>
+            <div className="d-flex pt-5 mt-5 px-md-5 px-3 flex-md-row flex-column">
+                <div className="me-2">
+                    <img
+                    src={Avatar}
+                    alt="profile"
+                    className="rounded-circle border border-3 border-white mb-3"
+                    style={{ width: "150px", height: "150px", objectFit: "cover" }}
+                    />
+                </div>
+                <div className="ms-2 pt-4">
+                    <h2 className="text-success">Welcome to Admin’s Dashboard</h2>
+                    <h3 className="fw-bold text-success">Iyanda Peter</h3>
+                </div>
+            </div>
 
             {/* ===== Property / Content Management ===== */}
             <section className="mb-5">

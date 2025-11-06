@@ -262,3 +262,154 @@ ul .booking-features::before {
 .cursor-pointer {
     cursor: pointer !important;
 }
+
+/* Image Orbit */
+/* Page centering */
+.image-orbit-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 12px;
+}
+
+/* Stage size (centered) */
+.orbit-stage {
+  width: 760px;            /* overall stage width */
+  height: 520px;           /* overall stage height */
+  position: relative;
+  margin: 0 auto;
+  user-select: none;
+  overflow: visible;       /* allow thumbs to be outside bounds */
+  display: block;
+}
+
+/* Generic slot */
+.slot {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 2000ms cubic-bezier(.22,.9,.3,1), width 2000ms ease, height 2000ms ease;
+  will-change: transform, width, height;
+}
+
+/* The small thumbnails */
+.slot .slot-img {
+  width: 170px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  transition: transform 800ms ease, box-shadow 800ms ease;
+}
+
+/* CENTER slot */
+.slot-center {
+  width: 480px;
+  height: 350px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+  pointer-events: none;
+}
+.center-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+}
+
+/* caption centered on center image */
+.center-caption {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 22px;
+  font-weight: 600;
+  font-size: 1.15rem;
+  transition: opacity 300ms ease, transform 300ms ease;
+  opacity: 1;
+}
+.center-caption.hide { opacity: 0; transform: translateX(-50%) translateY(6px); }
+.center-caption.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* POSITIONING: start positions for side slots */
+/* We position them *further away* from center so they don't overlap. Adjust values if needed. */
+
+/* TOP slot (above center): centered horizontally */
+.slot-top {
+  top: calc(50% - 260px); /* push sufficiently above center */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+}
+
+/* RIGHT slot (to the right of center) */
+.slot-right {
+  top: 50%;
+  left: calc(50% + 360px); /* push right */
+  transform: translate(-50%, -50%);
+  z-index: 20;
+}
+
+/* BOTTOM slot (below center) */
+.slot-bottom {
+  top: calc(50% + 260px); /* push below */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+}
+
+/* LEFT slot (to the left of center) */
+.slot-left {
+  top: 50%;
+  left: calc(50% - 360px); /* push left */
+  transform: translate(-50%, -50%);
+  z-index: 20;
+}
+
+/* ---- Animation behavior
+   Because we rotate our `order` array, a given DOM slot (e.g., .slot-top) will
+   show different image src over time. The smooth movement (swap) is produced
+   because the DOM elements keep their slot class while their src changes:
+   to perform a visual "swap" we rely on the transform transitions when the
+   element becomes slot-center (center) vs slot-top/right/... Notably we keep
+   the center in one DOM node (.slot-center) while side slots are separate.
+   To animate the swap simultaneously, we'll move the side slot into the center
+   position when it becomes the center by overriding its transform via computed classes.
+*/
+
+/* When slot transforms to center (we simulate by swapping content), transitions handle the smooth move.
+   However to add an immediate visual swap feel we define a slightly larger transform on center and side */
+ 
+/* Small scale effect on side thumbnails to make movement more lively */
+.slot:hover .slot-img {
+  transform: scale(1.02);
+}
+
+/* RESPONSIVE adjustments */
+@media (max-width: 1100px) {
+  .orbit-stage { width: 640px; height: 440px; }
+  .slot .slot-img { width: 150px; height: 105px; }
+  .slot-center { width: 420px; height: 300px; }
+  .slot-top { top: calc(50% - 220px); }
+  .slot-right { left: calc(50% + 300px); }
+  .slot-left { left: calc(50% - 300px); }
+  .slot-bottom { top: calc(50% + 220px); }
+}
+
+@media (max-width: 700px) {
+  .orbit-stage { width: 360px; height: 320px; }
+  .slot .slot-img { width: 100px; height: 72px; }
+  .slot-center { width: 260px; height: 180px; }
+  .slot-top { top: calc(50% - 180px); }
+  .slot-right { left: calc(50% + 220px); }
+  .slot-left { left: calc(50% - 220px); }
+  .slot-bottom { top: calc(50% + 180px); }
+}

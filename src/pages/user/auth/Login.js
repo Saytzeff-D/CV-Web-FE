@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginSchema } from "../../../schemas";
 import axios from "axios";
 import { Alert } from "@mui/material";
@@ -11,11 +11,14 @@ const Login = () => {
   const uri = useSelector(state=>state.uri)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isAgent, setIsAgent] = useState(false)
+  const navigate = useNavigate()
 
-  const { handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
+  const { handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue } = useFormik({
     initialValues: {
       email: '',
-      password: ''
+      password: '',
+      role: 'customer'
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
@@ -33,6 +36,16 @@ const Login = () => {
       })
     }
   })
+
+  const handleRoleChange = (e) => {
+    setIsAgent(e.target.checked);
+    console.log(e.target.checked, isAgent)
+    setFieldValue('role', isAgent ? 'agent' : 'customer');
+  }
+  const verifyNow = () => {
+    sessionStorage.setItem('tempUserEmail', values.email)
+    navigate('/create-account/verify')
+  }
 
   return (
     <>        
@@ -105,7 +118,19 @@ const Login = () => {
 
                 {/* Form */}
                 <form onSubmit={handleSubmit}>       
-                    {error && <Alert severity="error" className="mb-3">{error}</Alert>}
+                    {
+                        error && 
+                        <Alert severity="error" className="mb-3">
+                            {error}. {error.toLowerCase().includes('verify your email') && 
+                                <a href=""
+                                    onClick={verifyNow}
+                                    style={{ cursor: "pointer", color: "#f72c2cff" }}
+                                >
+                                    Click here
+                                </a>
+                            }
+                        </Alert>
+                    }
                 <div className="mb-3">
                     <label className="form-label fw-medium" style={{ fontSize: "13px" }}>
                     Email Address
@@ -153,7 +178,30 @@ const Login = () => {
                         color: "#aaa",
                     }}
                     ></i>
-                </div>               
+                </div>   
+
+                <div className="form-check form-switch mb-3">
+                    <input
+                    className="form-check-input"
+                    type="checkbox"
+                    name="isAgent"
+                    id="agentSwitch"
+                    checked={isAgent}
+                    onChange={(e)=>handleRoleChange(e)}
+                    style={{
+                        width: "42px",
+                        height: "22px",
+                        cursor: "pointer",
+                    }}
+                    />
+                    <label
+                    className="form-check-label ms-2 fw-medium"
+                    htmlFor="agentSwitch"
+                    style={{ fontSize: "13px" }}
+                    >
+                        Login as an agent?
+                    </label>
+                </div>            
 
                 <button
                     type="submit"

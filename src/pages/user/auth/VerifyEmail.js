@@ -1,13 +1,51 @@
-import React, { useState } from "react";
+import { Alert } from "@mui/material";
+import axios from "axios";
+import React, { use, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 const VerifyEmail = () => {  
     const navigate = useNavigate()
+    const email = sessionStorage.getItem('tempUserEmail')
+    const [code, setCode] = useState()
+    const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
+    const uri = useSelector(state=>state.uri)
+    const [isLoading, setIsLoading] = useState(false)
 
     const verify = () => {
-        navigate('/login')
-        // Verification logic here
+        setError('')
+        if (code) {
+            setIsLoading(true)
+            axios.post(`${uri}auth/verify-email`, { email, code: parseInt(code) })
+            .then((res) => {
+                console.log(res.data)
+                navigate('/login')
+            })
+            .catch((err) => {
+                setIsLoading(false)
+                err.response ? setError(err.response.data.message) : setError('An error occurred')
+            })
+        } else {
+            setError('Enter verification code')
+        }
     }
+    const resendCode = () => {
+        axios.post(`${uri}auth/resend-verification-code`, { email })
+        .then((res) => {
+            console.log(res.data)
+            setSuccess('Verification code resent successfully')
+        })
+        .catch((err) => {
+            err.response ? setError(err.response.data.message) : setError('An error occurred')
+        })
+    }
+
+    useEffect(() => {
+        if(!email){
+            navigate('/create-account')
+        }
+    }, [email, navigate])
 
   return (
     <>        
@@ -29,9 +67,19 @@ const VerifyEmail = () => {
                 className="text-center text-muted mb-4"
                 style={{ fontSize: "14px" }}
                 >
-                    Check <b>Sogojames@gmail.com</b> to verify your account and get started
+                    Check <b>{email}</b> to verify your account and get started
                 </p>
-                                
+
+                {error && (
+                <Alert severity="error" className="mb-3">
+                    {error}
+                </Alert>
+                )}
+                {success && (
+                <Alert severity="success" className="mb-3">
+                    {success}
+                </Alert>
+                )}
                 {/* Form */}
                 <div>               
                 <div className="mb-3">
@@ -39,7 +87,7 @@ const VerifyEmail = () => {
                     Enter Code
                     </label>
                     <input
-                    type="email"
+                    type="number"
                     className="form-control"
                     placeholder="falanayemi.com"
                     style={{
@@ -47,11 +95,13 @@ const VerifyEmail = () => {
                         height: "42px",
                         fontSize: "14px",
                     }}
+                    onChange={(e)=>setCode(e.target.value)}
                     />
                 </div>                            
 
                 <button
                     onClick={verify}
+                    disabled={isLoading}
                     type="submit"
                     className="btn w-100 fw-semibold"
                     style={{
@@ -61,13 +111,11 @@ const VerifyEmail = () => {
                     height: "45px",
                     }}
                 >
-                    Continue
+                    {isLoading ? 'Verifying...' : 'Verify'}
                 </button>
 
-                <p className="text-center mt-3 mb-0" style={{ fontSize: "13px" }}>                    
-                    <Link to={'/create-account'} className="fw-semibold">
-                        Resend
-                    </Link>
+                <p onClick={resendCode} className="text-center mt-3 mb-0 text-primary fw-bold" style={{ fontSize: "13px" }}>
+                    Resend                    
                 </p>
                 </div>
             </div>

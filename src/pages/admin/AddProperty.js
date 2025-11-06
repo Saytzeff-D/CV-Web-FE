@@ -8,6 +8,8 @@ const AddProperty = () => {
   const navigate = useNavigate()
   const [bedrooms, setBedrooms] = useState('Any');
   const [bathrooms, setBathrooms] = useState('Any');
+  const [toilets, setToilets] = useState('Any');
+  const [parking, setParking] = useState('Any');
   const [features, setFeatures] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [selectedCoordinates, setSelectedCoordinates] = useState(null);
@@ -29,10 +31,10 @@ const AddProperty = () => {
       name: "4-Bedroom Flat",
       location: "",
       category: "",
-      price: "",
-      propertyType: "",
-      inspectionFee: "",
-      description: "",
+      total_price: "",
+      type: "",
+      inspection_fee: "",
+      about: "",
       land_size: ""      
     },
     onSubmit: (values, { resetForm }) => {
@@ -40,7 +42,9 @@ const AddProperty = () => {
         ...values,
         bedrooms,
         bathrooms,
-        features,
+        toilets,
+        parking_space: parking,
+        amenities:features,
         images,
         coordinates: selectedCoordinates        
       };
@@ -115,8 +119,8 @@ const AddProperty = () => {
   const handleSuggestionClick = (place) => {
     formik.setFieldValue("location", place.place_name);
     setSelectedCoordinates({
-      lat: place.geometry.coordinates[1],
-      lng: place.geometry.coordinates[0],
+      latitude: place.geometry.coordinates[1],
+      longitude: place.geometry.coordinates[0],
     });
     setSuggestions([]); // close suggestions list
   };
@@ -219,10 +223,10 @@ const AddProperty = () => {
             <label className="form-label fw-semibold">How much is this property?</label>
             <input
               type="number"
-              name="price"              
+              name="total_price"              
               placeholder="Enter Amount"
               className={`form-control ${
-                formik.touched.price && formik.errors.price ? "is-invalid" : ""
+                formik.touched.total_price && formik.errors.total_price ? "is-invalid" : ""
               }`}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
@@ -235,9 +239,9 @@ const AddProperty = () => {
           <div className="col-md-6">
             <label className="form-label fw-semibold">Property Type</label>
             <select
-              name="propertyType"              
+              name="type"              
               className={`form-select ${
-                formik.touched.propertyType && formik.errors.propertyType ? "is-invalid" : ""
+                formik.touched.type && formik.errors.type ? "is-invalid" : ""
               }`}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
@@ -253,10 +257,10 @@ const AddProperty = () => {
             <label className="form-label fw-semibold">Property Inspection Fees</label>
             <input
               type="number"
-              name="inspectionFee"            
+              name="inspection_fee"            
               placeholder="Enter Amount"
               className={`form-control ${
-                formik.touched.inspectionFee && formik.errors.inspectionFee ? "is-invalid" : ""
+                formik.touched.inspection_fee && formik.errors.inspection_fee ? "is-invalid" : ""
               }`}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
@@ -265,7 +269,7 @@ const AddProperty = () => {
         </div>
           {/* Beds & Baths */}
           {
-            formik.values.propertyType == 'Land'
+            formik.values.type == 'Land'
             ?
             <>
               <div className="mb-4">
@@ -283,7 +287,7 @@ const AddProperty = () => {
               </div>
             </>
             :
-            <>
+            <div className="d-flex justify-content-between flex-md-row flex-column">
               <div className="mb-4">
                 <label className="form-label fw-bold">
                   How many Bedrooms & Bathrooms?
@@ -328,18 +332,63 @@ const AddProperty = () => {
                   </div>
                 </div>
               </div>
-            </>
+
+              <div className="mb-4">
+                <label className="form-label fw-bold">
+                  How many Toilets & Parking Space?
+                </label>
+                <div
+                  className="border rounded p-3 bg-light"
+                  style={{ maxWidth: "400px" }}
+                >
+                  <div className="mb-2 fw-semibold">Toilets</div>
+                  <div className="d-flex gap-2 flex-wrap mb-3">
+                    {["Any", "+1", "+2", "+3", "+4", "+5"].map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        className={`btn btn-sm ${
+                          toilets === opt
+                            ? "btn-success text-white"
+                            : "btn-outline-success"
+                        }`}
+                        onClick={() => setToilets(opt)}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="fw-semibold">Parking Space</div>
+                  <div className="d-flex gap-2 flex-wrap">
+                    {["Any", "+1", "+2", "+3", "+4", "+5"].map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        className={`btn btn-sm ${
+                          parking === opt
+                            ? "btn-success text-white"
+                            : "btn-outline-success"
+                        }`}
+                        onClick={() => setParking(opt)}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           }
 
         {/* Description */}
         <div className="mb-3">
           <label className="form-label fw-semibold">Write About this Property?</label>
           <textarea
-            name="description"            
+            name="about"            
             rows="3"
             placeholder="Describe the property"
             className={`form-control ${
-                formik.touched.description && formik.errors.description ? "is-invalid" : ""
+                formik.touched.about && formik.errors.about ? "is-invalid" : ""
               }`}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
@@ -366,8 +415,8 @@ const AddProperty = () => {
               </button>
             ))}
             {
-              formik.values.propertyType && 
-              featuredOptions[formik.values.propertyType].map((feature) => (
+              formik.values.type && 
+              featuredOptions[formik.values.type].map((feature) => (
                 <button
                   key={feature}
                   type="button"

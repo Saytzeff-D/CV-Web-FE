@@ -16,14 +16,14 @@ const AgentDashboard = () => {
             <div className="bg-admin">
                 <div className="container-fluid p-0 inner-bg-admin">      
                     <div className="d-flex pt-5 mt-5 px-3 px-md-5 flex-md-row flex-column">
-                        <div className="me-2">
+                        {/* <div className="me-2">
                             <img
                             src={Avatar}
                             alt="profile"
                             className="rounded-circle border border-3 border-white mb-3"
                             style={{ width: "150px", height: "150px", objectFit: "cover" }}
                             />
-                        </div>
+                        </div> */}
                         <div className="ms-2 pt-4">
                             <h2 className="text-success">Welcome to Agent’s Dashboard</h2>
                             <h3 className="fw-bold text-success">Iyanda Peter</h3>
