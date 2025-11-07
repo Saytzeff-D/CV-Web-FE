@@ -1,4 +1,4 @@
-import { Alert } from "@mui/material";
+import { Alert, Dialog, DialogContent } from "@mui/material";
 import axios from "axios";
 import React, { use, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -12,9 +12,11 @@ const VerifyEmail = () => {
     const [success, setSuccess] = useState('')
     const uri = useSelector(state=>state.uri)
     const [isLoading, setIsLoading] = useState(false)
+    const [openDialog, setOpenDialog] = useState(false)
 
     const verify = () => {
         setError('')
+        setSuccess('')
         if (code) {
             setIsLoading(true)
             axios.post(`${uri}auth/verify-email`, { email, code: parseInt(code) })
@@ -31,12 +33,17 @@ const VerifyEmail = () => {
         }
     }
     const resendCode = () => {
-        axios.post(`${uri}auth/resend-verification-code`, { email })
+        setError('')
+        setSuccess('')
+        setOpenDialog(true)
+        axios.post(`${uri}auth/resend-verification`, { email })
         .then((res) => {
             console.log(res.data)
-            setSuccess('Verification code resent successfully')
+            setSuccess(res.data.message)
+            setOpenDialog(false)
         })
         .catch((err) => {
+            setOpenDialog(false)
             err.response ? setError(err.response.data.message) : setError('An error occurred')
         })
     }
@@ -114,12 +121,25 @@ const VerifyEmail = () => {
                     {isLoading ? 'Verifying...' : 'Verify'}
                 </button>
 
-                <p onClick={resendCode} className="text-center mt-3 mb-0 text-primary fw-bold" style={{ fontSize: "13px" }}>
+                <p onClick={resendCode} className="text-center mt-3 mb-0 text-primary fw-bold cursor-pointer" style={{ fontSize: "13px" }}>
                     Resend                    
                 </p>
                 </div>
             </div>
-            </div>
+            <Dialog open={openDialog} PaperProps={{
+                style: {
+                backgroundColor: 'transparent',
+                boxShadow: 'none',
+                }
+            }}
+            >
+                <DialogContent>
+                    <p>
+                        <span className='spinner-border text-white'></span>
+                    </p>
+                </DialogContent>
+            </Dialog>
+        </div>
     </>
   );
 }

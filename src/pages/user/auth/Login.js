@@ -17,8 +17,7 @@ const Login = () => {
   const { handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue } = useFormik({
     initialValues: {
       email: '',
-      password: '',
-      role: 'customer'
+      password: ''      
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
@@ -27,6 +26,8 @@ const Login = () => {
       axios.post(`${uri}auth/login`, values)
       .then((res)=>{
         console.log(res.data);
+        sessionStorage.setItem('userToken', res.data.token)
+        navigate('/client/dashboard')
         // Handle successful login
       })
       .catch((err)=>{
@@ -40,7 +41,7 @@ const Login = () => {
   const handleRoleChange = (e) => {
     setIsAgent(e.target.checked);
     console.log(e.target.checked, isAgent)
-    setFieldValue('role', isAgent ? 'agent' : 'customer');
+    // setFieldValue('role', isAgent ? 'agent' : 'customer');
   }
   const verifyNow = () => {
     sessionStorage.setItem('tempUserEmail', values.email)

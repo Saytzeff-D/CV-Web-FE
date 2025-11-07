@@ -7,14 +7,29 @@ import { Link, useNavigate } from "react-router-dom";
 const ForgotPassword = () => {  
     const uri = useSelector(state=>state.uri)
     const navigate = useNavigate()
-    const [checkEmail, setCheckEmail] = useState(false)
+    const [checkAccount, setCheckAccount] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [email, setEmail] = useState('')
-    const [code, setCode] = useState('')
+    const [code, setCode] = useState()
+    const [success, setSuccess] = useState('')
     const [error, setError] = useState('')
 
     const verifyCode = () => {
-        navigate('/reset-password')
+        setError('')        
+        if (code) {
+            setIsLoading(true)
+            axios.post(`${uri}auth/verify-forgot-password`, { email, code: parseInt(code) })
+            .then((res) => {
+                console.log(res.data)
+                // navigate('/reset-password')
+            })
+            .catch((err) => {
+                setIsLoading(false)
+                err.response ? setError(err.response.data.message) : setError('An error occurred')
+            })
+        } else {
+            setError('Enter verification code')
+        }    
         // Verification logic here
     }
 
@@ -27,6 +42,8 @@ const ForgotPassword = () => {
             axios.post(`${uri}auth/forgot-password`, {email})
             .then((res)=>{
                 setIsLoading(false)
+                setCheckAccount(true)
+                setSuccess(res.data.message)
                 console.log(res.data)            
             })                        
             .catch((err)=>{
@@ -53,7 +70,7 @@ const ForgotPassword = () => {
                 {/* Header */}
                 <h4 className="text-center fw-semibold mb-1">Forgot Password</h4>
                 {
-                    !checkEmail
+                    !checkAccount
                     ?
                     <>
                         <p
@@ -100,11 +117,16 @@ const ForgotPassword = () => {
                     </>                
                     :
                     <>
+                        {error && (
+                        <Alert severity="error" className="mb-3">
+                            {error}
+                        </Alert>
+                        )}                        
                         <p
                             className="text-center text-muted mb-4"
                             style={{ fontSize: "14px" }}
                         >
-                            Check <b>Sogojames@gmail.com</b> to verify your account and get started
+                            {success}
                         </p>
                             
                         <div>               
@@ -116,6 +138,7 @@ const ForgotPassword = () => {
                                 type="number"
                                 className="form-control"
                                 placeholder="123456"
+                                onChange={(e)=>setCode(e.target.value)}
                                 style={{
                                     border: "1px solid #e9e9e9",
                                     height: "42px",

@@ -2,10 +2,15 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from '../assets/icon.png'
 
-const Navbar = () => {    
+const Navbar = ({avatar}) => {    
     const [menuOpen, setMenuOpen] = useState(false);
     const { pathname } = useLocation();
     const navigate = useNavigate()
+
+    const logout = ()=>{
+        sessionStorage.removeItem('userToken')
+        navigate('/login')
+    }
 
   return (
     <div>
@@ -81,10 +86,24 @@ const Navbar = () => {
                         </Link>
                     </li>
                 </ul>
-                <div className="d-flex" role="search">
-                    <button onClick={()=>navigate('/create-account')} className="btn btn-white me-2" type="submit">Sign Up</button>
-                    <button onClick={()=>navigate('/login')} className="btn bg-theme me-2" type="submit">Login</button>
-                </div>
+                {
+                    avatar !== null && avatar !== undefined
+                    ?
+                    <div className="dropdown" role="search">
+                        <div className="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style={{cursor: 'pointer'}}>
+                            <img src={avatar} alt="User Avatar" className="rounded-circle" style={{ width: "40px", height: "40px", objectFit: "cover" }} />
+                        </div>
+                        <ul className="dropdown-menu dropdown-menu-end">
+                            <li><Link className="dropdown-item" to="/client/dashboard">Dashboard</Link></li>
+                            <li><p className="dropdown-item cursor-pointer" onClick={logout} >Logout</p></li>
+                        </ul>
+                    </div>
+                    :
+                    <div className="d-flex" role="search">
+                        <button onClick={()=>navigate('/create-account')} className="btn btn-white me-2" type="submit">Sign Up</button>
+                        <button onClick={()=>navigate('/login')} className="btn bg-theme me-2" type="submit">Login</button>
+                    </div>
+                }
                 </div>
             </div>
         </nav>        
