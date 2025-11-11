@@ -24,6 +24,8 @@ import AddProperty from './pages/admin/AddProperty';
 import ClientDashboard from './pages/user/dashboard/ClientDashboard';
 import AgentDashboard from './pages/user/dashboard/AgentDashboard';
 import FilterBar from './Filterbar';
+import AddBlog from './pages/admin/AddBlog';
+import BlogManager from './pages/admin/BlogManager';
 
 function App() {
   return (
@@ -52,6 +54,9 @@ function App() {
         <Route path='/admin/view-agents' element={<AgentsPage />} />
         <Route path='/client/dashboard' element={<ClientDashboard />} />
         <Route path='/agent/dashboard' element={<AgentDashboard />} />
+        <Route path='/agent/add-property' element={<AddProperty />} />
+        <Route path='/admin/add-blog' element={<AddBlog />} />
+        <Route path='/admin/blog-manager' element={<BlogManager />} />
         <Route path='/filterbar' element={<FilterBar />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
