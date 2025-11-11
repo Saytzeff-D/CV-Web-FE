@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginSchema } from "../../schemas";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ const AdminLogin = () => {
     const uri = useSelector(state=>state.uri)
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate()
   const { handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
       initialValues: {
         email: '',
@@ -23,7 +24,9 @@ const AdminLogin = () => {
         axios.post(`${uri}auth/admin/login`, values)
         .then((res)=>{
           console.log(res.data);
-          // Handle successful login
+          sessionStorage.setItem('userToken', res.data.token)
+          sessionStorage.setItem('route', '/admin/dashboard')
+          navigate('/admin/dashboard')
         })
         .catch((err)=>{
           setIsLoading(false)

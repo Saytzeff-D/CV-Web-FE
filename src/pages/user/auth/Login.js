@@ -27,7 +27,8 @@ const Login = () => {
       .then((res)=>{
         console.log(res.data);
         sessionStorage.setItem('userToken', res.data.token)
-        navigate('/client/dashboard')
+        res.data.role == 'customer' ? navigate('/client/dashboard') : navigate('/agent/dashboard')
+        res.data.role == 'customer' ? sessionStorage.setItem('route', ' /client/dashboard') : sessionStorage.setItem('route', '/agent/dashboard ')
         // Handle successful login
       })
       .catch((err)=>{
@@ -38,11 +39,6 @@ const Login = () => {
     }
   })
 
-  const handleRoleChange = (e) => {
-    setIsAgent(e.target.checked);
-    console.log(e.target.checked, isAgent)
-    // setFieldValue('role', isAgent ? 'agent' : 'customer');
-  }
   const verifyNow = () => {
     sessionStorage.setItem('tempUserEmail', values.email)
     navigate('/create-account/verify')
@@ -179,30 +175,7 @@ const Login = () => {
                         color: "#aaa",
                     }}
                     ></i>
-                </div>   
-
-                <div className="form-check form-switch mb-3">
-                    <input
-                    className="form-check-input"
-                    type="checkbox"
-                    name="isAgent"
-                    id="agentSwitch"
-                    checked={isAgent}
-                    onChange={(e)=>handleRoleChange(e)}
-                    style={{
-                        width: "42px",
-                        height: "22px",
-                        cursor: "pointer",
-                    }}
-                    />
-                    <label
-                    className="form-check-label ms-2 fw-medium"
-                    htmlFor="agentSwitch"
-                    style={{ fontSize: "13px" }}
-                    >
-                        Login as an agent?
-                    </label>
-                </div>            
+                </div>                   
 
                 <button
                     type="submit"
