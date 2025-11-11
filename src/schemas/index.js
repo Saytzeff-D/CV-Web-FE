@@ -50,3 +50,23 @@ export const createAdminSchema = yup.object().shape({
     confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Required'),
     avatar: yup.mixed().required('Required')
 })
+
+export const addPropertySchema = yup.object().shape({
+    name: yup.string().required('Required'),
+    address: yup.string().required('Required'),
+    category: yup.string().required('Required'),
+    total_price: yup.number().required('Required'),
+    type: yup.string().required('Required'),
+    inspection_fee: yup.number().required('Required'),
+    about: yup.string().required('Required'),
+    land_size: yup.string().when('type', {
+        is: 'Land',
+        then: (schema) => schema.required('Required for Land'),
+        otherwise: (schema) => schema.notRequired()
+    })
+})
+export const addBlogSchema = yup.object().shape({
+    title: yup.string().required('Required'),
+    subtitle: yup.string().required('Required'),
+    content: yup.string().required('Required')
+})
