@@ -9,7 +9,7 @@ import Footer from "../../../components/Footer";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Skeleton } from "@mui/material";
+import { Skeleton, Dialog, DialogContent } from "@mui/material";
 
 const ClientDashboard = () => {
     const uri = useSelector(state=>state.uri)
@@ -19,6 +19,10 @@ const ClientDashboard = () => {
     const navigate = useNavigate()
     const [userData, setUserData] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
+    const [savedProperties, setSavedProperties] = useState([])
+    const [transactions, setTransactions] = useState([])
+    const [bookings, setBookings] = useState([])
+    const [openDialog, setOpenDialog] = useState(true)
 
     useEffect(()=>{
         if(!token){
@@ -29,17 +33,22 @@ const ClientDashboard = () => {
             })
             .then((res)=>{
                 setIsLoading(false)
-                setUserData(res.data.data[0])
+                setOpenDialog(false)
+                sessionStorage.setItem('avatar', res.data.account.avatar)
+                setBookings(res.data.activeBookings)
+                setTransactions(res.data.transactions)
+                setSavedProperties(res.data.savedProperties)
+                setUserData(res.data.account)
                 console.log(res.data);
             })
             .catch((err)=>{
-                console.log(err);
+                navigate('/login')
             })            
         }
     },[uri])
     return (
         <>
-            <Navbar avatar={userData && userData.avatar} />
+            <Navbar />
             <div className="bg-admin">
                 <div className="container-fluid p-0 inner-bg-admin"> 
                     <div className="d-flex pt-5 mt-5 px-md-5 px-3 flex-md-row flex-column">
@@ -82,13 +91,13 @@ const ClientDashboard = () => {
                     {/* Tab Content */}
                     <div className="container">
                         {activeTab === "transactions" && (
-                        <TransactionHistory />
+                        <TransactionHistory transactions={transactions} />
                         )}
                         {activeTab === "bookings" && (
-                        <ActiveBookings />
+                        <ActiveBookings bookings={bookings} />
                         )}
                         {activeTab === "saved" && (
-                        <SavedProperties />
+                        <SavedProperties savedProperties={savedProperties} />
                         )}
                     </div>
 
@@ -131,6 +140,19 @@ const ClientDashboard = () => {
                     </div>
             </div>
             <Footer />
+            <Dialog open={openDialog} PaperProps={{
+                style: {
+                backgroundColor: 'transparent',
+                boxShadow: 'none',
+                }
+            }}
+            >
+                <DialogContent>
+                    <p>
+                        <span className='spinner-border text-white'></span>
+                    </p>
+                </DialogContent>
+            </Dialog>
         </>
     )
 }
