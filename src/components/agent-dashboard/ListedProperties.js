@@ -1,15 +1,15 @@
 import AddListing from "../../assets/add-property.png"
 import { Link, useNavigate } from "react-router-dom";
 
-const ListedProperties = () => {
-    const properties = [1,2,3,4];
+const ListedProperties = (props) => {
+    const { properties } = props;
     const navigate = useNavigate()
     return (
         <div>
             <div className="d-flex justify-content-center">
                 <div className="col-md-6">
                     <div className="d-flex px-5 pb-5">
-                        <div className="cursor-pointer" onClick={()=>navigate('/admin/add-property')}><img src={AddListing} alt="Add Listing" width={'80px'} height={'80px'} className="img-fluid" /></div>
+                        <div className="cursor-pointer" onClick={()=>navigate('/agent/add-property')}><img src={AddListing} alt="Add Listing" width={'80px'} height={'80px'} className="img-fluid" /></div>
                         <div className="ms-4 text-success fw-bold">
                             <p className="my-0 pt-3">My Listed Properties</p>
                             <p className="my-0">Total Listed: {properties.length} <span className="ps-5">Pending: 0</span></p>
@@ -18,33 +18,38 @@ const ListedProperties = () => {
                 </div>
             </div>
             <div className="row g-3 w-100 pb-5 px-md-0 px-4">
-                {
-                    properties.map((each, i)=>(
-                    <div className="col-lg-3 col-md-6" key={i}>
-                        <div className="card border-0" style={{ minWidth: "16rem" }}>
-                        <div className="position-relative overflow-hidden rounded">                
-                            <img src={`https://picsum.photos/600/400?random=${each}`} className="card-img-top" alt="Property" />                                                    
-
-                            {/* <Link to={'/buy/house'}
-                                className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
-                                See More
-                            </Link> */}
-                        </div>
-
-                        <div className="card-body pt-3">
-                            <h6 className="card-title mb-1">Furnished 4bdrm Duplex</h6>
-                            <p className="h5 fw-bold mb-2">₦450,000</p>
-                            <div className="d-flex flex-wrap text-muted small">
-                            <div className="me-3"><i className="fa fa-regular fa-bed"></i> 4 beds</div>
-                            <div className="me-3"><i className="fa fa-regular fa-toilet"></i> 5 toilets</div>
-                            <div className="me-3"><i className="fa fa-regular fa-bath"></i> 5 baths</div>
-                            </div>
-                            <p className="text-muted small mt-2">Ikota, Lekki, Lagos</p>
-                        </div>
-                        </div>
-                    </div>
-                    ))
-                }
+                <div className="table-responsive">
+                    <table className="table align-middle">
+                    <thead className="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Main Photo</th>
+                            <th>Created At</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            properties.map((each, i)=>(
+                                <tr key={i}>
+                                    <td>{i + 1}</td>
+                                    <td><img src={each.main_photo} alt={each.name} className="img-fluid" /></td>
+                                    <td>{new Date(each.created_at).toLocaleDateString()}</td>
+                                    <td>{each.name}</td>                                    
+                                    <td>{each.category.charAt(0).toUpperCase() + each.category.slice(1)}</td>
+                                    <td>{each.type}</td>
+                                    <td>{each.total_price}</td>
+                                    <td><span className={`badge ${each.publicized == '1' ? 'bg-success' : 'bg-warning'}`}>{each.publicized == '1' ? 'Approved' : 'Pending'}</span></td>
+                                </tr>
+                            ))
+                        }                                                
+                    </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

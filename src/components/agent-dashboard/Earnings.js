@@ -1,7 +1,8 @@
-const Earnings = () => {
+const Earnings = (props) => {
+    const { transactions, balance } = props;
     return (
     <>
-        <h4 className="fw-bold mb-3 text-success">Available Earnings: N500,000</h4>
+        <h4 className="fw-bold mb-3 text-success">Available Earnings: N{balance}</h4>
         <p className="text-success">We take 15% for every successful Transaction from your Property listing</p>
         <div className="table-responsive">
             <table className="table align-middle">
