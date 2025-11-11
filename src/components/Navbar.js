@@ -2,14 +2,18 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from '../assets/icon.png'
 
-const Navbar = ({avatar}) => {    
+const Navbar = () => {   
+    const avatar = sessionStorage.getItem('avatar') 
     const [menuOpen, setMenuOpen] = useState(false);
     const { pathname } = useLocation();
     const navigate = useNavigate()
+    const route = null
 
     const logout = ()=>{
+        sessionStorage.getItem('route') == '/admin/dashboard' ? navigate('/admin/login') : navigate('/login')
         sessionStorage.removeItem('userToken')
-        navigate('/login')
+        sessionStorage.removeItem('route')
+        sessionStorage.removeItem('avatar')
     }
 
   return (
@@ -94,7 +98,7 @@ const Navbar = ({avatar}) => {
                             <img src={avatar} alt="User Avatar" className="rounded-circle" style={{ width: "40px", height: "40px", objectFit: "cover" }} />
                         </div>
                         <ul className="dropdown-menu dropdown-menu-end">
-                            <li><Link className="dropdown-item" to="/client/dashboard">Dashboard</Link></li>
+                            <li><Link className="dropdown-item" to={route}>Dashboard</Link></li>
                             <li><p className="dropdown-item cursor-pointer" onClick={logout} >Logout</p></li>
                         </ul>
                     </div>
