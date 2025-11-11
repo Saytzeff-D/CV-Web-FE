@@ -1,9 +1,32 @@
 import { useNavigate } from 'react-router-dom';
 import data from '../../data.json'
+import { useEffect, useState } from 'react';
+import Apartment from '../../components/administer-property/Apartment';
+import Pending from '../../components/administer-property/Pending';
+import Land from '../../components/administer-property/Land';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const PropertyManager = () => {
-  const properties = data.properties;
+  const [properties, setProperties] = useState([]);
   const navigate = useNavigate()
+  const uri = useSelector(state=>state.uri)
+  const [activeTab, setActiveTab] = useState("apartment");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get(`${uri}property/all`)
+      .then((response) => {
+        console.log("Fetched properties:", response.data);
+        setProperties(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching properties:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [uri]);
 
   return (
     <div className="container py-4">
@@ -22,57 +45,34 @@ const PropertyManager = () => {
         </button>
       </div>
 
-    <div className='d-flex justify-content-center'>
-        <div className='col-md-9'>
-            {/* Property List */}
-            {properties.map((p) => (
-                <div key={p.id} className="row align-items-center mb-4 w-100">
-                <div className="col-5">
-                    <img
-                    src={p.image}
-                    alt={p.title}
-                    className="img-fluid rounded"
-                    style={{ width: "100%", height: "auto" }}
-                    />
-                </div>
-                <div className="col-7">
-                    <div className='d-flex justify-content-between flex-md-row flex-column'>
-                        <div>
-                            <h6 className="fw-semibold mb-1">{p.title}</h6>
-                            <p className="text-muted small mb-1">{p.location}</p>
-                            <h6 className="fw-bold mb-2">{p.price}</h6>
-                        </div>
-                        <div>
-                            <button className="btn btn-outline-success btn-sm me-2 mb-2">
-                                Edit
-                            </button>                            
-                            <button className="btn btn-outline-danger btn-sm mb-2">
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                    <div className="d-flex align-items-center text-muted small gap-3">
-                        <span>
-                            <i className="fas fa-bed"></i> {p.beds} beds
-                        </span>
-                        <span>
-                            <i className="fas fa-toilet"></i> {p.toilets} toilet
-                        </span>
-                        <span>
-                            <i className="fas fa-bath"></i> {p.baths} bath
-                        </span>
-                    </div>
-                </div>
-                </div>
-            ))}
-
-            {/* See More */}
-            <div className="text-center">
-                <button className="btn btn-link text-dark fw-semibold">
-                See more
-                </button>
-            </div>
-        </div>
+    <div className="mx-2 d-flex justify-content-center flex-row flex-nowrap overflow-auto my-4 gap-3">
+        {["apartment", "land", "pending"].map((tab) => (
+        <button
+            key={tab}
+            className={`btn ${
+            activeTab === tab ? "btn-success text-white" : "btn-outline-success"
+            }`}
+            onClick={() => setActiveTab(tab)}
+        >
+            {tab === "apartment"
+            ? "Apartment"
+            : tab === "land"
+            ? "Land"
+            : "Pending Approval"}
+        </button>
+        ))}
+    </div>
+    {/* Tab Content */}
+    <div className="container">
+        {activeTab === "apartment" && (
+        <Apartment isLoading={isLoading} properties={properties.filter(each=>each.type.toLowerCase() !== 'land' && each.publicized == 1)} />
+        )}
+        {activeTab === "land" && (
+        <Land isLoading={isLoading} properties={properties.filter(each=>each.type.toLowerCase() === 'land' && each.publicized == 1)} />
+        )}
+        {activeTab === "pending" && (
+        <Pending isLoading={isLoading} properties={properties.filter(each=>each.publicized == 0)} />
+        )}
     </div>
     </div>
   );

@@ -1,10 +1,14 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import data from "../../data.json"
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { addPropertySchema } from "../../schemas";
+import { Snackbar, Button, IconButton } from "@mui/material";
 
 const AddProperty = () => {
-  const featuredOptions = data.featuredOption;
+  const [featuredOptions, setFeaturedOptions] = useState([]);
   const navigate = useNavigate()
   const [bedrooms, setBedrooms] = useState('Any');
   const [bathrooms, setBathrooms] = useState('Any');
@@ -15,6 +19,13 @@ const AddProperty = () => {
   const [selectedCoordinates, setSelectedCoordinates] = useState(null);
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
+  const uri = useSelector(state=>state.uri)
+  const [isFetching, setIsFetching] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const token = sessionStorage.getItem('userToken')
+  const route = sessionStorage.getItem('route')
 
   const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoicGF4ZGF2IiwiYSI6ImNtaGdmbDhwbzBnbmMybXM3ZW84ZThsbDcifQ.EHc4njJ4J2q3-sNv9taX_A";
 
@@ -26,10 +37,28 @@ const AddProperty = () => {
     );
   };
 
+  useEffect(()=>{
+    if (!token) {
+      alert("You are not authorized to view this page.");
+      navigate("/admin/login");
+    } else {
+      axios.get(`${uri}property/amenities`)
+        .then((response) => {
+          setIsFetching(false);          
+          setFeaturedOptions(response.data.data);        
+        })
+        .catch((error) => {
+          setIsFetching(false);
+          alert("Failed to fetch amenities. Kindly reload page");
+          console.error("Error fetching amenities:", error);
+        });      
+    }
+  }, [uri]);
+
   const formik = useFormik({
     initialValues: {
-      name: "4-Bedroom Flat",
-      location: "",
+      name: "",
+      address: "",
       category: "",
       total_price: "",
       type: "",
@@ -37,6 +66,7 @@ const AddProperty = () => {
       about: "",
       land_size: ""      
     },
+    validationSchema: addPropertySchema,
     onSubmit: (values, { resetForm }) => {
       const finalData = {
         ...values,
@@ -48,19 +78,36 @@ const AddProperty = () => {
         images,
         coordinates: selectedCoordinates        
       };
-      console.log("Submitted Property:", finalData);
-      alert("Property submitted successfully!");
-      resetForm();
-      setBedrooms('Any');
-      setBathrooms('Any');
-      setFeatures([]);
+      if (images.length !== 0) {
+        setIsLoading(true);
+        console.log("Submitted Property:", finalData);
+        axios.post(`${uri}property/create`, finalData, {
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        })
+          .then((res) => {
+            setIsLoading(false);
+            // resetForm();
+            // setBedrooms('Any');
+            // setBathrooms('Any');
+            // setFeatures([]);
+            route == '/admin/dashboard' ? navigate('/admin/property-manager') : navigate('/agent/dashboard')
+            setSuccessMessage("Property submitted successfully!");
+          })
+          .catch((err) => {
+            setIsLoading(false);
+            setErrorMessage("Failed to submit property. Kindly try again");
+            console.error("Error submitting property:", err);
+          });
+      } else {
+        alert("Please upload at least one image.");
+      }                
     },
   });
 
   let typingTimer;
-  const handleLocationChange = (e) => {
+  const handleAddressChange = (e) => {
     const value = e.target.value;
-    formik.setFieldValue("location", value);
+    formik.setFieldValue("address", value);
     clearTimeout(typingTimer);
     typingTimer = setTimeout(() => fetchSuggestions(value), 500);
   };
@@ -96,6 +143,28 @@ const AddProperty = () => {
     setImages(newImages);
   };
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSuccessMessage('');
+    setErrorMessage('');
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        &times;
+      </IconButton>
+    </React.Fragment>
+  );
+
   const processImages = (e)=>{
       let files = e.target.files
       if (files.length == 0) {
@@ -117,7 +186,7 @@ const AddProperty = () => {
   }
 
   const handleSuggestionClick = (place) => {
-    formik.setFieldValue("location", place.place_name);
+    formik.setFieldValue("address", place.place_name);
     setSelectedCoordinates({
       latitude: place.geometry.coordinates[1],
       longitude: place.geometry.coordinates[0],
@@ -136,7 +205,7 @@ const AddProperty = () => {
           Add a New Property
         </h4>
 
-        <button onClick={()=>navigate('/admin/dashboard')} className="btn btn-success rounded-circle d-flex align-items-center justify-content-center custom-btn">
+        <button onClick={()=>navigate(route)} className="btn btn-success rounded-circle d-flex align-items-center justify-content-center custom-btn">
           ×
         </button>
       </div>
@@ -162,13 +231,14 @@ const AddProperty = () => {
             <label className="form-label fw-bold">Property location</label>
             <input
                 type="text"
-                name="location"                
-                placeholder="Start typing location..."
+                name="address"  
+                value={formik.values.address}              
+                placeholder="Start typing address..."
                 className={`form-control ${
-                formik.touched.location && formik.errors.location ? "is-invalid" : ""
+                formik.touched.address && formik.errors.address ? "is-invalid" : ""
               }`}
                 onBlur={formik.handleBlur}
-                onChange={handleLocationChange}
+                onChange={handleAddressChange}
                 autoComplete="off"
             />
 
@@ -400,36 +470,26 @@ const AddProperty = () => {
         <div className="mb-4">
           <label className="form-label fw-bold">Other Features</label>
           <div className="d-flex flex-wrap gap-2">
-            {featuredOptions['General'].map((feature) => (
-              <button
-                key={feature}
-                type="button"
-                className={`btn btn-sm ${
-                  features.includes(feature)
-                    ? "btn-success text-white"
-                    : "btn-outline-success"
-                }`}
-                onClick={() => handleFeatureToggle(feature)}
-              >
-                {feature}
-              </button>
-            ))}
             {
-              formik.values.type && 
-              featuredOptions[formik.values.type].map((feature) => (
+              isFetching
+              ?
+              <p className="text-muted">Loading features...</p>
+              :
+                featuredOptions.map((feature) => (
                 <button
-                  key={feature}
+                  key={feature.id}
                   type="button"
                   className={`btn btn-sm ${
-                    features.includes(feature)
+                    features.includes(feature.id)
                       ? "btn-success text-white"
                       : "btn-outline-success"
                   }`}
-                  onClick={() => handleFeatureToggle(feature)}
+                  onClick={() => handleFeatureToggle(feature.id)}
                 >
-                  {feature}
+                  {feature.name}
                 </button>
-            ))}
+              ))
+            }            
           </div>
         </div>
 
@@ -482,10 +542,26 @@ const AddProperty = () => {
           </div>
         )}
 
-        <button onClick={formik.handleSubmit} type="button" className="btn btn-success px-5">
-          Save Changes
+        <button disabled={isLoading} onClick={formik.handleSubmit} type="button" className="btn btn-success px-5">
+          {isLoading ? "Adding Property..." : "Add Property"}
         </button>
       </form>
+      <Snackbar
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      open={!!successMessage}
+      autoHideDuration={4000}
+      onClose={handleClose}
+      action={action}
+      message={successMessage}
+    />
+    <Snackbar
+      open={!!errorMessage}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      autoHideDuration={4000}
+      onClose={handleClose}
+      action={action}
+      message={errorMessage}
+    />
     </div>
     </div>
   );
