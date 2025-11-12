@@ -1,5 +1,5 @@
 const Booking = (props) => {
-    const { type } = props;
+    const { type, property } = props;
     return (
         <div>
             {
@@ -26,7 +26,7 @@ const Booking = (props) => {
                         <div className="bg-light">
 
                             <div className="px-4 py-3 bg-light">
-                                <span className="fw-bold mb-0 h4">₦4,000,000</span>
+                                <span className="fw-bold mb-0 h4">₦{property.total_price}</span>
                                 <span className="text-muted">/ per year</span>
 
                                 <button className="btn btn-success w-100 my-3">
@@ -77,18 +77,18 @@ const Booking = (props) => {
                 <div className="card booking-card shadow-sm sticky-top" style={{ top: 100 }}>
                     <div className="card-body p-0">
                         <div className="px-4 pt-4">
-                        <span className="h4 fw-bold mb-0">₦30,000,000</span>
+                        <span className="h4 fw-bold mb-0">₦{property.total_price}</span>
                         <small className="text-muted">outright</small>
                         <p className="my-0">
-                            Ibeju land for {type}
+                            {property.name}
                         </p>
                         <p className="text-muted py-0">
-                            Harmony Estate, GRA Phase 1, Magodo, Lagos
+                            {property.address}
                         </p>
                         </div>
 
                         <div className="mt-3 bg-light p-3">
-                        <span className="fw-bold h4">₦5,000</span>
+                        <span className="fw-bold h4">₦{property.inspection_fee}</span>
                         <span className="small text-muted mb-2"> / inspection</span>
                         <button className="btn btn-success w-100 mb-3 mt-2">Schedule for Inspection</button>
                         <button className="btn btn-outline-dark w-100">Contact Agent</button>

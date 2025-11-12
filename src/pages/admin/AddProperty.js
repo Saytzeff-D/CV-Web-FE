@@ -284,9 +284,9 @@ const AddProperty = () => {
               onChange={formik.handleChange}
             >
               <option value="">Select category</option>
-              <option value="Sales">Sales</option>
-              <option value="Rent">Rent</option>
-              <option value="Shortlet">Shortlet</option>
+              <option value="sale">Sales</option>
+              <option value="rent">Rent</option>
+              <option value="shortlet">Shortlet</option>
             </select>
           </div>
           <div className="col-md-6">
@@ -316,11 +316,10 @@ const AddProperty = () => {
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
             >
-              <option value="">Select type</option>
-              <option value="Apartment">Apartment</option>
-              <option value="Hostel">Hostel</option>
-              <option value="House">House</option>
-              <option value="Land">Land</option>
+              <option value="">Select type</option>              
+              <option value="hostel">Hostel</option>
+              <option value="house">House</option>
+              <option value="land">Land</option>
             </select>
           </div>
           <div className="col-md-6">
@@ -339,7 +338,7 @@ const AddProperty = () => {
         </div>
           {/* Beds & Baths */}
           {
-            formik.values.type == 'Land'
+            formik.values.type == 'land'
             ?
             <>
               <div className="mb-4">

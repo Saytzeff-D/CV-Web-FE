@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Popover, Box, Slider, Typography, Button } from "@mui/material";
 
-const FilterBar = () => {
+const FilterBar = (props) => {
+  const { type } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeFilter, setActiveFilter] = useState(null);
   const [priceRange, setPriceRange] = useState([1500000, 2000000]);
@@ -29,7 +30,7 @@ const FilterBar = () => {
   return (
     <div className="d-flex justify-content-center gap-3 my-4 flex-wrap">
       {/* Search Box */}
-      <div className="input-group" style={{ width: "400px" }}>
+      <div className="input-group" style={{ maxWidth: "550px" }}>
         <input
           type="text"
           className="form-control"
@@ -40,10 +41,7 @@ const FilterBar = () => {
         </span>
       </div>
 
-      {/* Filter Buttons */}
-      <button className="btn btn-outline-secondary dropdown-toggle">
-        For Sale
-      </button>
+      {/* Filter Buttons */}     
 
       <button
         className="btn btn-outline-secondary dropdown-toggle"
@@ -52,19 +50,38 @@ const FilterBar = () => {
         Price Range
       </button>
 
-      <button
-        className="btn btn-outline-secondary dropdown-toggle"
-        onClick={(e) => handleOpen(e, "size")}
-      >
-        Size
-      </button>
+      {
+        type == "land" && (
+          <button
+            className="btn btn-outline-secondary dropdown-toggle"
+            onClick={(e) => handleOpen(e, "size")}
+          >
+            Size
+          </button>
+        )
+      }
 
-      <button
-        className="btn btn-outline-secondary dropdown-toggle"
-        onClick={(e) => handleOpen(e, "bedsBath")}
-      >
-        Beds & Bath
-      </button>
+      {
+        type == "all" && (
+          <button
+            className="btn btn-outline-secondary dropdown-toggle"
+            onClick={(e) => handleOpen(e, "size")}
+          >
+            Size
+          </button>
+        )
+      }
+
+      {
+        type != "land" && (
+          <button
+            className="btn btn-outline-secondary dropdown-toggle"
+            onClick={(e) => handleOpen(e, "bedsBath")}
+          >
+            Beds & Bath
+          </button>
+        )
+      }
 
       <button className="btn btn-outline-secondary">
         <i className="fa fa-sliders-h"></i> Filters

@@ -12,7 +12,7 @@ const ListedProperties = (props) => {
                         <div className="cursor-pointer" onClick={()=>navigate('/agent/add-property')}><img src={AddListing} alt="Add Listing" width={'80px'} height={'80px'} className="img-fluid" /></div>
                         <div className="ms-4 text-success fw-bold">
                             <p className="my-0 pt-3">My Listed Properties</p>
-                            <p className="my-0">Total Listed: {properties.length} <span className="ps-5">Pending: {properties.filter(prop => prop.publicized === '0').length}</span></p>
+                            <p className="my-0">Total Listed: {properties.length} <span className="ps-5">Pending: {properties.filter(prop => prop.publicized === 0).length}</span></p>
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@ const ListedProperties = (props) => {
                                     properties.map((each, i)=>(
                                         <tr key={i}>
                                             <td>{i + 1}</td>
-                                            <td><img src={each.main_photo} alt={each.name} className="img-fluid" /></td>
+                                            <td><img src={each.main_photo} alt={each.name} className="img-fluid rounded-5" style={{ maxWidth: '200px', height: '150px' }} /></td>
                                             <td>{new Date(each.created_at).toLocaleDateString()}</td>
                                             <td>{each.name}</td>                                    
                                             <td>{each.category.charAt(0).toUpperCase() + each.category.slice(1)}</td>

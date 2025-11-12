@@ -23,7 +23,7 @@ import PropertyManager from './pages/admin/PropertyManager';
 import AddProperty from './pages/admin/AddProperty';
 import ClientDashboard from './pages/user/dashboard/ClientDashboard';
 import AgentDashboard from './pages/user/dashboard/AgentDashboard';
-import FilterBar from './Filterbar';
+import FilterBar from './components/Filterbar';
 import AddBlog from './pages/admin/AddBlog';
 import BlogManager from './pages/admin/BlogManager';
 

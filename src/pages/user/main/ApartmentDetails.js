@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
-import Details from "../../../components/apartment/details";
+import { useParams } from "react-router-dom";
+import Details from "../../../components/land/details";
 import Map from "../../../components/apartment/map";
 import Realtor from "../../../components/apartment/realtor";
+import Landmarks from "../../../components/land/landmarks";
+import Booking from "../../../components/Booking";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { Dialog, DialogContent } from "@mui/material";
 
 const images = [
   "https://picsum.photos/900/500?random=2",
@@ -13,18 +19,39 @@ const images = [
 ];
 
 const ApartmentDetails = () => {
+  const { type, id } = useParams();
   const [mainIndex, setMainIndex] = useState(0);
+  const uri = useSelector(state=>state.uri)
+  const [property, setProperty] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(()=>{
+    axios.get(`${uri}property/${id}`)
+      .then((response) => {
+        console.log("Fetched property details:", response.data);
+        setProperty(response.data.data);
+        // You can set the fetched data to state here if needed
+      })
+      .catch((error) => {
+        console.error("Error fetching property details:", error);
+      }).finally(() => {
+        setIsLoading(false);
+      });
+  }, [uri, id]);
+
 
   return (
     <>
       <Navbar />
+      {
+        property &&
       <div className="container py-5 my-5">        
         <div className="my-3">
-          <h3 className="fw-bold mb-1">3 Bedroom Apartment</h3>
+          <h3 className="fw-bold mb-1">{property.name}</h3>
           <div className="d-flex justify-content-between">
             <div>
               <p className="text-muted mb-0">
-                Harmony Estate, GRA Phase I, Magodo, Lagos
+                {property.address}
               </p>
             </div>
             <div className="d-flex justify-content-end mb-3 gap-2">
@@ -42,7 +69,7 @@ const ApartmentDetails = () => {
           <div className="col-lg-7">
             <div className="rounded overflow-hidden">
               <img
-                src={"https://picsum.photos/300/180?random=1"}
+                src={property.main_photo}
                 alt="main"
                 className="img-fluid w-100"
                 style={{ height: 300, objectFit: "cover", borderRadius: 8 }}
@@ -52,7 +79,7 @@ const ApartmentDetails = () => {
           <div className="col-lg-5">                                
             {/* thumbnail grid (two columns inside the col-4) */}
             <div className="row g-2 thumbnail-grid">
-              {images.map((src, i) => (
+              {property.resources.map((src, i) => (
                 <div key={i} className="col-6">
                   <img
                     src={src}
@@ -75,7 +102,7 @@ const ApartmentDetails = () => {
         </div>
 
         <div>
-          <span className="h4 fw-bold">N30,000,000</span>          
+          <span className="h4 fw-bold">N{property.total_price}</span>
         </div>
 
         {/* SECOND ROW: TABS (col-8) + BOOKING CARD (col-4) */}
@@ -102,11 +129,11 @@ const ApartmentDetails = () => {
 
             <div className="tab-content">
               <div className="tab-pane fade show active" id="details">
-                <Details />
+                <Details property={property} />
               </div>
 
               <div className="tab-pane fade" id="map">
-                <Map />
+                <Map lat={property.latitude} lng={property.longitude} />
               </div>
 
               <div className="tab-pane fade" id="realtor">
@@ -117,50 +144,24 @@ const ApartmentDetails = () => {
 
           {/* BOOKING CARD (beside tabs) */}
           <div className="col-lg-4">
-            <div className="card booking-card shadow-sm sticky-top" style={{ top: 100 }}>
-              <div className="card-body p-0">
-                <div className="px-4 pt-4">
-                  <span className="h4 fw-bold mb-0">₦30,000,000</span>
-                  <small className="text-muted">outright</small>
-                  <p className="my-0">
-                      3 Bedroom Apartment
-                  </p>
-                  <p className="text-muted py-0">
-                    Harmony Estate, GRA Phase 1, Magodo, Lagos
-                  </p>
-                </div>
-
-                <div className="mt-3 bg-light p-3">
-                  <span className="fw-bold h4">₦5,000</span>
-                  <span className="small text-muted mb-2"> / inspection</span>
-                  <button className="btn btn-success w-100 mb-3 mt-2">Schedule for Inspection</button>
-                  <button className="btn btn-outline-dark w-100">Contact Agent</button>
-                  <p className="small py-2 text-center">
-                    You won’t be charged yet
-                  </p>                  
-                  <h6 className="fw-bold small mb-2">Schedule for inspection</h6>
-                  <ul className="small text-muted mb-0 ps-3 booking">
-                    <li className="booking-features">
-                      First-hand experience of the property
-                    </li>
-                    <li className="booking-features">
-                      Assess land features
-                    </li>
-                    <li className="booking-features">
-                      Verify zoning and land use
-                    </li>
-                    <li className="booking-features">
-                      Identify any land issues
-                    </li>
-                  </ul>
-                </div>
-
-              </div>
-            </div>
+            <Booking type={type} property={property} />
           </div>
         </div>
       </div>
-
+      }
+      <Dialog open={isLoading} PaperProps={{
+          style: {
+          backgroundColor: 'transparent',
+          boxShadow: 'none',
+          }
+      }}
+      >
+          <DialogContent>
+              <p>
+                  <span className='spinner-border text-white'></span>
+              </p>
+          </DialogContent>
+      </Dialog>
       <Footer />
     </>
   );

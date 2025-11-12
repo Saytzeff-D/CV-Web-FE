@@ -60,7 +60,7 @@ export const addPropertySchema = yup.object().shape({
     inspection_fee: yup.number().required('Required'),
     about: yup.string().required('Required'),
     land_size: yup.string().when('type', {
-        is: 'Land',
+        is: 'land',
         then: (schema) => schema.required('Required for Land'),
         otherwise: (schema) => schema.notRequired()
     })

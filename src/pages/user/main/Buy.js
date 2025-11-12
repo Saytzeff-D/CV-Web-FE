@@ -1,14 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../../../components/Footer"
 import Navbar from "../../../components/Navbar"
 import 'react-range-slider-input/dist/style.css';
 import FilterProperty from "../../../components/FilterProperty";
 import { Link, useParams } from "react-router-dom";
-import FilterBar from "../../../Filterbar";
+import FilterBar from "../../../components/Filterbar";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { Dialog, DialogContent } from "@mui/material";
 
 const Buy = () => {
     const { type } = useParams()
-    const properties = [1,2,3,4, 5,6,7,8,9,10,11,12]
+    const [properties, setProperties] = useState([])
+    const uri = useSelector(state=>state.uri)
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(()=>{
+        setIsLoading(true)
+        setProperties([])
+        axios.get(`${uri}property/all`)
+          .then((response) => {
+            console.log("Fetched properties:", response.data);
+            type == 'all' ? setProperties(response.data.data.filter(each => each.category == 'sale')) : setProperties(response.data.data.filter(each => each.type === type && each.category == 'sale'));
+          })
+          .catch((error) => {
+            console.error("Error fetching properties:", error);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });    
+    }, [uri, type])
     
     return (
         <>
@@ -18,43 +38,48 @@ const Buy = () => {
             <p className="fw-semibold">
                 Home / <span className="text-theme">Buy / {type} for sale</span>
             </p>
-            <FilterBar />
-
-            <div className="modal fade" id="filterModal">
-                <div className="modal-dialog modal-dialog-centered modal-md">
-                    <div className="modal-content">                        
-                            <FilterProperty />                        
-                    </div>
-                </div>
-            </div>
+            <FilterBar type={type} />
             <div className="row">
                 {
+                    properties.length == 0 && !isLoading
+                    ? (
+                        <p className="fw-semibold fs-4 pb-5 text-muted">No properties available...</p>
+                    )
+                    :
                     properties.map((each, i)=>(
                         <div className="col-lg-3 col-sm-6" key={i}>
                         <div className="card border-0" style={{ minWidth: "16rem" }}>
                             <div className="position-relative overflow-hidden rounded">                
-                            <img src={`https://picsum.photos/600/400?random=${each}`} className="card-img-top" alt="Property" />
+                            <img src={each.main_photo} className="card-img-top" alt="Property" />
                             
                             <button type="button"
                                 className="btn btn-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center text-white bg-transparent" style={{zIndex: 2}}>
                                 <i className="fa fa-heart-o"></i>
                             </button>
 
-                            <Link to={type === 'land' ? `/land/sale/${i}` : `/apartment/sale/${i}`}
+                            <Link to={type === 'land' ? `/land/sale/${each.id}` : `/apartment/sale/${each.id}`}
                                 className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
                                 See More
                             </Link>
                             </div>
 
                             <div className="card-body px-0 pt-3">
-                            <h6 className="card-title mb-1">Furnished 4bdrm Duplex</h6>
-                            <p className="h5 fw-bold mb-2">₦450,000</p>
-                            <div className="d-flex flex-wrap text-muted small">
-                                <div className="me-3"><i className="fa fa-regular fa-bed"></i> 4 beds</div>
-                                <div className="me-3"><i className="fa fa-regular fa-toilet"></i> 5 toilets</div>
-                                <div className="me-3"><i className="fa fa-regular fa-bath"></i> 5 baths</div>
-                            </div>
-                            <p className="text-muted small mt-2">Ikota, Lekki, Lagos</p>
+                            <h6 className="card-title mb-1">{each.name}</h6>
+                            <p className="h5 fw-bold mb-2">₦{each.total_price}</p>
+                            {
+                                each.type == 'land'
+                                ?
+                                <div className="d-flex flex-wrap text-muted small">
+                                    <div>{each.land_size} Sqm</div>                        
+                                </div>
+                                :
+                                <div className="d-flex flex-wrap text-muted small">
+                                    <div className="me-3"><i className="fa fa-regular fa-bed"></i> {each.bedrooms} beds</div>
+                                    <div className="me-3"><i className="fa fa-regular fa-toilet"></i> {each.toilets} toilets</div>
+                                    <div className="me-3"><i className="fa fa-regular fa-bath"></i> {each.bathrooms} baths</div>
+                                </div>
+                            }
+                            <p className="text-muted small mt-2">{each.address}</p>
                             </div>
                         </div>
                         </div>
@@ -62,6 +87,19 @@ const Buy = () => {
                 }
             </div>
         </div>
+        <Dialog open={isLoading} PaperProps={{
+            style: {
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+            }
+        }}
+        >
+            <DialogContent>
+                <p>
+                    <span className='spinner-border text-white'></span>
+                </p>
+            </DialogContent>
+        </Dialog>
         <Footer />
         </>
     )

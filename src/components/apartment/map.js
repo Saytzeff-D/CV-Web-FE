@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-const Map = ({ lat = "8.1700", lng = "4.2636" }) => {
+const Map = ({ lat, lng }) => {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
 
