@@ -1,19 +1,24 @@
 import { Link } from "react-router-dom";
 
-const SavedProperties = () => {
-    const properties = [1,2,3,4]
-    const {} = {}; // Placeholder for future state or props
+const SavedProperties = (props) => {
+    const { savedProperties, isLoading } = props;
     return(
-        <>  
-            {/* <p className="text-center text-muted">No saved properties yet.</p> */}
+        <>              
             <h4 className="fw-bold mb-3 text-success">Saved Properties</h4>
             <div className="row g-3 w-100 px-md-0 px-4">
                 {
-                    properties.map((each, i)=>(
-                    <div className="col-lg-3 col-md-6" key={i}>
+                    isLoading ? 
+                    <p className="fs-4 pb-5 text-muted">Loading saved properties...</p>
+                    :
+                    savedProperties.length === 0 
+                    ? (
+                        <p className="fs-4 pb-5 text-muted">No saved properties yet.</p>
+                    )
+                    :
+                    savedProperties.map((each, i)=>(<div className="col-lg-3 col-md-6" key={i}>
                         <div className="card border-0" style={{ minWidth: "16rem" }}>
                         <div className="position-relative overflow-hidden rounded">                
-                            <img src={`https://picsum.photos/600/400?random=${each}`} className="card-img-top" alt="Property" />
+                            <img src={each.main_photo} height={'250px'} className="card-img-top" alt="Property" />
                             
                             <button type="button"
                             className="btn btn-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center text-white bg-transparent" style={{zIndex: 2}}>
@@ -27,14 +32,14 @@ const SavedProperties = () => {
                         </div>
 
                         <div className="card-body pt-3">
-                            <h6 className="card-title mb-1">Furnished 4bdrm Duplex</h6>
-                            <p className="h5 fw-bold mb-2">₦450,000</p>
+                            <h6 className="card-title mb-1">{each.name}</h6>
+                            <p className="h5 fw-bold mb-2">{each.total_price}</p>
                             <div className="d-flex flex-wrap text-muted small">
-                            <div className="me-3"><i className="fa fa-regular fa-bed"></i> 4 beds</div>
-                            <div className="me-3"><i className="fa fa-regular fa-toilet"></i> 5 toilets</div>
-                            <div className="me-3"><i className="fa fa-regular fa-bath"></i> 5 baths</div>
+                                <div className="me-3 text-success fw-semibold">
+                                     {each.type.charAt(0).toUpperCase() + each.type.slice(1)}
+                                </div>
                             </div>
-                            <p className="text-muted small mt-2">Ikota, Lekki, Lagos</p>
+                            <p className="text-muted small mt-2">{each.address}</p>
                         </div>
                         </div>
                     </div>

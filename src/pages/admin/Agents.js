@@ -11,7 +11,7 @@ const AgentsPage = () => {
   const uri = useSelector(state=>state.uri)
 
   useEffect(()=>{
-    axios.get(`${uri}admin/agents`, {
+    axios.get(`${uri}admin/customers`, {
       headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
     })
     .then((res)=>{

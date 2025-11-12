@@ -1,42 +1,48 @@
-const TransactionHistory = () => {
+const TransactionHistory = (props) => {
+    const {transactions, isLoading} = props;
     return (
     <>
         <h4 className="fw-bold mb-3 text-success">Transaction History</h4>
-        <div className="table-responsive">
-            <table className="table align-middle">
-            <thead className="table-light">
-                <tr>
-                    <th>#</th>
-                    <th>Date</th>
-                    <th>Trx Ref</th>
-                    <th>Property</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>02 Nov 2025</td>
-                    <td><span className="badge bg-success">TRX123456</span></td>
-                    <td>4 Bedroom Duplex</td>
-                    <td>Rent</td>
-                    <td>₦750,000</td>
-                    <td><span className="badge bg-success">Completed</span></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>20 Oct 2025</td>
-                    <td><span className="badge bg-success">TRX123457</span></td>
-                    <td>2 Bedroom Apartment</td>
-                    <td>Inspection Fee</td>
-                    <td>₦450,000</td>
-                    <td><span className="badge bg-warning text-dark">Pending</span></td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
+        {
+            isLoading ? 
+            <p className="fs-4 pb-5 text-muted">Loading...</p>
+            :
+            transactions.length === 0 
+            ? (
+                <p className="fs-4 pb-5 text-muted">No transactions found.</p>
+            )
+            :
+            <div className="table-responsive">
+                <table className="table align-middle">
+                <thead className="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Trx Ref</th>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        transactions.map((trx, i)=>(
+                            <tr key={i}>
+                                <td>{i + 1}</td>
+                                <td>{new Date(trx.created_at).toLocaleDateString()}</td>
+                                <td><span className="badge bg-success">{trx.reference}</span></td>
+                                <td>{trx.name}</td>
+                                <td>{trx.type.toUpperCase()}</td>
+                                <td>{trx.amount}</td>
+                                <td><span className={`badge ${trx.status === "success" ? "bg-success" : "bg-warning text-dark"}`}>{trx.status}</span></td>
+                            </tr>
+                        ))
+                    }                    
+                </tbody>
+                </table>
+            </div>
+        }
     </>
     )
 }

@@ -91,13 +91,13 @@ const ClientDashboard = () => {
                     {/* Tab Content */}
                     <div className="container">
                         {activeTab === "transactions" && (
-                        <TransactionHistory transactions={transactions} />
+                        <TransactionHistory transactions={transactions} isLoading={isLoading} />
                         )}
                         {activeTab === "bookings" && (
-                        <ActiveBookings bookings={bookings} />
+                        <ActiveBookings bookings={bookings} isLoading={isLoading} />
                         )}
                         {activeTab === "saved" && (
-                        <SavedProperties savedProperties={savedProperties} />
+                        <SavedProperties savedProperties={savedProperties} isLoading={isLoading} />
                         )}
                     </div>
 
