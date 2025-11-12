@@ -36,19 +36,19 @@ const Footer = ()=>{
                             <div className="col-md-4 col-6">
                                 <p className="fw-bold">Useful Links</p>
                                 <ul className="list-unstyled">
-                                    <li><Link to="#" className="text-muted text-decoration-none">About</Link></li>
-                                    <li><Link to="#" className="text-muted text-decoration-none">Properties</Link></li>
-                                    <li><Link to="#" className="text-muted text-decoration-none">Blog</Link></li>
-                                    <li><Link to="#" className="text-muted text-decoration-none">Contact</Link></li>
+                                    <li><Link to="/about" className="text-muted text-decoration-none">About</Link></li>
+                                    <li><Link to="/buy/all" className="text-muted text-decoration-none">Properties</Link></li>
+                                    <li><Link to="/blog" className="text-muted text-decoration-none">Blog</Link></li>
+                                    <li><Link to="/contact" className="text-muted text-decoration-none">Contact</Link></li>
                                 </ul>
                             </div>
                             <div className="col-md-4 col-6">
                                 <p className="fw-bold">Category</p>
                                 <ul className="list-unstyled">
-                                    <li><Link to="#" className="text-muted text-decoration-none">Land</Link></li>
-                                    <li><Link to="#" className="text-muted text-decoration-none">Apartment</Link></li>
-                                    <li><Link to="#" className="text-muted text-decoration-none">Hostels</Link></li>
-                                    <li><Link to="#" className="text-muted text-decoration-none">Houses</Link></li>
+                                    <li><Link to="/buy/land" className="text-muted text-decoration-none">Land</Link></li>
+                                    <li><Link to="/buy/apartment" className="text-muted text-decoration-none">Apartment</Link></li>
+                                    <li><Link to="/buy/hostel" className="text-muted text-decoration-none">Hostels</Link></li>
+                                    <li><Link to="/buy/house" className="text-muted text-decoration-none">Houses</Link></li>
                                 </ul>
                             </div>
                             <div className="col-md-4">
