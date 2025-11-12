@@ -71,9 +71,11 @@ const AddBlog = () => {
           })
           .then(() => {
             setIsLoading(false);
-            resetForm();
-            setSuccessMessage("Blog submitted successfully!");
-            editor.commands.clearContent();
+            navigate("/admin/blog-manager");
+            // resetForm();
+            // setSuccessMessage("Blog submitted successfully!");
+            // editor.commands.clearContent();
+            // setImages([]);
           })
           .catch((err) => {
             setIsLoading(false);

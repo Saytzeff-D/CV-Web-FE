@@ -1,14 +1,33 @@
 import { useNavigate } from 'react-router-dom';
 import data from '../../data.json'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CloseIcon from "../../assets/close-icon.png"
 import CancelIcon from "../../assets/cancel-icon.png"
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Alert, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
-const BlogManager = () => {
-  const { blogs } = data;
+const BlogManager = () => {  
   const navigate = useNavigate()
   const [open, setOpen] = useState(false);
+  const uri = useSelector(state=>state.uri)
+  const [blogs, setBlogs] = useState([])
+  const [isFetching, setIsFetching] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    // Fetch blogs from the API
+    axios.get(`${uri}blog/all`)
+      .then(response => {
+        setIsFetching(false)
+        setBlogs(response.data.blogs);
+      })
+      .catch(error => {
+        setIsFetching(false)
+        setError('Failed to fetch blogs');
+        // console.error("Error fetching blogs:", error);
+      });
+  }, [uri]);
 
   return (
     <div className="container py-4">
@@ -27,34 +46,52 @@ const BlogManager = () => {
         </button>
       </div>
         <div className='d-flex justify-content-center'>
-        <div className='col-md-9'>
-            {/* Property List */}
-                {blogs.slice(0, 6).map((blog) => (
-            <div className="row g-4 mb-5 align-items-center">
-                <div className="col-md-6" key={blog.id}>
-                    <div className="card border-0 h-100">
-                    <img src={blog.img} className="card-img-top rounded-3" alt={blog.title} />
-                    <div className="card-body">
-                        <p className="text-success small mb-1 fw-semibold">
-                        {blog.category} • <span className="text-muted">{blog.date}</span>
-                        </p>
-                        <h6 className="fw-bold mb-2">{blog.title}</h6>
-                        <p className="text-muted small mb-0">{blog.desc}</p>
-                    </div>
-                    </div>
-                </div>
-                <div className="col-md-6">
-                    <div className='d-flex flex-md-row flex-column'>
-                        <button className="btn btn-lg btn-outline-success btn-sm me-2 px-4 fs-5 mb-2">
-                            Edit
-                        </button>                            
-                        <button onClick={()=>setOpen(true)} className="btn btn-lg px-4 fs-5 btn-outline-danger btn-sm mb-2">
-                            Delete
-                        </button>
-                    </div>
-                </div>
+            <div>
+                {
+                    error !== ''
+                    ? (
+                        <div className=''>
+                            <Alert severity="error" className="mb-4">
+                                {error}
+                            </Alert>
+                        </div>
+                    )
+                    :
+                    blogs.length === 0 && !isFetching
+                    ? (
+                        <p className="text-center text-muted">No blogs available.</p>
+                    )
+                    : (
+                        blogs.map((blog) => (
+                            <div className="row g-4 mb-5 align-items-center">
+                                <div className="col-md-6" key={blog.id}>
+                                    <div className="card border-0 h-100">
+                                        <img src={blog.main_photo} className="card-img-top rounded-3" alt={blog.title} height={'300px'} />
+                                        <div className="card-body">
+                                            <p className="text-success small mb-1 fw-semibold">
+                                                {blog.title} • <span className="text-muted">{new Date(blog.created_at).toLocaleDateString()}</span>
+                                            </p>
+                                            <h6 className="fw-bold mb-2">{blog.subtitle}</h6>
+                                            <p className="text-muted small mb-0" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className='d-flex flex-md-row flex-column'>
+                                        <button className="btn btn-lg btn-outline-success btn-sm me-2 px-4 fs-5 mb-2">
+                                            Edit
+                                        </button>
+                                        <button onClick={()=>setOpen(true)} className="btn btn-lg px-4 fs-5 btn-outline-danger btn-sm mb-2">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    )
+                }
             </div>
-            ))} 
+            
             <Dialog open={open} aria-labelledby="modal-title" aria-describedby="modal-description">
                 <DialogTitle id="modal-title" className="text-success">Delete Blog</DialogTitle>
                 <DialogContent>
@@ -70,16 +107,21 @@ const BlogManager = () => {
                         </div>
                     </div>
                 </DialogContent>                
-            </Dialog>
-
-            {/* See More */}
-            <div className="text-center">
-                <button className="btn btn-link text-dark fw-semibold">
-                See more
-                </button>
-            </div>
-        </div>
+            </Dialog>            
     </div>
+    <Dialog open={isFetching} PaperProps={{
+        style: {
+        backgroundColor: 'transparent',
+        boxShadow: 'none',
+        }
+    }}
+    >
+        <DialogContent>
+            <p>
+                <span className='spinner-border text-white'></span>
+            </p>
+        </DialogContent>
+    </Dialog>
     </div>
   );
 }
