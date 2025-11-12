@@ -274,9 +274,9 @@ const CreateAccount = () => {
                         }}
                         >
                         <option defaultValue value={''}>Select your category</option>
-                        <option value={'Real Estate Agent'}>Real Estate Agent</option>
-                        <option value={'Property Manager'}>Property Manager</option>
-                        <option value={'Developer'}>Developer</option>
+                        <option value={'real_estate_agent'}>Real Estate Agent</option>
+                        <option value={'property_manager'}>Property Manager</option>
+                        <option value={'developer'}>Developer</option>
                         </select>
                     </div>
 
