@@ -14,6 +14,8 @@ const BlogManager = () => {
   const [blogs, setBlogs] = useState([])
   const [isFetching, setIsFetching] = useState(true)
   const [error, setError] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [id, setId] = useState(null);
 
   useEffect(() => {
     // Fetch blogs from the API
@@ -33,6 +35,28 @@ const BlogManager = () => {
     sessionStorage.setItem('editBlog', JSON.stringify(blog));
     navigate('/admin/edit-blog');
   }
+
+  const openDelete = (propertyId) => {
+        setId(propertyId);
+        setOpen(true);
+    }
+
+    const deleteProperty = () => {
+        setIsDeleting(true);
+        axios.delete(`${uri}blog/${id}`, {
+            headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
+        })
+        .then(response => {
+            console.log("Property deleted successfully:", response.data);
+            setOpen(false);
+            setIsDeleting(false);
+            // Optionally, refresh the property list or update state here
+        })
+        .catch(error => {
+            setIsDeleting(false);
+            console.error("Error deleting property:", error);
+        });
+    }
 
   return (
     <div className="container py-4">
@@ -86,7 +110,7 @@ const BlogManager = () => {
                                         <button onClick={()=>editBlog(blog)} className="btn btn-lg btn-outline-success btn-sm me-2 px-4 fs-5 mb-2">
                                             Edit
                                         </button>
-                                        <button onClick={()=>setOpen(true)} className="btn btn-lg px-4 fs-5 btn-outline-danger btn-sm mb-2">
+                                        <button onClick={() => openDelete(blog.id)} className="btn btn-lg px-4 fs-5 btn-outline-danger btn-sm mb-2">
                                             Delete
                                         </button>
                                     </div>
@@ -102,14 +126,17 @@ const BlogManager = () => {
                 <DialogContent>
                     <p className="text-success h6">Are you sure you want to delete?</p>
                     <div className="d-flex justify-content-between mt-4">
-                        <div onClick={()=>setOpen(false)} className="cursor-pointer">
-                            <img src={CancelIcon} alt="Close" width={'20px'} height={'20px'} />
-                            <p className="text-success">Cancel</p>
-                        </div>
-                        <div className="cursor-pointer">
-                            <img src={CloseIcon} alt="Close" width={'20px'} height={'20px'} />
-                            <p className="text-danger">Delete</p>
-                        </div>
+                        <button disabled={isDeleting} onClick={()=>setOpen(false)} className="cursor-pointer btn btn-secondary">
+                            Cancel
+                        </button>
+                        <button disabled={isDeleting} onClick={()=>deleteProperty()} className="cursor-pointer btn btn-danger">
+                            Delete
+                            {
+                                isDeleting && (
+                                    <span className="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+                                )
+                            }
+                        </button>
                     </div>
                 </DialogContent>                
             </Dialog>            
