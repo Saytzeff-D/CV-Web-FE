@@ -2,21 +2,13 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 import { useParams } from "react-router-dom";
-import Details from "../../../components/land/details";
+import Details from "../../../components/apartment/details";
 import Map from "../../../components/apartment/map";
 import Realtor from "../../../components/apartment/realtor";
-import Landmarks from "../../../components/land/landmarks";
 import Booking from "../../../components/Booking";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Dialog, DialogContent } from "@mui/material";
-
-const images = [
-  "https://picsum.photos/900/500?random=2",
-  "https://picsum.photos/300/180?random=3",
-  "https://picsum.photos/300/180?random=4",
-  "https://picsum.photos/300/180?random=5"  
-];
 
 const ApartmentDetails = () => {
   const { type, id } = useParams();
