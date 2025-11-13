@@ -13,9 +13,9 @@ const Details = ({ property }) => {
 
             <p className="fw-bold mt-4 small">Estate Features</p>
             <ul className="text-muted small">
-                {data.landfeatures.map((a) => (
+                {property.amenities.map((a) => (
                 <li className="mb-3" key={a}>
-                    {a}
+                    {a.name}
                 </li>
                 ))}
             </ul>

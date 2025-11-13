@@ -51,7 +51,7 @@ const Pending = (props) => {
                                     <div>
                                         <h6 className="fw-semibold mb-1">{p.name}</h6>
                                         <p className="text-muted small mb-1">{p.address}</p>
-                                        <h6 className="fw-bold mb-2">{p.total_price}</h6>
+                                        <h6 className="fw-bold mb-2">{Number(p.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h6>
                                     </div>
                                     <div>
                                         <button className="btn btn-outline-success btn-sm me-2 mb-2">
@@ -96,7 +96,7 @@ const Pending = (props) => {
                                     <div>
                                         <h6 className="fw-semibold mb-1">{p.name}</h6>
                                         <p className="text-muted small mb-1">{p.address}</p>
-                                        <h6 className="fw-bold mb-2">{p.total_price}</h6>
+                                        <h6 className="fw-bold mb-2">{Number(p.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h6>
                                     </div>
                                     <div>
                                         <button className="btn btn-outline-success btn-sm me-2 mb-2">

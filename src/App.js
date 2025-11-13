@@ -18,7 +18,7 @@ import ResetPassword from './pages/user/auth/ResetPassword';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/Login';
 import CreateAdmin from './pages/admin/CreateAdmin';
-import AgentsPage from './pages/admin/Agents';
+import AllUsers from './pages/admin/AllUsers';
 import PropertyManager from './pages/admin/PropertyManager';
 import AddProperty from './pages/admin/AddProperty';
 import ClientDashboard from './pages/user/dashboard/ClientDashboard';
@@ -26,6 +26,8 @@ import AgentDashboard from './pages/user/dashboard/AgentDashboard';
 import FilterBar from './components/Filterbar';
 import AddBlog from './pages/admin/AddBlog';
 import BlogManager from './pages/admin/BlogManager';
+import EditProperty from './pages/admin/EditProperty';
+import EditBlog from './pages/admin/EditBlog';
 
 function App() {
   return (
@@ -51,11 +53,13 @@ function App() {
         <Route path='/admin/dashboard' element={<AdminDashboard />} />
         <Route path='/admin/property-manager' element={<PropertyManager />} />
         <Route path='/admin/add-property' element={<AddProperty />} />
-        <Route path='/admin/view-agents' element={<AgentsPage />} />
+        <Route path='/admin/view-agents' element={<AllUsers />} />
         <Route path='/client/dashboard' element={<ClientDashboard />} />
         <Route path='/agent/dashboard' element={<AgentDashboard />} />
         <Route path='/agent/add-property' element={<AddProperty />} />
         <Route path='/admin/add-blog' element={<AddBlog />} />
+        <Route path='/admin/edit-property' element={<EditProperty />} />
+        <Route path='/admin/edit-blog' element={<EditBlog />} />
         <Route path='/admin/blog-manager' element={<BlogManager />} />
         <Route path='/filterbar' element={<FilterBar />} />
         <Route path='*' element={<NotFound />} />

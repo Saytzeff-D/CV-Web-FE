@@ -26,7 +26,7 @@ const Booking = (props) => {
                         <div className="bg-light">
 
                             <div className="px-4 py-3 bg-light">
-                                <span className="fw-bold mb-0 h4">₦{property.total_price}</span>
+                                <h4 className="fw-bold mb-2">{Number(property.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h4>
                                 <span className="text-muted">/ per year</span>
 
                                 <button className="btn btn-success w-100 my-3">
@@ -77,7 +77,7 @@ const Booking = (props) => {
                 <div className="card booking-card shadow-sm sticky-top" style={{ top: 100 }}>
                     <div className="card-body p-0">
                         <div className="px-4 pt-4">
-                        <span className="h4 fw-bold mb-0">₦{property.total_price}</span>
+                        <h5 className="fw-bold mb-2">{Number(property.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h5>
                         <small className="text-muted">outright</small>
                         <p className="my-0">
                             {property.name}
@@ -88,7 +88,7 @@ const Booking = (props) => {
                         </div>
 
                         <div className="mt-3 bg-light p-3">
-                        <span className="fw-bold h4">₦{property.inspection_fee}</span>
+                        <h5 className="fw-bold mb-2">{Number(property.inspection_fee).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h5>
                         <span className="small text-muted mb-2"> / inspection</span>
                         <button className="btn btn-success w-100 mb-3 mt-2">Schedule for Inspection</button>
                         <button className="btn btn-outline-dark w-100">Contact Agent</button>

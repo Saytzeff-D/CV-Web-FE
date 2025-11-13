@@ -29,6 +29,11 @@ const BlogManager = () => {
       });
   }, [uri]);
 
+  const editBlog = (blog) => {
+    sessionStorage.setItem('editBlog', JSON.stringify(blog));
+    navigate('/admin/edit-blog');
+  }
+
   return (
     <div className="container py-4">
       {/* Header */}
@@ -78,7 +83,7 @@ const BlogManager = () => {
                                 </div>
                                 <div className="col-md-6">
                                     <div className='d-flex flex-md-row flex-column'>
-                                        <button className="btn btn-lg btn-outline-success btn-sm me-2 px-4 fs-5 mb-2">
+                                        <button onClick={()=>editBlog(blog)} className="btn btn-lg btn-outline-success btn-sm me-2 px-4 fs-5 mb-2">
                                             Edit
                                         </button>
                                         <button onClick={()=>setOpen(true)} className="btn btn-lg px-4 fs-5 btn-outline-danger btn-sm mb-2">

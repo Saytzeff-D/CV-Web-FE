@@ -39,9 +39,9 @@ const Details = ({ property }) => {
 
             <h6 className="fw-bold mt-4">What this place offers</h6>
             <ul className="offer-list text-muted small">
-                {["Kitchen", "WiFi", "TV", "Refrigerator", "Washing Machine"].map((a) => (
-                <li className="mb-3" key={a}>
-                    <i className="fa-solid fa-circle-check text-success me-1"></i>{a}
+                {property.amenities.map((a) => (
+                <li className="mb-3" key={a.name}>
+                    <i className="fa-solid fa-circle-check text-success me-1"></i>{a.name}
                 </li>
                 ))}
             </ul>

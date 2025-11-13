@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Details from "../../../components/land/details";
 import Map from "../../../components/apartment/map";
 import Realtor from "../../../components/apartment/realtor";
@@ -17,20 +17,26 @@ const LandDetails = () => {
   const uri = useSelector(state=>state.uri)
   const [property, setProperty] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate()
 
   useEffect(()=>{
-    axios.get(`${uri}property/${id}`)
+    axios.get(`${uri}property/${decode(id)}`)
       .then((response) => {
         console.log("Fetched property details:", response.data);
         setProperty(response.data.data);
         // You can set the fetched data to state here if needed
       })
       .catch((error) => {
+        navigate("/404");
         console.error("Error fetching property details:", error);
       }).finally(() => {
         setIsLoading(false);
       });
   }, [uri, id]);
+
+  const decode = (str) => {
+    return atob(str);
+  }
 
   return (
     <>
@@ -94,7 +100,7 @@ const LandDetails = () => {
           </div>
 
           <div>
-            <span className="h4 fw-bold">N{property.total_price}</span>
+            <h4 className="fw-bold mb-2">{Number(property.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h4>
             <span className="text-muted">/Per year </span>
             <span>· {property.land_size}sqm</span>
           </div>

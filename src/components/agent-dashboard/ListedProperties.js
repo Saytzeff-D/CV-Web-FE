@@ -48,7 +48,7 @@ const ListedProperties = (props) => {
                                             <td>{each.name}</td>                                    
                                             <td>{each.category.charAt(0).toUpperCase() + each.category.slice(1)}</td>
                                             <td>{each.type}</td>
-                                            <td>{each.total_price}</td>
+                                            <td>{Number(each.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</td>
                                             <td><span className={`badge ${each.publicized == '1' ? 'bg-success' : 'bg-warning'}`}>{each.publicized == '1' ? 'Approved' : 'Pending'}</span></td>
                                         </tr>
                                     ))

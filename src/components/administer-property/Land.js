@@ -2,10 +2,38 @@ import CloseIcon from "../../assets/close-icon.png"
 import CancelIcon from "../../assets/cancel-icon.png"
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Land = (props) => {
     const {properties, isLoading} = props;
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate()
+    const uri = useSelector(state=>state.uri)
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [id, setId] = useState(null);
+
+    const editProperty = (property) => {
+        sessionStorage.setItem("editProperty", JSON.stringify(property));
+        navigate('/admin/edit-property');
+    }
+    const deleteProperty = () => {
+        setIsDeleting(true);
+        axios.delete(`${uri}property/delete/${id}`, {
+            headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
+        })
+        .then(response => {
+            console.log("Property deleted successfully:", response.data);
+            setOpen(false);
+            setIsDeleting(false);
+            // Optionally, refresh the property list or update state here
+        })
+        .catch(error => {
+            setIsDeleting(false);
+            console.error("Error deleting property:", error);
+        });
+    }
     return (
         <div className='d-flex justify-content-center'>
         <div className='col-md-9'>
@@ -36,10 +64,10 @@ const Land = (props) => {
                         <div>
                             <h6 className="fw-semibold mb-1">{p.name}</h6>
                             <p className="text-muted small mb-1">{p.address}</p>
-                            <h6 className="fw-bold mb-2">{p.total_price}</h6>
+                            <h6 className="fw-bold mb-2">{Number(p.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h6>
                         </div>
                         <div>
-                            <button className="btn btn-outline-success btn-sm me-2 mb-2">
+                            <button onClick={()=>editProperty(p)} className="btn btn-outline-success btn-sm me-2 mb-2">
                                 Edit
                             </button>                            
                             <button onClick={()=>setOpen(true)} className="btn btn-outline-danger btn-sm mb-2">
@@ -59,14 +87,17 @@ const Land = (props) => {
                 <DialogContent>
                     <p className="text-success h6">Are you sure you want to delete?</p>
                     <div className="d-flex justify-content-between mt-4">
-                        <div onClick={()=>setOpen(false)} className="cursor-pointer">
-                            <img src={CancelIcon} alt="Close" width={'20px'} height={'20px'} />
-                            <p className="text-success">Cancel</p>
-                        </div>
-                        <div className="cursor-pointer">
-                            <img src={CloseIcon} alt="Close" width={'20px'} height={'20px'} />
-                            <p className="text-danger">Delete</p>
-                        </div>
+                        <button disabled={isDeleting} onClick={()=>setOpen(false)} className="cursor-pointer btn btn-secondary">
+                            Cancel
+                        </button>
+                        <button disabled={isDeleting} onClick={()=>deleteProperty()} className="cursor-pointer btn btn-danger">
+                            Delete
+                            {
+                                isDeleting && (
+                                    <span className="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
+                                )
+                            }
+                        </button>
                     </div>
                 </DialogContent>                
             </Dialog>

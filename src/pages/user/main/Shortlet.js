@@ -29,6 +29,10 @@ const Shortlet = () => {
             setIsLoading(false);
           });    
     }, [uri, type])
+
+    const encode = (str) => {
+        return btoa(str.toString());
+    }
     
     return (
         <>
@@ -57,7 +61,7 @@ const Shortlet = () => {
                                 <i className="fa fa-heart-o"></i>
                             </button>
 
-                            <Link to={type === 'land' ? `/land/sale/${i}` : `/apartment/sale/${i}`}
+                            <Link to={type === 'land' || type === 'all' ? `/land/shortlet/${encode(i)}` : `/apartment/shortlet/${encode(i)}`}
                                 className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
                                 See More
                             </Link>
@@ -65,7 +69,7 @@ const Shortlet = () => {
 
                             <div className="card-body px-0 pt-3">
                             <h6 className="card-title mb-1">{each.name}</h6>
-                            <p className="h5 fw-bold mb-2">₦{each.total_price}</p>
+                            <h6 className="fw-bold mb-2">{Number(each.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h6>
                             {
                                 each.type == 'land'
                                 ?
