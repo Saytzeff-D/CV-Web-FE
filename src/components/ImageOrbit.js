@@ -37,7 +37,6 @@ export default function ImageOrbit({ intervalMs = 3000 /* total per step */, ani
       }, animMs + 300);
     };
 
-    // start interval
     const id = setInterval(step, intervalMs);
     return () => clearInterval(id);
   }, [intervalMs, animMs]);
@@ -58,43 +57,42 @@ export default function ImageOrbit({ intervalMs = 3000 /* total per step */, ani
         <p className="text-muted">Tailored Property Listings to Match Your Lifestyle</p>
       </div>
 
-      <div className="orbit-stage w-100" aria-hidden={false}>
-        {/* Top */}
-        <div className="slot slot-top">
-          <img src={images[positions.top].src} alt="" className="slot-img" />
-        </div>
+      {/* Wrapper for scaling */}
+      <div className="orbit-wrapper">
+        <div className="orbit-stage w-100" aria-hidden={false}>
+          {/* Top */}
+          <div className="slot slot-top">
+            <img src={images[positions.top].src} alt="" className="slot-img" />
+          </div>
 
-        {/* Right */}
-        <div className="slot slot-right">
-          <img src={images[positions.right].src} alt="" className="slot-img" />
-        </div>
+          {/* Right */}
+          <div className="slot slot-right">
+            <img src={images[positions.right].src} alt="" className="slot-img" />
+          </div>
 
-        {/* Bottom */}
-        <div className="slot slot-bottom">
-          <img src={images[positions.bottom].src} alt="" className="slot-img" />
-        </div>
+          {/* Bottom */}
+          <div className="slot slot-bottom">
+            <img src={images[positions.bottom].src} alt="" className="slot-img" />
+          </div>
 
-        {/* Left */}
-        <div className="slot slot-left">
-          <img src={images[positions.left].src} alt="" className="slot-img" />
-        </div>
+          {/* Left */}
+          <div className="slot slot-left">
+            <img src={images[positions.left].src} alt="" className="slot-img" />
+          </div>
 
-        {/* Center */}
-        <div className="slot slot-center">
-          <img
-            src={images[positions.center].src}
-            alt=""
-            className={`center-img ${captionVisible ? "enter" : "exit"}`}
-          />
-          <div className={`center-caption ${captionVisible ? "show" : "hide"}`}>
-            {images[positions.center].caption}
+          {/* Center */}
+          <div className="slot slot-center">
+            <img
+              src={images[positions.center].src}
+              alt=""
+              className={`center-img ${captionVisible ? "enter" : "exit"}`}
+            />
+            <div className={`center-caption ${captionVisible ? "show" : "hide"}`}>
+              {images[positions.center].caption}
+            </div>
           </div>
         </div>
       </div>
-
-      {/* <div className="text-center mt-4">
-        <button className="btn btn-outline-success">Explore properties</button>
-      </div> */}
     </div>
   );
 }
