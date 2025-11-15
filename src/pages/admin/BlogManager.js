@@ -46,10 +46,10 @@ const BlogManager = () => {
         axios.delete(`${uri}blog/${id}`, {
             headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
         })
-        .then(response => {
-            console.log("Property deleted successfully:", response.data);
+        .then(response => {            
             setOpen(false);
             setIsDeleting(false);
+            setBlogs(blogs.filter(blog => blog.id !== id));
             // Optionally, refresh the property list or update state here
         })
         .catch(error => {

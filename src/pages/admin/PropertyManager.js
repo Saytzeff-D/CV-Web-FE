@@ -65,10 +65,10 @@ const PropertyManager = () => {
     {/* Tab Content */}
     <div className="container">
         {activeTab === "apartment" && (
-        <Apartment isLoading={isLoading} properties={properties.filter(each=>each.type.toLowerCase() !== 'land' && each.publicized == 1)} />
+        <Apartment isLoading={isLoading} updatedProperties={setProperties} properties={properties.filter(each=>each.type.toLowerCase() !== 'land' && each.publicized == 1)} />
         )}
         {activeTab === "land" && (
-        <Land isLoading={isLoading} properties={properties.filter(each=>each.type.toLowerCase() === 'land' && each.publicized == 1)} />
+        <Land isLoading={isLoading} updatedProperties={setProperties} properties={properties.filter(each=>each.type.toLowerCase() === 'land' && each.publicized == 1)} />
         )}
         {activeTab === "pending" && (
         <Pending isLoading={isLoading} properties={properties.filter(each=>each.publicized == 0)} />

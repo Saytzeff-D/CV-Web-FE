@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../../components/Navbar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { createAccountSchema } from "../../../schemas";
 import { useSelector } from "react-redux";
@@ -13,6 +13,16 @@ const CreateAccount = () => {
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const [err, setErr] = useState('');
+    const location = useLocation()
+    
+    useEffect(() => {    
+        const params = new URLSearchParams(location.search);
+        const errorParam = params.get('error');    
+        if (errorParam) {
+          setErr(errorParam);
+        }
+    }, [location.search]);
 
     const { handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
     initialValues: {
@@ -87,6 +97,7 @@ const CreateAccount = () => {
                     Apple
                 </button>
                 <button
+                    onClick={()=>window.location.href = `${uri}auth/google/register`}
                     className="btn d-flex align-items-center justify-content-center border my-0"
                     style={{
                     borderRadius: "6px",
@@ -121,6 +132,7 @@ const CreateAccount = () => {
                             {error}
                         </Alert>
                     }
+                    {err && <Alert severity="error" className="mb-3">{err}</Alert>}
                 <div className="row">
                     <div className="col-6 mb-3">
                     <label className="form-label fw-medium" style={{ fontSize: "13px" }}>

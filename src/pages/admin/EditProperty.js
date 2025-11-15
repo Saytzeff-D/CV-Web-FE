@@ -454,7 +454,7 @@ const EditProperty = () => {
 
 
         {/* Features */}
-        {/* <div className="mb-4">
+        <div className="mb-4">
           <label className="form-label fw-bold">Other Features</label>
           <div className="d-flex flex-wrap gap-2">
             {
@@ -478,7 +478,7 @@ const EditProperty = () => {
               ))
             }            
           </div>
-        </div>         */}
+        </div>        
 
         <button disabled={isLoading} onClick={formik.handleSubmit} type="button" className="btn btn-success px-5">
           {isLoading ? "Editting Property..." : "Edit Property"}

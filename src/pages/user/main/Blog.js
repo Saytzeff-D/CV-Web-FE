@@ -57,7 +57,7 @@ const Blog = () => {
                   <p className="text-success small mb-1 fw-semibold">
                     {blog.title.slice(0,20)} • <span className="text-muted">{new Date(blog.created_at).toLocaleDateString()}</span>
                   </p>
-                  <h6 className="fw-bold mb-2">{blog.title.slice(0,20)}</h6>
+                  <h6 className="fw-bold mb-2">{blog.subtitle.slice(0,20)}</h6>
                   <p className="text-muted small mb-0" dangerouslySetInnerHTML={{__html: blog.content.substring(0, 150)}}></p>
                 </div>
               </div>

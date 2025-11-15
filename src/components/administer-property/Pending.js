@@ -28,8 +28,8 @@ const Pending = (props) => {
 
     setLoading(true);
     try {
-      const response = await axios.post(
-        `${uri}agent/approve`,
+      const response = await axios.patch(
+        `${uri}admin/approve-property`,
         { propertyId: selectedProperty.id },
         {
           headers: {
@@ -95,7 +95,7 @@ const Pending = (props) => {
                     key={p.id}
                     className="row align-items-center mb-4 w-100"
                   >
-                    <div className="col-5">
+                    <div className="col-md-5">
                       <img
                         src={p.main_photo}
                         alt={p.name}
@@ -103,7 +103,7 @@ const Pending = (props) => {
                         style={{ width: "100%", height: "200px" }}
                       />
                     </div>
-                    <div className="col-7">
+                    <div className="col-md-7">
                       <div className="d-flex justify-content-between flex-md-row flex-column">
                         <div>
                           <h6 className="fw-semibold mb-1">{p.name}</h6>
@@ -159,7 +159,7 @@ const Pending = (props) => {
                     key={p.id}
                     className="row align-items-center mb-4 w-100"
                   >
-                    <div className="col-5">
+                    <div className="col-md-5">
                       <img
                         src={p.main_photo}
                         alt={p.name}
@@ -167,10 +167,10 @@ const Pending = (props) => {
                         style={{ width: "100%", height: "200px" }}
                       />
                     </div>
-                    <div className="col-7">
+                    <div className="col-md-7">
                       <div className="d-flex justify-content-between flex-md-row flex-column">
                         <div>
-                          <h6 className="fw-semibold mb-1">{p.name}</h6>
+                          <h6 className="fw-semibold my-2">{p.name}</h6>
                           <p className="text-muted small mb-1">{p.address}</p>
                           <h6 className="fw-bold mb-2">
                             {Number(p.total_price).toLocaleString("en-NG", {

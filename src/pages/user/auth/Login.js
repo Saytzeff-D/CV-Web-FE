@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginSchema } from "../../../schemas";
 import axios from "axios";
 import { Alert } from "@mui/material";
@@ -13,7 +13,16 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isAgent, setIsAgent] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
+  const [err, setErr] = useState('')
 
+  useEffect(() => {    
+    const params = new URLSearchParams(location.search);
+    const errorParam = params.get('error');    
+    if (errorParam) {
+      setErr(errorParam);
+    }
+  }, [location.search]);
   const { handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue } = useFormik({
     initialValues: {
       email: '',
@@ -86,6 +95,7 @@ const Login = () => {
                     Apple
                 </button>
                 <button
+                    onClick={()=>window.location.href = `${uri}auth/google/login`}
                     className="btn d-flex align-items-center justify-content-center border my-0"
                     style={{
                     borderRadius: "6px",
@@ -128,6 +138,7 @@ const Login = () => {
                             }
                         </Alert>
                     }
+                    {err && <Alert severity="error" className="mb-3">{err}</Alert>}
                 <div className="mb-3">
                     <label className="form-label fw-medium" style={{ fontSize: "13px" }}>
                     Email Address
