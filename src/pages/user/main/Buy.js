@@ -2,36 +2,82 @@ import { useEffect, useState } from "react";
 import Footer from "../../../components/Footer"
 import Navbar from "../../../components/Navbar"
 import 'react-range-slider-input/dist/style.css';
-import FilterProperty from "../../../components/FilterProperty";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import FilterBar from "../../../components/Filterbar";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Dialog, DialogContent } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Button } from "@mui/material";
 
 const Buy = () => {
     const { type } = useParams()
     const [properties, setProperties] = useState([])
     const uri = useSelector(state=>state.uri)
     const [isLoading, setIsLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState("")
+    const [filteredProperties, setFilteredProperties] = useState([])
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+    const navigate = useNavigate();
+    const [savedProperties, setSavedProperties] = useState([])
+
     useEffect(()=>{        
+        fetchProperties();
+        fetchSavedProperties();
+    }, [uri, type])
+
+    const fetchSavedProperties = () => {
+        if (!sessionStorage.getItem('userToken')) return;
+        axios.get(`${uri}customer/saved-properties`, {
+            headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
+        })
+        .then(res => {
+            console.log("Saved properties:", res.data);
+            setSavedProperties(res.data.savedProperties.map(prop => prop.id));
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
+    const fetchProperties = () => {
         setIsLoading(true)
         setProperties([])
+        setErrorMessage("")
         axios.get(`${uri}property/all`)
           .then((response) => {
             console.log("Fetched properties:", response.data);
             type == 'all' ? setProperties(response.data.data.filter(each => each.category == 'sale')) : setProperties(response.data.data.filter(each => each.type === type && each.category == 'sale'));
+            type == 'all' ? setFilteredProperties(response.data.data.filter(each => each.category == 'sale')) : setFilteredProperties(response.data.data.filter(each => each.type === type && each.category == 'sale'));
           })
           .catch((error) => {
             console.error("Error fetching properties:", error);
+            const msg = error?.response?.data?.message 
+                         || "Server Connection Failed. Please try again.";
+
+            setErrorMessage(msg);
           })
           .finally(() => {
             setIsLoading(false);
           });    
-    }, [uri, type])
+    }
 
     const encode = (str) => {
         return btoa(str.toString());
+    }
+
+    const handleSaveProperty = (propertyId) => {
+        if (!sessionStorage.getItem('userToken')) {
+            setShowLoginPrompt(true);
+            return;
+        }
+        axios.post(`${uri}customer/save-property`, { propertyId }, {
+            headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
+        })
+        .then(res => {            
+            fetchSavedProperties();
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
     
     return (
@@ -42,23 +88,23 @@ const Buy = () => {
             <p className="fw-semibold">
                 Home / <span className="text-theme">Buy / {type} for sale</span>
             </p>
-            <FilterBar type={type} />
-            <div className="row">
+            <FilterBar type={type} properties={properties} setFilteredProperties={setFilteredProperties} />
+            <div className="row w-100 px-md-0 px-4">
                 {
-                    properties.length == 0 && !isLoading
+                    filteredProperties.length == 0 && !isLoading && !errorMessage
                     ? (
                         <p className="fw-semibold fs-4 pb-5 text-muted">No properties available...</p>
                     )
                     :
-                    properties.map((each, i)=>(
+                    filteredProperties.map((each, i)=>(
                         <div className="col-lg-3 col-sm-6" key={i}>
                         <div className="card border-0" style={{ minWidth: "16rem" }}>
                             <div className="position-relative overflow-hidden rounded">                
                             <img src={each.main_photo} className="card-img-top" alt="Property" />
                             
-                            <button type="button"
+                            <button onClick={() => handleSaveProperty(each.id)} type="button"
                                 className="btn btn-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center text-white bg-transparent" style={{zIndex: 2}}>
-                                <i className="fa fa-heart-o"></i>
+                                <i className={savedProperties.includes(each.id) ? "fa fa-heart text-success" : "fa fa-heart-o"}></i>
                             </button>
 
                             <Link to={type === 'land' || type === 'all' ? `/land/sale/${encode(each.id)}` : `/apartment/sale/${encode(each.id)}`}
@@ -74,7 +120,7 @@ const Buy = () => {
                                 each.type == 'land'
                                 ?
                                 <div className="d-flex flex-wrap text-muted small">
-                                    <div>{each.land_size} Sqm</div>                        
+                                    <div>{Number(each.land_size).toLocaleString()} Sqm</div>                        
                                 </div>
                                 :
                                 <div className="d-flex flex-wrap text-muted small">
@@ -102,6 +148,47 @@ const Buy = () => {
                 <p>
                     <span className='spinner-border text-white'></span>
                 </p>
+            </DialogContent>
+        </Dialog>
+
+        <Dialog open={Boolean(errorMessage)}>
+            <DialogTitle className="text-danger fw-bold">Error</DialogTitle>
+            <DialogContent>
+                <p>{errorMessage}</p>
+                <Button
+                    variant="contained"
+                    color="error"
+                    fullWidth
+                    onClick={fetchProperties}
+                    style={{ marginTop: "15px" }}
+                >
+                    Retry
+                </Button>
+            </DialogContent>
+        </Dialog>
+
+        <Dialog open={showLoginPrompt} onClose={() => setShowLoginPrompt(false)}>
+            <DialogTitle className="fw-bold">Login Required</DialogTitle>
+            <DialogContent>
+                <p>You need to log in to save this property.</p>
+                <Button 
+                    variant="contained" 
+                    fullWidth 
+                    onClick={() => navigate('/login')}
+                    style={{ marginTop: "10px" }}
+                    className="bg-success"
+                >
+                    Login
+                </Button>
+
+                <Button 
+                    variant="outlined" 
+                    fullWidth 
+                    onClick={() => setShowLoginPrompt(false)}
+                    style={{ marginTop: "10px" }}
+                >
+                    Cancel
+                </Button>
             </DialogContent>
         </Dialog>
         <Footer />

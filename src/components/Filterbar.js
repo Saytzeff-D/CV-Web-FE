@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Popover, Box, Slider, Typography, Button } from "@mui/material";
 
 const FilterBar = (props) => {
-  const { type } = props;
+  const { type, properties, setFilteredProperties } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeFilter, setActiveFilter] = useState(null);
   const [priceRange, setPriceRange] = useState([1500000, 2000000]);
-  const [sizeRange, setSizeRange] = useState([14000, 20000]);
+  const [sizeRange, setSizeRange] = useState([50000, 95000]);
   const [bedrooms, setBedrooms] = useState("Any");
   const [bathrooms, setBathrooms] = useState("Any");
 
@@ -25,6 +25,36 @@ const FilterBar = (props) => {
     setBathrooms("Any");
   };
 
+  const priceFilter = (val)=>{
+    setPriceRange(val)    
+    const filtered = properties.filter(each => Number(String(each.total_price).replace(/[^0-9.]/g, '')) >= val[0] && Number(String(each.total_price).replace(/[^0-9.]/g, '')) <= val[1])
+    setFilteredProperties(filtered)    
+  }
+
+  const landFilter = (val)=>{
+    setSizeRange(val)    
+    const filtered = properties.filter(each => Number(String(each.land_size).replace(/[^0-9.]/g, '')) >= val[0] && Number(String(each.land_size).replace(/[^0-9.]/g, '')) <= val[1])
+    setFilteredProperties(filtered)    
+  }
+
+  const bedsBathFilter = ()=>{
+    handleClose()
+    if(bedrooms === "Any" && bathrooms === "Any"){
+      setFilteredProperties(properties.filter(each => each.bedrooms !== null && each.bathrooms !== null))
+      return;
+    }
+    const filtered = properties.filter(each => (each.bedrooms == bedrooms && each.bathrooms == bathrooms))
+    setFilteredProperties(filtered)
+  }
+
+  const searchProperties = (query) => {
+    const filtered = properties.filter(each => 
+      each.address.toLowerCase().includes(query.toLowerCase()) ||
+      each.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredProperties(filtered);
+  }
+
   const open = Boolean(anchorEl);
 
   return (
@@ -35,6 +65,7 @@ const FilterBar = (props) => {
           type="text"
           className="form-control"
           placeholder="Address, neighborhood, city, zipcode"
+          onChange={(e)=>searchProperties(e.target.value)}
         />
         <span className="input-group-text bg-white">
           <i className="fa fa-search"></i>
@@ -83,7 +114,7 @@ const FilterBar = (props) => {
         )
       }
 
-      <button className="btn btn-outline-secondary">
+      <button onClick={()=>setFilteredProperties(properties)} className="btn btn-outline-secondary">
         <i className="fa fa-sliders-h"></i> Filters
       </button>
 
@@ -121,7 +152,7 @@ const FilterBar = (props) => {
             </div>
             <Slider
               value={priceRange}
-              onChange={(e, val) => setPriceRange(val)}
+              onChange={(e, val) => priceFilter(val)}
               min={200000}
               max={5000000}
               step={50000}
@@ -142,9 +173,9 @@ const FilterBar = (props) => {
             </div>
             <Slider
               value={sizeRange}
-              onChange={(e, val) => setSizeRange(val)}
-              min={1000}
-              max={30000}
+              onChange={(e, val) => landFilter(val)}
+              min={100}
+              max={100000}
               step={100}
               sx={{ color: "green" }}
             />
@@ -213,7 +244,7 @@ const FilterBar = (props) => {
                 color="success"
                 size="small"
                 sx={{ textTransform: "none", px: 3 }}
-                onClick={handleClose}
+                onClick={bedsBathFilter}
               >
                 Save
               </Button>

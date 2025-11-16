@@ -319,7 +319,7 @@ const AddProperty = () => {
               <option value="">Select type</option>              
               <option value="hostel">Hostel</option>
               <option value="house">House</option>
-              <option value="land">Land</option>
+              {formik.values.category === 'sale' && (<option value="land">Land</option>)}
             </select>
           </div>
           <div className="col-md-6">

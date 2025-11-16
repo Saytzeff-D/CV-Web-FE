@@ -7,7 +7,7 @@ const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const { pathname } = useLocation();
     const navigate = useNavigate()
-    const route = null
+    const myRoute = sessionStorage.getItem('route')
 
     const logout = ()=>{
         sessionStorage.getItem('route') == '/admin/dashboard' ? navigate('/admin/login') : navigate('/login')
@@ -23,10 +23,7 @@ const Navbar = () => {
                 <Link className="navbar-brand" to="/">
                     <img src={Logo} className="img-fluid px-lg-1 px-3" width={'65px'} />
                 </Link>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation" onClick={() => setMenuOpen(true)}>
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="d-lg-none w-100 px-3 mb-2">
+                <div className="d-lg-none px-3 mb-2">
                     <select defaultValue={"NGN"} className="form-control form-select rounded-3 text-theme">
                         <option value="NGN">NGN</option>
                         <option value="1">EUR</option>
@@ -34,6 +31,9 @@ const Navbar = () => {
                         <option value="3">GBP</option>
                     </select>
                 </div>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation" onClick={() => setMenuOpen(true)}>
+                    <span className="navbar-toggler-icon"></span>
+                </button>
                 <div className="collapse navbar-collapse" id="navbarScroll">
                 <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
                     <li className="nav-item ps-md-5 pe-md-3 d-lg-block d-none">
@@ -69,8 +69,7 @@ const Navbar = () => {
                         <Link className={`nav-link dropdown-toggle ${pathname.startsWith("/rent") ? "active-link" : ""}`} to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Rent
                         </Link>
-                        <ul className="dropdown-menu">
-                            <li><Link className="dropdown-item" to="/rent/land">Land for rent</Link></li>
+                        <ul className="dropdown-menu">                            
                             <li><Link className="dropdown-item" to="/rent/house">House for rent</Link></li>                            
                             <li><Link className="dropdown-item" to="/rent/hostel">Hostels for rent</Link></li>
                             <li><Link className="dropdown-item" to="/rent/all">All properties for rent</Link></li>
@@ -106,7 +105,11 @@ const Navbar = () => {
                             <img src={avatar} alt="User Avatar" className="rounded-circle" style={{ width: "40px", height: "40px", objectFit: "cover" }} />
                         </div>
                         <ul className="dropdown-menu dropdown-menu-end">
-                            <li><p className="dropdown-item cursor-pointer my-0" onClick={()=> navigate(sessionStorage.getItem('route'))}>Dashboard</p></li>
+                            <li>
+                                <p className="dropdown-item cursor-pointer my-0" onClick={()=> myRoute.includes('client') ? navigate('/client/dashboard') : myRoute.includes('agent') ? navigate('/agent/dashboard') : navigate('/admin/dashboard')} >
+                                    Dashboard
+                                </p>
+                            </li>
                             <li><p className="dropdown-item cursor-pointer" onClick={logout} >Logout</p></li>
                         </ul>
                     </div>

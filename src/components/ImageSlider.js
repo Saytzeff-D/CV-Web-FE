@@ -8,20 +8,20 @@ const ImageSlider = () => {
   const imageArray = [Carousel2, Carousel1, Carousel3]
 
   // Auto-slide effect
-  useEffect(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
+  // useEffect(() => {
+  //   const slider = sliderRef.current;
+  //   if (!slider) return;
 
-    const interval = setInterval(() => {
-      slider.scrollBy({ left: 250, behavior: "smooth" });
-      // loop back if end reached
-      if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth) {
-        slider.scrollTo({ left: 0, behavior: "smooth" });
-      }
-    }, 3000); // slide every 3s
+  //   const interval = setInterval(() => {
+  //     slider.scrollBy({ left: 250, behavior: "smooth" });
+  //     // loop back if end reached
+  //     if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth) {
+  //       slider.scrollTo({ left: 0, behavior: "smooth" });
+  //     }
+  //   }, 3000); // slide every 3s
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const scroll = (direction) => {
     const { current } = sliderRef;

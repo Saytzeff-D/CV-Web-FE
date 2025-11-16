@@ -18,7 +18,7 @@ const SavedProperties = (props) => {
                     savedProperties.map((each, i)=>(<div className="col-lg-3 col-md-6" key={i}>
                         <div className="card border-0" style={{ minWidth: "16rem" }}>
                         <div className="position-relative overflow-hidden rounded">                
-                            <img src={each.main_photo} height={'250px'} className="card-img-top" alt="Property" />
+                            <img src={each.main_photo} height={'200px'} className="card-img-top" alt="Property" />
                             
                             <button type="button"
                             className="btn btn-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center text-white bg-transparent" style={{zIndex: 2}}>
@@ -33,7 +33,7 @@ const SavedProperties = (props) => {
 
                         <div className="card-body pt-3">
                             <h6 className="card-title mb-1">{each.name}</h6>
-                            <p className="h5 fw-bold mb-2">{each.total_price}</p>
+                            <p className="h5 fw-bold mb-2">{Number(each.total_price).toLocaleString()}</p>
                             <div className="d-flex flex-wrap text-muted small">
                                 <div className="me-3 text-success fw-semibold">
                                      {each.type.charAt(0).toUpperCase() + each.type.slice(1)}

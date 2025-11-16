@@ -7,7 +7,7 @@ const WhatClientsSay = () => {
                 <h2 className="fw-bold">What Our Clients Say:</h2>
                 <h2 className="fw-bold">Real Experiences, Real Results</h2>
             </div>
-            <div className="row w-100">
+            <div className="row w-100 px-md-0 px-4">
                 {data.testimonials.map((t, index) => (
                     <div className="col-md-4 mb-4" key={index} style={{ marginTop: `${index % 2 === 0 ? 0 : 40}px` }}>
                         <div className="card border-0 shadow rounded-4 h-100">

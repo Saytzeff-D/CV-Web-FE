@@ -3,34 +3,81 @@ import Footer from "../../../components/Footer"
 import Navbar from "../../../components/Navbar"
 import 'react-range-slider-input/dist/style.css';
 import FilterBar from "../../../components/Filterbar";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Dialog, DialogContent } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Button } from "@mui/material";
 
 const Rent = () => {
     const { type } = useParams()
     const [properties, setProperties] = useState([])
     const uri = useSelector(state=>state.uri)
     const [isLoading, setIsLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState("")
+    const [filteredProperties, setFilteredProperties] = useState([])
+    const [savedProperties, setSavedProperties] = useState([])
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+    const navigate = useNavigate();
+
     useEffect(()=>{
+        fetchProperties()
+        fetchSavedProperties();
+    }, [uri, type])
+
+    const fetchSavedProperties = () => {
+        if (!sessionStorage.getItem('userToken')) return;
+        axios.get(`${uri}customer/saved-properties`, {
+            headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
+        })
+        .then(res => {
+            console.log("Saved properties:", res.data);
+            setSavedProperties(res.data.savedProperties.map(prop => prop.id));
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+    
+    const fetchProperties = () =>{
         setIsLoading(true)
         setProperties([])
+        setErrorMessage("")
         axios.get(`${uri}property/all`)
           .then((response) => {
             console.log("Fetched properties:", response.data);
             type == 'all' ? setProperties(response.data.data.filter(each => each.category == 'rent')) : setProperties(response.data.data.filter(each => each.type === type && each.category == 'rent'));
+            type == 'all' ? setFilteredProperties(response.data.data.filter(each => each.category == 'rent')) : setFilteredProperties(response.data.data.filter(each => each.type === type && each.category == 'rent'));
           })
           .catch((error) => {
             console.error("Error fetching properties:", error);
+            const msg = error?.response?.data?.message 
+                         || "Server Connection Failed. Please try again.";
+
+            setErrorMessage(msg);
           })
           .finally(() => {
             setIsLoading(false);
           });    
-    }, [uri, type])
+    }
 
     const encode = (str) => {
         return btoa(str.toString());
+    }
+
+    const handleSaveProperty = (propertyId) => {
+        if (!sessionStorage.getItem('userToken')) {
+            setShowLoginPrompt(true);
+            return;
+        }
+        axios.post(`${uri}customer/save-property`, { propertyId }, {
+            headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
+        })
+        .then(res => {            
+            fetchSavedProperties();
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
     
     return (
@@ -41,26 +88,26 @@ const Rent = () => {
             <p className="fw-semibold">
                 Home / <span className="text-theme">Rent / {type} for rent</span>
             </p>
-            <FilterBar type={type} />
+            <FilterBar type={'rent'} properties={properties} setFilteredProperties={setFilteredProperties} />
             <div className="row">
                 {
-                    properties.length == 0 && !isLoading
+                    filteredProperties.length == 0 && !isLoading && !errorMessage
                     ? (
                         <p className="fw-semibold fs-4 pb-5 text-muted">No properties available...</p>
                     )
                     :
-                    properties.map((each, i)=>(
+                    filteredProperties.map((each, i)=>(
                         <div className="col-lg-3 col-sm-6" key={i}>
                         <div className="card border-0" style={{ minWidth: "16rem" }}>
                             <div className="position-relative overflow-hidden rounded">                
                             <img src={each.main_photo} className="card-img-top" alt="Property" />
                             
-                            <button type="button"
+                            <button onClick={() => handleSaveProperty(each.id)} type="button"
                                 className="btn btn-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center text-white bg-transparent" style={{zIndex: 2}}>
-                                <i className="fa fa-heart-o"></i>
+                                <i className={savedProperties.includes(each.id) ? "fa fa-heart text-success" : "fa fa-heart-o"}></i>
                             </button>
 
-                            <Link to={type === 'land' || type === 'all' ? `/land/rent/${encode(each.id)}` : `/apartment/rent/${encode(each.id)}`}
+                            <Link to={each.type === 'land' ? `/land/rent/${encode(each.id)}` : `/apartment/rent/${encode(each.id)}`}
                                 className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
                                 See More
                             </Link>
@@ -69,19 +116,11 @@ const Rent = () => {
                             <div className="card-body px-0 pt-3">
                             <h6 className="card-title mb-1">{each.name}</h6>
                             <h6 className="fw-bold mb-2">{Number(each.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h6>
-                            {
-                                each.type == 'land'
-                                ?
-                                <div className="d-flex flex-wrap text-muted small">
-                                    <div>{each.land_size} Sqm</div>                        
-                                </div>
-                                :
-                                <div className="d-flex flex-wrap text-muted small">
-                                    <div className="me-3"><i className="fa fa-regular fa-bed"></i> {each.bedrooms} beds</div>
-                                    <div className="me-3"><i className="fa fa-regular fa-toilet"></i> {each.toilets} toilets</div>
-                                    <div className="me-3"><i className="fa fa-regular fa-bath"></i> {each.bathrooms} baths</div>
-                                </div>
-                            }
+                            <div className="d-flex flex-wrap text-muted small">
+                                <div className="me-3"><i className="fa fa-regular fa-bed"></i> {each.bedrooms} beds</div>
+                                <div className="me-3"><i className="fa fa-regular fa-toilet"></i> {each.toilets} toilets</div>
+                                <div className="me-3"><i className="fa fa-regular fa-bath"></i> {each.bathrooms} baths</div>
+                            </div>                            
                             <p className="text-muted small mt-2">{each.address}</p>
                             </div>
                         </div>
@@ -103,6 +142,48 @@ const Rent = () => {
                 </p>
             </DialogContent>
         </Dialog>
+
+        <Dialog open={Boolean(errorMessage)}>
+            <DialogTitle className="text-danger fw-bold">Error</DialogTitle>
+            <DialogContent>
+                <p>{errorMessage}</p>
+                <Button
+                    variant="contained"
+                    color="error"
+                    fullWidth
+                    onClick={fetchProperties}
+                    style={{ marginTop: "15px" }}
+                >
+                    Retry
+                </Button>
+            </DialogContent>
+        </Dialog>
+
+        <Dialog open={showLoginPrompt} onClose={() => setShowLoginPrompt(false)}>
+            <DialogTitle className="fw-bold">Login Required</DialogTitle>
+            <DialogContent>
+                <p>You need to log in to save this property.</p>
+                <Button 
+                    variant="contained" 
+                    fullWidth 
+                    onClick={() => navigate('/login')}
+                    style={{ marginTop: "10px" }}
+                    className="bg-success"
+                >
+                    Login
+                </Button>
+
+                <Button 
+                    variant="outlined" 
+                    fullWidth 
+                    onClick={() => setShowLoginPrompt(false)}
+                    style={{ marginTop: "10px" }}
+                >
+                    Cancel
+                </Button>
+            </DialogContent>
+        </Dialog>
+
         <Footer />
         </>
     )
