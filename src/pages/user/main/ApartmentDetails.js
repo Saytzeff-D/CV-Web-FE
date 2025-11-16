@@ -17,13 +17,16 @@ const ApartmentDetails = () => {
   const uri = useSelector(state=>state.uri)
   const [property, setProperty] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [days, setDays] = useState('')
 
   useEffect(()=>{
     axios.get(`${uri}property/${decode(id)}`)
       .then((response) => {
         console.log("Fetched property details:", response.data);
         setProperty(response.data.data);
-        // You can set the fetched data to state here if needed
+        const time_difference_ms = new Date().getTime() - new Date(response.data.data.created_at).getTime();
+        const days_since_creation = Math.floor(time_difference_ms / (1000 * 60 * 60 * 24));
+        setDays(days_since_creation)
       })
       .catch((error) => {
         navigate("/404");
@@ -94,7 +97,7 @@ const ApartmentDetails = () => {
           </div>
           <div className="mt-2 text-muted small d-flex justify-content-end">
             <p>
-                30 days on <b className="text-dark">C&V</b> · <b className="text-dark">300</b> views · <b className="text-dark">20</b> saves
+                {days} days on <b className="text-dark">C&V</b> · <b className="text-dark">{property.views_count}</b> views · <b className="text-dark">{property.saves_count}</b> saves
             </p>
           </div>
         </div>

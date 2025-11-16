@@ -10,6 +10,7 @@ import Booking from "../../../components/Booking";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Dialog, DialogContent } from "@mui/material";
+import { time } from "framer-motion";
 
 const LandDetails = () => {
   const { type, id } = useParams();
@@ -18,13 +19,15 @@ const LandDetails = () => {
   const [property, setProperty] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate()
+  const [days, setDays] = useState('')
 
   useEffect(()=>{
     axios.get(`${uri}property/${decode(id)}`)
-      .then((response) => {
-        console.log("Fetched property details:", response.data);
+      .then((response) => {        
         setProperty(response.data.data);
-        // You can set the fetched data to state here if needed
+        const time_difference_ms = new Date().getTime() - new Date(response.data.data.created_at).getTime();        
+        const days_since_creation = Math.floor(time_difference_ms / (1000 * 60 * 60 * 24));
+        setDays(days_since_creation)
       })
       .catch((error) => {
         navigate("/404");
@@ -94,7 +97,7 @@ const LandDetails = () => {
             </div>
             <div className="mt-2 text-muted small d-flex justify-content-end">
               <p>
-                  30 days on <b className="text-dark">C&V</b> · <b className="text-dark">300</b> views · <b className="text-dark">20</b> saves
+                  {days} days on <b className="text-dark">C&V</b> · <b className="text-dark">{property.views_count}</b> views · <b className="text-dark">{property.saves_count}</b> saves
               </p>
             </div>
           </div>
@@ -102,7 +105,7 @@ const LandDetails = () => {
           <div>
             <h4 className="fw-bold mb-2">{Number(property.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h4>
             <span className="text-muted">/Per year </span>
-            <span>· {property.land_size}sqm</span>
+            <span>· {Number(property.land_size).toLocaleString()}sqm</span>
           </div>
 
           {/* SECOND ROW: TABS (col-8) + BOOKING CARD (col-4) */}
