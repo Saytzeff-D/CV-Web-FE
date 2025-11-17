@@ -29,6 +29,8 @@ import BlogManager from './pages/admin/BlogManager';
 import EditProperty from './pages/admin/EditProperty';
 import EditBlog from './pages/admin/EditBlog';
 import GoogleAuth from './GoogleAuth';
+import PayNow from './pages/PayNow';
+import TransactionStatus from './pages/TransactionStatus';
 
 function App() {
   return (
@@ -63,6 +65,8 @@ function App() {
         <Route path='/admin/edit-blog' element={<EditBlog />} />
         <Route path='/admin/blog-manager' element={<BlogManager />} />
         <Route path='/filterbar' element={<FilterBar />} />
+        <Route path='/pay-now' element={<PayNow />} />
+        <Route path='/transaction-status' element={<TransactionStatus />} />
         <Route path='/dashboard' element={<GoogleAuth />} />
         <Route path='*' element={<NotFound />} />
       </Routes>

@@ -8,7 +8,7 @@ import Realtor from "../../../components/apartment/realtor";
 import Booking from "../../../components/Booking";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Dialog, DialogContent } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, Button } from "@mui/material";
 
 const ApartmentDetails = () => {
   const navigate = useNavigate();
@@ -16,17 +16,14 @@ const ApartmentDetails = () => {
   const [mainIndex, setMainIndex] = useState(0);
   const uri = useSelector(state=>state.uri)
   const [property, setProperty] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [days, setDays] = useState('')
+  const [isLoading, setIsLoading] = useState(true);  
 
   useEffect(()=>{
+    fetchSavedProperties();
     axios.get(`${uri}property/${decode(id)}`)
       .then((response) => {
         console.log("Fetched property details:", response.data);
-        setProperty(response.data.data);
-        const time_difference_ms = new Date().getTime() - new Date(response.data.data.created_at).getTime();
-        const days_since_creation = Math.floor(time_difference_ms / (1000 * 60 * 60 * 24));
-        setDays(days_since_creation)
+        setProperty(response.data.data);        
       })
       .catch((error) => {
         navigate("/404");
@@ -40,6 +37,38 @@ const ApartmentDetails = () => {
     return atob(str);
   }
 
+  const handleSaveProperty = (propertyId) => {
+      if (!sessionStorage.getItem('userToken')) {
+          setShowLoginPrompt(true);
+          return;
+      }
+      axios.post(`${uri}customer/save-property`, { propertyId }, {
+          headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
+      })
+      .then(res => {            
+          fetchSavedProperties();
+      })
+      .catch(err => {
+          console.log(err)
+      })
+  }
+
+  const fetchSavedProperties = () => {
+      if (!sessionStorage.getItem('userToken')) return;
+      axios.get(`${uri}customer/saved-properties`, {
+          headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
+      })
+      .then(res => {
+          console.log("Saved properties:", res.data);
+          setSavedProperties(res.data.savedProperties.map(prop => prop.id));
+      })
+      .catch(err => {
+          console.log(err);
+      });
+  }
+
+  const [savedProperties, setSavedProperties] = useState([]);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   return (
     <>
@@ -59,8 +88,8 @@ const ApartmentDetails = () => {
               <button className="btn btn-light btn-sm btn-circle shadow-sm" title="Share">
                 <i className="fa fa-share"></i> Share
               </button>
-              <button className="btn btn-light btn-sm btn-circle shadow-sm" title="Save">
-                <i className="fa fa-heart-o"></i> Save
+              <button onClick={()=>handleSaveProperty(property.id)} className="btn btn-light btn-sm btn-circle shadow-sm" title="Save">
+                <i className={savedProperties.includes(property.id) ? "fa fa-heart text-success" : "fa fa-heart-o"}></i> Save
               </button>
             </div>
           </div>
@@ -97,7 +126,7 @@ const ApartmentDetails = () => {
           </div>
           <div className="mt-2 text-muted small d-flex justify-content-end">
             <p>
-                {days} days on <b className="text-dark">C&V</b> · <b className="text-dark">{property.views_count}</b> views · <b className="text-dark">{property.saves_count}</b> saves
+                {property.days_listed} days on <b className="text-dark">C&V</b> · <b className="text-dark">{property.views_count}</b> views · <b className="text-dark">{property.saves_count}</b> saves
             </p>
           </div>
         </div>
@@ -163,6 +192,32 @@ const ApartmentDetails = () => {
               </p>
           </DialogContent>
       </Dialog>
+
+      <Dialog open={showLoginPrompt} onClose={() => setShowLoginPrompt(false)}>
+          <DialogTitle className="fw-bold">Login Required</DialogTitle>
+          <DialogContent>
+              <p>You need to log in to save this property.</p>
+              <Button 
+                  variant="contained" 
+                  fullWidth 
+                  onClick={() => navigate('/login')}
+                  style={{ marginTop: "10px" }}
+                  className="bg-success"
+              >
+                  Login
+              </Button>
+
+              <Button 
+                  variant="outlined" 
+                  fullWidth 
+                  onClick={() => setShowLoginPrompt(false)}
+                  style={{ marginTop: "10px" }}
+              >
+                  Cancel
+              </Button>
+          </DialogContent>
+      </Dialog>
+
       <Footer />
     </>
   );
