@@ -32,7 +32,7 @@ const EditProperty = () => {
     setBedrooms(edit ? JSON.parse(edit).bedrooms : 'Any');
     setToilets(edit ? JSON.parse(edit).toilets : 'Any');
     setParking(edit ? JSON.parse(edit).parking_space : 'Any'); 
-    // setFeatures(edit ? JSON.parse(edit).amenities : []);      
+    setFeatures(edit ? JSON.parse(edit).amenities.map((amenity) => amenity.id) : []);          
   }, [edit]);
 
   const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoicGF4ZGF2IiwiYSI6ImNtaGdmbDhwbzBnbmMybXM3ZW84ZThsbDcifQ.EHc4njJ4J2q3-sNv9taX_A";
@@ -50,7 +50,12 @@ const EditProperty = () => {
         axios.get(`${uri}property/amenities`)
           .then((response) => {
             setIsFetching(false);          
-            setFeaturedOptions(response.data.data);        
+            setFeaturedOptions(response.data.data);
+            let selectedAmenities = JSON.parse(edit).amenities; 
+            selectedAmenities.map((amenity) => {
+              let foundAmenity = response.data.data.find((feature)=> feature.name == amenity)              
+              setFeatures((prev) => [...prev, foundAmenity.id]);
+            })     
           })
           .catch((error) => {
             setIsFetching(false);
@@ -79,7 +84,7 @@ const EditProperty = () => {
         bathrooms,
         toilets,
         parking_space: parking,
-        // amenities:features,        
+        amenities:features.filter((item, index) => features.indexOf(item) === index && item !== undefined),
         coordinates: selectedCoordinates        
       };
       setIsLoading(true);
