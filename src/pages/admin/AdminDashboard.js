@@ -64,13 +64,13 @@ const AdminDashboard = () => {
                 <h4 className="fw-semibold mb-4 text-success text-center">
                     Property / Content Management
                 </h4>
-                <div className="row g-4 w-100">                
-                    <div className="col-md-6 px-md-5 px-2">
+                <div className="d-flex justify-content-center flex-md-row flex-column">                
+                    <div className="mb-2 px-md-5 px-3">
                         <button onClick={() => navigate('/admin/property-manager')} className="btn px-5 py-3 rounded-0 btn-success me-3">
                             Property Management (Add/Edit/Delete)
                         </button>
                     </div>
-                    <div className="col-md-6 px-md-5 px-2">
+                    <div className="mt-2 px-md-5 px-3">
                         <button onClick={() => navigate('/admin/blog-manager')} className="btn px-5 py-3 rounded-0 btn-success me-3">
                             Blog Management (Add/Edit/Delete)
                         </button>                        
@@ -80,19 +80,19 @@ const AdminDashboard = () => {
 
             {/* ===== Agent Management ===== */}
             <section className="mb-5">
-                <h4 className="fw-semibold mb-4 text-success text-center">Agent Management</h4>
+                <h4 className="fw-semibold mb-4 text-success text-center">User Management</h4>
                 <div className="d-flex justify-content-center">
                     <button onClick={()=>navigate('/admin/view-agents')} className="btn px-5 py-3 rounded-0 btn-success me-3">
-                        All Agents Section
+                        All Users Section
                     </button>                                                               
                 </div>
             </section>
 
             {/* ===== Transaction / Payment Management ===== */}
             <section>
-                <h4 className="fw-semibold mb-4 text-success text-center">
+                {/* <h4 className="fw-semibold mb-4 text-success text-center">
                 Transaction / Payment Management
-                </h4>
+                </h4> */}
                 {/* <div className="row g-4 w-100">
                 {[
                     "Approve / Reject Agent Payment",
