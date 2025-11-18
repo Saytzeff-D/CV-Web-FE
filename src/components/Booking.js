@@ -73,9 +73,24 @@ const Booking = (props) => {
                                 <h4 className="fw-bold mb-2">{Number(property.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h4>
                                 <span className="text-muted">/ per year</span>
 
-                                <button className="btn btn-success w-100 my-3">
-                                Check Availability
-                                </button>
+                                <div className="mt-3 dropdown">
+                                    <button className="btn btn-success w-100 mb-3 mt-2 dropddown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Schedule for Inspection
+                                    </button>
+                                    <ul className="dropdown-menu w-75 text-center p-2">
+                                        <li>
+                                        <button onClick={()=>payNow('inspection')} className="btn btn-success w-100 mb-2">
+                                            Schedule for Inspection
+                                        </button>
+                                        </li>
+                                        <li>
+                                            I Want to Buy Now! <br />
+                                        <button onClick={()=>payNow('checkout')} className="btn btn-white border w-100">
+                                            <span className="small">Proceed to Check out</span>
+                                        </button>
+                                        </li>
+                                    </ul>
+                                </div>
 
                                 <button className="btn btn-outline-dark w-100">
                                 Contact Agent
