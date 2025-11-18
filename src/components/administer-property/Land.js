@@ -77,7 +77,7 @@ const Land = (props) => {
                         </div>
                     </div>
                     <div className="d-flex align-items-center text-muted small gap-3">
-                        <p>{p.land_size} Sqm</p>                        
+                        <p>{Number(p.land_size).toLocaleString()} Sqm</p>                        
                     </div>
                 </div>
                 </div>
