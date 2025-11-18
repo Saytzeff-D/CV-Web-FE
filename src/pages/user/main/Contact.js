@@ -25,8 +25,8 @@ const Contact = () => {
                             <p className="my-0">
                                 Email Us
                             </p>                   
-                            <a className="text-dark" href="mailto:cvproperty@gmail.com">
-                                cvproperty@gmail.com
+                            <a className="text-dark" href="mailto:candvproperty@gmail.com">
+                                candvproperty@gmail.com
                             </a>
                         </div>
                         <div className="text-center bg-light p-5 border mb-3">
