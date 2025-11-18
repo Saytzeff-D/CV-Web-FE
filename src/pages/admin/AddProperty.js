@@ -5,7 +5,7 @@ import data from "../../data.json"
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { addPropertySchema } from "../../schemas";
-import { Snackbar, Button, IconButton } from "@mui/material";
+import { Snackbar, Button, IconButton, Alert } from "@mui/material";
 
 const AddProperty = () => {
   const [featuredOptions, setFeaturedOptions] = useState([]);
@@ -167,8 +167,9 @@ const AddProperty = () => {
 
   const processImages = (e)=>{
       let files = e.target.files
-      if (files.length == 0) {
-          console.log('No file selected');
+      if (files.length < 4) {
+          console.log('You need to upload at least 4 images');
+          setErrorMessage('You need to upload at least 4 images');
       } else {
         const allValid = Array.from(files).every(file => file.type == 'image/png' || file.type == 'image/jpg' || file.type == 'image/jpeg');
         if (allValid) {
@@ -550,17 +551,23 @@ const AddProperty = () => {
       open={!!successMessage}
       autoHideDuration={4000}
       onClose={handleClose}
-      action={action}
-      message={successMessage}
-    />
+      action={action}      
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          {successMessage}
+        </Alert>
+      </Snackbar>
     <Snackbar
       open={!!errorMessage}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       autoHideDuration={4000}
       onClose={handleClose}
-      action={action}
-      message={errorMessage}
-    />
+      action={action}      
+      >
+        <Alert onClose={handleClose} variant="filled" severity="error" sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
     </div>
   );
