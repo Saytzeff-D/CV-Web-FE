@@ -8,6 +8,9 @@ import {
   Typography,
   Button,
   CircularProgress,
+  Alert,
+  Snackbar,
+  IconButton,
 } from "@mui/material";
 
 const AllUsers = () => {
@@ -21,6 +24,8 @@ const AllUsers = () => {
   const navigate = useNavigate();
   const uri = useSelector((state) => state.uri);
   const token = sessionStorage.getItem("userToken");
+  const [errorMessage, setErrorMessage] = useState('')
+  const [err, setErr] = useState('')
 
   useEffect(() => {
     axios
@@ -31,7 +36,7 @@ const AllUsers = () => {
         setUsers(res.data.allCustomers);
       })
       .catch((err) => {
-        console.error("Error fetching agents:", err);
+        setErr('Error fetching agents')        
       })
       .finally(() => {
         setIsLoading(false);
@@ -51,20 +56,13 @@ const AllUsers = () => {
     setActionType("");
   };
 
-  const handleConfirmAction = async () => {
-    if (!selectedUser || !actionType) return;
-
+  const handleConfirmAction = () => {
     setProcessing(true);
-    const endpoint =
-      actionType === "suspend"
-        ? `${uri}agent/suspend/${selectedUser.id}`
-        : `${uri}agent/restore/${selectedUser.id}`;
-
-    try {
-      await axios.delete(endpoint, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+    axios.patch(`${uri}admin/account/suspend`, { accountId: selectedUser.id }, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(()=>{
+      setProcessing(false);
+      closeConfirm();
       setUsers((prev) =>
         prev.map((a) =>
           a.id === selectedUser.id
@@ -72,13 +70,31 @@ const AllUsers = () => {
             : a
         )
       );
-    } catch (err) {
-      console.error(`Error performing ${actionType}:`, err);
-    } finally {
+    }).catch((err)=>{
       setProcessing(false);
-      closeConfirm();
-    }
+      setErrorMessage('Your request could not be processed.')
+    })
   };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }    
+    setErrorMessage('');
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        &times;
+      </IconButton>
+    </React.Fragment>
+  );
 
   return (
     <div className="container py-5 px-5">
@@ -95,7 +111,7 @@ const AllUsers = () => {
       </div>
 
       <div className="d-flex justify-content-center">
-        <div className="col-md-9">
+        <div className="col-9">
           <ul className="nav nav-tabs mb-3">
             <li className="nav-item">
               <button
@@ -133,13 +149,17 @@ const AllUsers = () => {
                 <p className="text-center text-muted">Loading active agents...</p>
               )}
 
-              {!isLoading &&
+              {!isLoading && err == '' &&
                 users.filter((a) => a.role === "agent" && a.suspended === 0)
                   .length === 0 && (
                   <p className="text-center text-muted">
                     No active agents found.
                   </p>
                 )}
+
+                {
+                  err !== '' && <Alert severity="error" >{err}</Alert>
+                }
 
               {users
                 .filter((a) => a.role === "agent" && a.suspended === 0)
@@ -196,7 +216,11 @@ const AllUsers = () => {
                 </p>
               )}
 
-              {!isLoading &&
+              {
+                err !== '' && <Alert severity="error" >{err}</Alert>
+              }
+
+              {!isLoading && err == '' &&
                 users.filter((a) => a.role === "agent" && a.suspended === 1)
                   .length === 0 && (
                   <p className="text-center text-muted">
@@ -257,10 +281,14 @@ const AllUsers = () => {
                 <p className="text-center text-muted">Loading Customers...</p>
               )}
 
-              {!isLoading &&
+              {!isLoading && err == '' &&
                 users.filter((a) => a.role === "customer").length === 0 && (
                   <p className="text-center text-muted">No customers found.</p>
                 )}
+
+                {
+                  err !== '' && <Alert severity="error" >{err}</Alert>
+                }
 
               {users
                 .filter((a) => a.role === "customer")
@@ -355,6 +383,15 @@ const AllUsers = () => {
           </Box>
         </Box>
       </Modal>
+
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={!!errorMessage}
+        autoHideDuration={4000}
+        onClose={handleClose}
+        action={action}
+        message={errorMessage}
+      />
     </div>
   );
 };
