@@ -107,7 +107,7 @@ const Buy = () => {
                                 <i className={savedProperties.includes(each.id) ? "fa fa-heart text-success" : "fa fa-heart-o"}></i>
                             </button>
 
-                            <Link to={type === 'land' || type === 'all' ? `/land/sale/${encode(each.id)}` : `/apartment/sale/${encode(each.id)}`}
+                            <Link to={each.type === 'land' ? `/land/sale/${encode(each.id)}` : `/apartment/sale/${encode(each.id)}`}
                                 className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
                                 See More
                             </Link>

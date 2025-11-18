@@ -108,7 +108,7 @@ const Shortlet = () => {
                                 <i className={savedProperties.includes(each.id) ? "fa fa-heart text-success" : "fa fa-heart-o"}></i>
                             </button>
 
-                            <Link to={type === 'land' || type === 'all' ? `/land/shortlet/${encode(i)}` : `/apartment/shortlet/${encode(i)}`}
+                            <Link to={each.type === 'land' ? `/land/shortlet/${encode(each.id)}` : `/apartment/shortlet/${encode(each.id)}`}
                                 className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
                                 See More
                             </Link>
