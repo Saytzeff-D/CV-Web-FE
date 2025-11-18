@@ -36,8 +36,8 @@ const Contact = () => {
                             <p className="my-0">
                                 Our Address
                             </p>                
-                            <a className="my-0 text-dark" href="https://maps.app.goo.gl/yApDbuTwDdUYtAHh7" target="_blank" rel="noopener noreferrer">
-                                15A, Lagos, Nigeria
+                            <a className="my-0 text-dark" href="https://maps.app.goo.gl/FQoyGu2wm9EiVTtXA" target="_blank" rel="noopener noreferrer">
+                                Block A, Facebook Complex, Under G Road, Ogbomoso, Oyo State
                             </a>
                         </div>
                         <div className="text-center bg-light p-5 border mb-3">     
@@ -54,16 +54,8 @@ const Contact = () => {
                     </div>
 
                     {/* Map */}
-                    <div className="col-md-8 mb-4">
-                    <iframe
-                        title="Google Map"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31707.225546788988!2d3.3650270558503115!3d6.596708927402687!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b92fed71986e3%3A0x15f231c40b992496!2sKetu%2C%20Ikeja%20105102%2C%20Lagos!5e0!3m2!1sen!2sng!4v1759411441715!5m2!1sen!2sng"
-                        width="100%"
-                        height={600}
-                        style={{ border: 0 }}
-                        allowFullScreen=""
-                        loading="lazy"
-                    ></iframe>
+                    <div className="col-md-8 mb-4">                    
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.4032778835667!2d4.2629811750089734!3d8.162061691868658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10370daf3fc49367%3A0xb7eea39b9bbe7be3!2sFacebook%20complex!5e0!3m2!1sen!2sng!4v1763461293494!5m2!1sen!2sng" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
 
