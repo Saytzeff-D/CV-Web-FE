@@ -1,10 +1,12 @@
 import { Alert } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const PayNow = () => {
   const [inspectionDate, setInspectionDate] = useState("");
   const navigate = useNavigate();
+  const currency  = useSelector(state=>state.CurrencyReducer.currency)
   const [propertyForPayment, setPropertyForPayment] = useState(null);
 
   useEffect(() => {
@@ -44,7 +46,7 @@ const PayNow = () => {
 
           <h5 className="fw-semibold mt-4">{propertyForPayment && propertyForPayment.name}</h5>
 
-          <h2 className="fw-bold mt-3">{Number(propertyForPayment && propertyForPayment.fee).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h2>
+          <h2 className="fw-bold mt-3">{Number(propertyForPayment && propertyForPayment.fee).toLocaleString('en-NG', {style: 'currency', currency})}</h2>
           <small className="text-muted">{propertyForPayment && propertyForPayment.type === 'inspection' ? 'per Inspection' : 'outright'}</small>
 
           <div className="border-bottom my-3"></div>

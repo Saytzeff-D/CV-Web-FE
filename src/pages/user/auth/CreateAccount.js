@@ -8,7 +8,7 @@ import axios from "axios";
 import { Alert } from "@mui/material";
 
 const CreateAccount = () => {
-    const uri = useSelector(state=>state.uri)
+    const uri = useSelector(state=>state.UriReducer.uri)
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);

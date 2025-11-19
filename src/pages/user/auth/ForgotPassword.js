@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {  
-    const uri = useSelector(state=>state.uri)
+    const uri = useSelector(state=>state.UriReducer.uri)
     const navigate = useNavigate()
     const [checkAccount, setCheckAccount] = useState(false)
     const [isLoading, setIsLoading] = useState(false)

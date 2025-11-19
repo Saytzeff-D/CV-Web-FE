@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from '../assets/icon.png'
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 const Navbar = () => {   
     const avatar = sessionStorage.getItem('avatar') 
@@ -8,12 +10,27 @@ const Navbar = () => {
     const { pathname } = useLocation();
     const navigate = useNavigate()
     const myRoute = sessionStorage.getItem('route')
+    const dispatch = useDispatch()
+    const currency = useSelector(state=>state.CurrencyReducer.currency);
+
+    // useEffect(()=>{
+    //     axios.get('https://api.exchangerate.host/latest?base=NGN&symbols=USD,GBP,EUR').then(res=>{
+    //         console.log("Exchange rates:", res.data);
+    //         dispatch({type: 'SET_EXCHANGE_RATES', payload: res.data.rates})
+    //     }).catch(err=>{
+    //         console.log(err);
+    //     })
+    // })
 
     const logout = ()=>{
         sessionStorage.getItem('route') == '/admin/dashboard' ? navigate('/admin/login') : navigate('/login')
         sessionStorage.removeItem('userToken')
         sessionStorage.removeItem('route')
         sessionStorage.removeItem('avatar')
+    }
+
+    const handleCurrency = (value) => {        
+        dispatch({type: 'SET_CURRENCY', payload: value});
     }
 
   return (
@@ -24,11 +41,11 @@ const Navbar = () => {
                     <img src={Logo} className="img-fluid px-lg-1 px-3" width={'65px'} />
                 </Link>
                 <div className="d-lg-none px-3 mb-2">
-                    <select defaultValue={"NGN"} className="form-control form-select rounded-3 text-theme">
+                    <select onChange={(e)=> handleCurrency(e.target.value)} defaultValue={currency} className="form-control form-select rounded-3 text-theme">
                         <option value="NGN">NGN</option>
-                        <option value="1">EUR</option>
-                        <option value="2">USD</option>
-                        <option value="3">GBP</option>
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                        <option value="GBP">GBP</option>
                     </select>
                 </div>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation" onClick={() => setMenuOpen(true)}>
@@ -37,11 +54,11 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarScroll">
                 <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
                     <li className="nav-item ps-md-5 pe-md-3 d-lg-block d-none">
-                        <select defaultValue={"NGN"} className="form-control form-select border-0 rounded-3 text-theme">
+                        <select onChange={(e)=> handleCurrency(e.target.value)} defaultValue={currency} className="form-control form-select border-0 rounded-3 text-theme">
                             <option value="NGN">NGN</option>
-                            <option value="1">EUR</option>
-                            <option value="2">USD</option>
-                            <option value="3">GBP</option>
+                            <option value="EUR">EUR</option>
+                            <option value="USD">USD</option>
+                            <option value="GBP">GBP</option>
                         </select>
                     </li>
                     <li className="nav-item px-md-3">
@@ -60,7 +77,7 @@ const Navbar = () => {
                         </Link>
                         <ul className="dropdown-menu">
                             <li><Link className="dropdown-item" to="/buy/land">Land for sale</Link></li>
-                            <li><Link className="dropdown-item" to="/buy/house">House for sale</Link></li>                            
+                            <li><Link className="dropdown-item" to="/buy/house">Apartments for sale</Link></li>                            
                             <li><Link className="dropdown-item" to="/buy/hostel">Hostels for sale</Link></li>
                             <li><Link className="dropdown-item" to="/buy/all">All properties for sale</Link></li>
                         </ul>
@@ -70,7 +87,7 @@ const Navbar = () => {
                             Rent
                         </Link>
                         <ul className="dropdown-menu">                            
-                            <li><Link className="dropdown-item" to="/rent/house">House for rent</Link></li>                            
+                            <li><Link className="dropdown-item" to="/rent/house">Apartments for rent</Link></li>                            
                             <li><Link className="dropdown-item" to="/rent/hostel">Hostels for rent</Link></li>
                             <li><Link className="dropdown-item" to="/rent/all">All properties for rent</Link></li>
                         </ul>

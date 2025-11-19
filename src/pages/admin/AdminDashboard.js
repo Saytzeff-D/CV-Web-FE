@@ -9,7 +9,7 @@ import { Skeleton } from "@mui/material";
 
 const AdminDashboard = () => {
     const navigate = useNavigate()
-    const uri = useSelector(state=>state.uri)
+    const uri = useSelector(state=>state.UriReducer.uri)
     const token = sessionStorage.getItem('userToken')
     const [userData, setUserData] = useState(null)
     const [isLoading, setIsLoading] = useState(true)

@@ -10,9 +10,11 @@ const Land = (props) => {
     const {properties, isLoading, updatedProperties} = props;
     const [open, setOpen] = useState(false);
     const navigate = useNavigate()
-    const uri = useSelector(state=>state.uri)
+    const uri = useSelector(state=>state.UriReducer.uri)
     const [isDeleting, setIsDeleting] = useState(false);
     const [id, setId] = useState(null);
+    const rates = useSelector(state=>state.CurrencyReducer.rates);
+    const currency = useSelector(state=>state.CurrencyReducer.currency);
 
     const editProperty = (property) => {
         sessionStorage.setItem("editProperty", JSON.stringify(property));
@@ -65,7 +67,7 @@ const Land = (props) => {
                         <div>
                             <h6 className="fw-semibold my-2">{p.name}</h6>
                             <p className="text-muted small mb-1">{p.address}</p>
-                            <h6 className="fw-bold mb-2">{Number(p.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h6>
+                            <h6 className="fw-bold mb-2">{Number(p.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h6>
                         </div>
                         <div>
                             <button onClick={()=>editProperty(p)} className="btn btn-outline-success btn-sm me-2 mb-2">

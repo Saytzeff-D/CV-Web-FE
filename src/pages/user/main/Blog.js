@@ -10,7 +10,7 @@ import { Alert, Dialog, DialogContent } from "@mui/material";
 const Blog = () => {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false);
-  const uri = useSelector(state=>state.uri)
+  const uri = useSelector(state=>state.UriReducer.uri)
   const [blogs, setBlogs] = useState([])
   const [isFetching, setIsFetching] = useState(true)
   const [error, setError] = useState('')

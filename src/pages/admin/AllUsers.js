@@ -22,7 +22,7 @@ const AllUsers = () => {
   const [processing, setProcessing] = useState(false);
 
   const navigate = useNavigate();
-  const uri = useSelector((state) => state.uri);
+  const uri = useSelector(state=>state.UriReducer.uri)
   const token = sessionStorage.getItem("userToken");
   const [errorMessage, setErrorMessage] = useState('')
   const [err, setErr] = useState('')

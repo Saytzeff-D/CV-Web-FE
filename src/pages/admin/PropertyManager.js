@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 const PropertyManager = () => {
   const [properties, setProperties] = useState([]);
   const navigate = useNavigate()
-  const uri = useSelector(state=>state.uri)
+  const uri = useSelector(state=>state.UriReducer.uri)
   const [activeTab, setActiveTab] = useState("apartment");
   const [isLoading, setIsLoading] = useState(true);
 

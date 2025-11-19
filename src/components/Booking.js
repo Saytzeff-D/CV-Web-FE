@@ -1,5 +1,6 @@
 import { Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const Booking = (props) => {
@@ -9,6 +10,8 @@ const Booking = (props) => {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [duration, setDuration] = useState(0);
+    const currency = useSelector(state=>state.CurrencyReducer.currency);
+    const rates = useSelector(state=>state.CurrencyReducer.rates);
 
     const payNow = (type)=>{
         if(!sessionStorage.getItem('userToken')){
@@ -70,7 +73,7 @@ const Booking = (props) => {
                         <div className="bg-light">
 
                             <div className="px-4 py-3 bg-light">
-                                <h4 className="fw-bold mb-2">{Number(property.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h4>
+                                <h4 className="fw-bold mb-2">{Number(property.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h4>
                                 <span className="text-muted">/ per year</span>
 
                                 <div className="mt-3 dropdown">
@@ -106,7 +109,7 @@ const Booking = (props) => {
                                 <h6 className="fw-bold small mb-2">Price Details</h6>
                                 <div className="d-flex justify-content-between small mb-1">
                                 <span>Apartment rent x {duration} year{duration > 1 ? "s" : ""}</span>
-                                <span className="fw-semibold">{Number(property.total_price) * duration}</span>
+                                <span className="fw-semibold">{Number(property.total_price * rates[currency]) * duration}</span>
                                 </div>
                                 <div className="d-flex justify-content-between small mb-1">
                                 <span>Agent & Cleaning Fee</span>
@@ -136,7 +139,7 @@ const Booking = (props) => {
                 <div className="card booking-card shadow-sm sticky-top" style={{ top: 100 }}>
                     <div className="card-body p-0">
                         <div className="px-4 pt-4">
-                        <span className="fw-bold mb-2 h5">{Number(property.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</span>
+                        <span className="fw-bold mb-2 h5">{Number(property.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</span>
                         <small className="text-muted">outright</small>
                         <p className="my-0">
                             {property.name}
@@ -147,7 +150,7 @@ const Booking = (props) => {
                         </div>
 
                         <div className="mt-3 bg-light p-3">
-                        <span className="fw-bold mb-2 h5">{Number(property.inspection_fee).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</span>
+                        <span className="fw-bold mb-2 h5">{Number(property.inspection_fee * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</span>
                         <span className="small text-muted mb-2"> / inspection</span>
                         <div className="mt-3 dropdown">
                             <button className="btn btn-success w-100 mb-3 mt-2 dropddown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

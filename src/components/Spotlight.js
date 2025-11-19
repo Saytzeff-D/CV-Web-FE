@@ -89,7 +89,7 @@ const Spotlight = () => {
           <span className="counter-label text-muted">Properties</span>
         </div>
         <div className="counter-item my-2 p-3">
-          <span className="counter-number">500</span><br />
+          <span className="counter-number">500+</span><br />
           <span className="counter-label text-muted">Users</span>
         </div>
         <div className="counter-item my-2 p-3">

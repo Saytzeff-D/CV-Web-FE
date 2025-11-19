@@ -18,7 +18,7 @@ const EditProperty = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [selectedCoordinates, setSelectedCoordinates] = useState(null);
   const [loading, setLoading] = useState(false);  
-  const uri = useSelector(state=>state.uri)
+  const uri = useSelector(state=>state.UriReducer.uri)
   const [isFetching, setIsFetching] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');

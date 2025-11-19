@@ -15,7 +15,9 @@ const ApartmentDetails = () => {
   const navigate = useNavigate();
   const { type, id } = useParams();
   const [mainIndex, setMainIndex] = useState(0);
-  const uri = useSelector(state=>state.uri)
+  const uri = useSelector(state=>state.UriReducer.uri)
+  const currency = useSelector(state=>state.CurrencyReducer.currency)
+  const rates = useSelector(state=>state.CurrencyReducer.rates);
   const [property, setProperty] = useState(null);
   const [isLoading, setIsLoading] = useState(true);  
   const [showGallery, setShowGallery] = useState(false);
@@ -89,7 +91,7 @@ const ApartmentDetails = () => {
             <div className="d-flex justify-content-end mb-3 gap-2">
               <RWebShare
                 data={{
-                  text: `Check out this property: ${property.name}, located at ${property.address}. Price: ${Number(property.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}.`,
+                  text: `Check out this property: ${property.name}, located at ${property.address}. Price: ${Number(property.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}.`,
                   url: window.location.href,
                   title: 'CV Properties'
                 }}>
@@ -160,7 +162,7 @@ const ApartmentDetails = () => {
         </div>
 
         <div>
-          <h4 className="fw-bold mb-2">{Number(property.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h4>
+          <h4 className="fw-bold mb-2">{Number(property.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h4>
         </div>
 
         {/* SECOND ROW: TABS (col-8) + BOOKING CARD (col-4) */}

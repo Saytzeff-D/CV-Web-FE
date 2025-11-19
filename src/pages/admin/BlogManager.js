@@ -10,7 +10,7 @@ import axios from 'axios';
 const BlogManager = () => {  
   const navigate = useNavigate()
   const [open, setOpen] = useState(false);
-  const uri = useSelector(state=>state.uri)
+  const uri = useSelector(state=>state.UriReducer.uri)
   const [blogs, setBlogs] = useState([])
   const [isFetching, setIsFetching] = useState(true)
   const [error, setError] = useState('')

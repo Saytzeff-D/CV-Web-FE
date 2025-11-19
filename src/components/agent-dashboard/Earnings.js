@@ -1,5 +1,9 @@
+import { useSelector } from "react-redux";
+
 const Earnings = (props) => {
     const { transactions, balance } = props;
+    const currency = useSelector(state=>state.CurrencyReducer.currency);
+    const rates = useSelector(state=>state.CurrencyReducer.rates);
     return (
     <>
         <h4 className="fw-bold mb-3 text-success">Available Earnings: N{balance}</h4>

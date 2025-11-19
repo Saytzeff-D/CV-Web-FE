@@ -12,7 +12,7 @@ import { Skeleton, Dialog, DialogContent } from "@mui/material";
 
 const AgentDashboard = () => {    
     const [activeTab, setActiveTab] = useState("earnings");
-    const uri = useSelector(state=>state.uri)
+    const uri = useSelector(state=>state.UriReducer.uri)
     const token = sessionStorage.getItem('userToken')
     const navigate = useNavigate()
     const [userData, setUserData] = useState(null)

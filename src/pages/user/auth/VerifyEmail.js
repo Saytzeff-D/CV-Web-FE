@@ -10,7 +10,7 @@ const VerifyEmail = () => {
     const [code, setCode] = useState()
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
-    const uri = useSelector(state=>state.uri)
+    const uri = useSelector(state=>state.UriReducer.uri)
     const [isLoading, setIsLoading] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
 

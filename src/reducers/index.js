@@ -1,9 +1,6 @@
-const initState = {
-    uri: 'https://cv-web-be.onrender.com/api/'
-}
+import { combineReducers } from "redux";
+import CurrencyReducer from "./currency";
+import UriReducer from './uri';
 
-const Reducer = (state=initState, action)=>{
-    return state
-}
-
-export default Reducer
+const appReducer = combineReducers({ CurrencyReducer, UriReducer })
+export default appReducer

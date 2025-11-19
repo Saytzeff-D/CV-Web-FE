@@ -8,7 +8,7 @@ import { Alert } from "@mui/material";
 
 const AdminLogin = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const uri = useSelector(state=>state.uri)
+    const uri = useSelector(state=>state.UriReducer.uri)
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()

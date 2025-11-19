@@ -14,7 +14,7 @@ import Underline from "@tiptap/extension-underline";
 const EditBlog = () => {
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
-  const uri = useSelector((state) => state.uri);
+  const uri = useSelector(state=>state.UriReducer.uri)
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");

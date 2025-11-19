@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { Skeleton, Dialog, DialogContent } from "@mui/material";
 
 const ClientDashboard = () => {
-    const uri = useSelector(state=>state.uri)
+    const uri = useSelector(state=>state.UriReducer.uri)
     const recommendedProperties = data.recommendedProperties;
     const [activeTab, setActiveTab] = useState("transactions");
     const token = sessionStorage.getItem('userToken')

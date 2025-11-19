@@ -11,7 +11,9 @@ import { Dialog, DialogContent, DialogTitle, Button } from "@mui/material";
 const Rent = () => {
     const { type } = useParams()
     const [properties, setProperties] = useState([])
-    const uri = useSelector(state=>state.uri)
+    const uri = useSelector(state=>state.UriReducer.uri)
+    const currency = useSelector(state=>state.CurrencyReducer.currency)
+    const rates = useSelector(state=>state.CurrencyReducer.rates);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("")
     const [filteredProperties, setFilteredProperties] = useState([])
@@ -115,7 +117,7 @@ const Rent = () => {
 
                             <div className="card-body px-0 pt-3">
                             <h6 className="card-title mb-1">{each.name}</h6>
-                            <h6 className="fw-bold mb-2">{Number(each.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h6>
+                            <h6 className="fw-bold mb-2">{Number(each.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h6>
                             <div className="d-flex flex-wrap text-muted small">
                                 <div className="me-3"><i className="fa fa-regular fa-bed"></i> {each.bedrooms} beds</div>
                                 <div className="me-3"><i className="fa fa-regular fa-toilet"></i> {each.toilets} toilets</div>

@@ -7,11 +7,13 @@ import { useSelector } from "react-redux";
 
 const Pending = (props) => {
   const { properties, isLoading } = props;
-  const uri = useSelector((state) => state.uri);
+  const uri = useSelector((state) => state.UriReducer.uri);
   const [openDelete, setOpenDelete] = useState(false);
   const [openApprove, setOpenApprove] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [loading, setLoading] = useState(false);
+  const currency = useSelector((state) => state.CurrencyReducer.currency);
+  const rates = useSelector((state) => state.CurrencyReducer.rates);
 
   const handleApproveClick = (property) => {
     setSelectedProperty(property);
@@ -109,9 +111,9 @@ const Pending = (props) => {
                           <h6 className="fw-semibold mb-1">{p.name}</h6>
                           <p className="text-muted small mb-1">{p.address}</p>
                           <h6 className="fw-bold mb-2">
-                            {Number(p.total_price).toLocaleString("en-NG", {
+                            {Number(p.total_price * rates[currency]).toLocaleString("en-NG", {
                               style: "currency",
-                              currency: "NGN",
+                              currency,
                             })}
                           </h6>
                         </div>
@@ -173,9 +175,9 @@ const Pending = (props) => {
                           <h6 className="fw-semibold my-2">{p.name}</h6>
                           <p className="text-muted small mb-1">{p.address}</p>
                           <h6 className="fw-bold mb-2">
-                            {Number(p.total_price).toLocaleString("en-NG", {
+                            {Number(p.total_price * rates[currency]).toLocaleString("en-NG", {
                               style: "currency",
-                              currency: "NGN",
+                              currency,
                             })}
                           </h6>
                         </div>

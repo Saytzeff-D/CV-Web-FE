@@ -19,7 +19,7 @@ const AddProperty = () => {
   const [selectedCoordinates, setSelectedCoordinates] = useState(null);
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
-  const uri = useSelector(state=>state.uri)
+  const uri = useSelector(state=>state.UriReducer.uri)
   const [isFetching, setIsFetching] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -319,12 +319,12 @@ const AddProperty = () => {
             >
               <option value="">Select type</option>              
               <option value="hostel">Hostel</option>
-              <option value="house">House</option>
+              <option value="house">Apartment</option>
               {formik.values.category === 'sale' && (<option value="land">Land</option>)}
             </select>
           </div>
           <div className="col-md-6">
-            <label className="form-label fw-semibold">Property Inspection Fees</label>
+            <label className="form-label fw-semibold">{formik.values.category == 'shortlet' ? 'Caution' : 'Inspection'} Fees</label>
             <input
               type="number"
               name="inspection_fee"            

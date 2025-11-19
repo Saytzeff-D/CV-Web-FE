@@ -11,13 +11,15 @@ import { Dialog, DialogContent, DialogTitle, Button } from "@mui/material";
 const Buy = () => {
     const { type } = useParams()
     const [properties, setProperties] = useState([])
-    const uri = useSelector(state=>state.uri)
+    const uri = useSelector(state=>state.UriReducer.uri)
+    const currency = useSelector(state=>state.CurrencyReducer.currency)
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("")
     const [filteredProperties, setFilteredProperties] = useState([])
     const [showLoginPrompt, setShowLoginPrompt] = useState(false);
     const navigate = useNavigate();
     const [savedProperties, setSavedProperties] = useState([])
+    const rates = useSelector(state=>state.CurrencyReducer.rates);
 
     useEffect(()=>{        
         fetchProperties();
@@ -115,7 +117,7 @@ const Buy = () => {
 
                             <div className="card-body px-0 pt-3">
                             <h6 className="card-title mb-1">{each.name}</h6>
-                            <h6 className="fw-bold mb-2">{Number(each.total_price).toLocaleString('en-NG', {style: 'currency', currency: 'NGN'})}</h6>
+                            <h6 className="fw-bold mb-2">{Number(each.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h6>
                             {
                                 each.type == 'land'
                                 ?
