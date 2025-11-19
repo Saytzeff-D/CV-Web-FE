@@ -88,7 +88,7 @@ const Booking = (props) => {
                                         </li>
                                         <li>
                                             I Want to Buy Now! <br />
-                                        <button onClick={()=>payNow('checkout')} className="btn btn-white border w-100">
+                                        <button onClick={()=>payNow(property.category)} className="btn btn-white border w-100">
                                             <span className="small">Proceed to Check out</span>
                                         </button>
                                         </li>
@@ -164,7 +164,7 @@ const Booking = (props) => {
                                 </li>
                                 <li>
                                     I Want to Buy Now! <br />
-                                <button onClick={()=>payNow('checkout')} className="btn btn-white border w-100">
+                                <button onClick={()=>payNow(property.category)} className="btn btn-white border w-100">
                                     <span className="small">Proceed to Check out</span>
                                 </button>
                                 </li>

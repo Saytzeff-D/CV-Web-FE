@@ -1,13 +1,11 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import CloseIcon from "../../assets/close-icon.png"
-import CancelIcon from "../../assets/cancel-icon.png"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
 const Apartment = (props) => {
-    const {properties, isLoading, updatedProperties} = props;
+    const {properties, isLoading, update} = props;
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const uri = useSelector(state=>state.UriReducer.uri)
@@ -31,10 +29,9 @@ const Apartment = (props) => {
         axios.delete(`${uri}property/delete/${id}`, {
             headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
         })
-        .then(response => {
-            console.log("Property deleted successfully:", response.data);
+        .then(response => {            
             setOpen(false);
-            updatedProperties(properties.filter(property => property.id !== id));
+            update(Math.random()*1000);             
             setIsDeleting(false);
             // Optionally, refresh the property list or update state here
         })

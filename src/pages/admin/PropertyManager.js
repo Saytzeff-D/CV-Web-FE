@@ -13,11 +13,13 @@ const PropertyManager = () => {
   const uri = useSelector(state=>state.UriReducer.uri)
   const [activeTab, setActiveTab] = useState("apartment");
   const [isLoading, setIsLoading] = useState(true);
+  const [update, setUpdate] = useState(0);
 
   useEffect(() => {
-    axios.get(`${uri}property/all`)
-      .then((response) => {
-        console.log("Fetched properties:", response.data);
+    axios.get(`${uri}property/all`, {
+      headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
+    })
+      .then((response) => {        
         setProperties(response.data.data);
       })
       .catch((error) => {
@@ -26,7 +28,7 @@ const PropertyManager = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [uri]);
+  }, [uri, update]);
 
   return (
     <div className="container py-4">
@@ -65,13 +67,13 @@ const PropertyManager = () => {
     {/* Tab Content */}
     <div className="container">
         {activeTab === "apartment" && (
-        <Apartment isLoading={isLoading} updatedProperties={setProperties} properties={properties.filter(each=>each.type.toLowerCase() !== 'land' && each.publicized == 1)} />
+        <Apartment isLoading={isLoading} update={setUpdate} properties={properties.filter(each=>each.type.toLowerCase() !== 'land' && each.publicized == 1)} />
         )}
         {activeTab === "land" && (
-        <Land isLoading={isLoading} updatedProperties={setProperties} properties={properties.filter(each=>each.type.toLowerCase() === 'land' && each.publicized == 1)} />
+        <Land isLoading={isLoading} update={setUpdate} properties={properties.filter(each=>each.type.toLowerCase() === 'land' && each.publicized == 1)} />
         )}
         {activeTab === "pending" && (
-        <Pending isLoading={isLoading} properties={properties.filter(each=>each.publicized == 0)} />
+        <Pending isLoading={isLoading} properties={properties.filter(each=>each.publicized == 0)} update={setUpdate} />
         )}
     </div>
     </div>

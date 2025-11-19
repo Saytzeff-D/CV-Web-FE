@@ -66,7 +66,7 @@ function App() {
         <Route path='/admin/blog-manager' element={<BlogManager />} />
         <Route path='/filterbar' element={<FilterBar />} />
         <Route path='/pay-now' element={<PayNow />} />
-        <Route path='/transaction-status' element={<TransactionStatus />} />
+        <Route path='/payment/verify/' element={<TransactionStatus />} />
         <Route path='/dashboard' element={<GoogleAuth />} />
         <Route path='*' element={<NotFound />} />
       </Routes>

@@ -102,7 +102,7 @@ const Buy = () => {
                         <div className="col-lg-3 col-sm-6" key={i}>
                         <div className="card border-0" style={{ minWidth: "16rem" }}>
                             <div className="position-relative overflow-hidden rounded">                
-                            <img src={each.main_photo} className="card-img-top" alt="Property" />
+                            <img src={each.main_photo} className="card-img-top" height={'200px'} alt="Property" />
                             
                             <button onClick={() => handleSaveProperty(each.id)} type="button"
                                 className="btn btn-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center text-white bg-transparent" style={{zIndex: 2}}>

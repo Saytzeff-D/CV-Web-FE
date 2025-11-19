@@ -1,5 +1,3 @@
-import CloseIcon from "../../assets/close-icon.png"
-import CancelIcon from "../../assets/cancel-icon.png"
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +5,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 const Land = (props) => {
-    const {properties, isLoading, updatedProperties} = props;
+    const {properties, isLoading, update} = props;
     const [open, setOpen] = useState(false);
     const navigate = useNavigate()
     const uri = useSelector(state=>state.UriReducer.uri)
@@ -29,7 +27,7 @@ const Land = (props) => {
             console.log("Property deleted successfully:", response.data);
             setOpen(false);
             setIsDeleting(false);
-            updatedProperties(properties.filter(property => property.id !== id));
+            update(Math.random()*1000); 
             // Optionally, refresh the property list or update state here
         })
         .catch(error => {

@@ -6,7 +6,7 @@ const Earnings = (props) => {
     const rates = useSelector(state=>state.CurrencyReducer.rates);
     return (
     <>
-        <h4 className="fw-bold mb-3 text-success">Available Earnings: N{balance}</h4>
+        <h4 className="fw-bold mb-3 text-success">Available Earnings: {Number(balance * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h4>
         <p className="text-success">We take 15% for every successful Transaction from your Property listing</p>
         {
             transactions.length === 0 
@@ -28,24 +28,19 @@ const Earnings = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>02 Nov 2025</td>                    
-                            <td>4 Bedroom Duplex</td>
-                            <td>Rent</td>
-                            <td>₦750,000</td>
-                            <td>₦112,500</td>
-                            <td>₦637,500</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>20 Oct 2025</td>                    
-                            <td>2 Bedroom Apartment</td>
-                            <td>Inspection Fee</td>
-                            <td>₦450,000</td>
-                            <td>₦67,500</td>
-                            <td>₦382,500</td>
-                        </tr>
+                        {
+                            transactions.map((each, i)=>(
+                                <tr key={i}>
+                                    <td>{i +1}</td>
+                                    <td>{new Date(each.created_at).toLocaleDateString()}</td>                    
+                                    <td>{each.name}</td>
+                                    <td>{each.type.toUpperCase()}</td>
+                                    <td>{Number(each.listed_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</td>
+                                    <td>{Number(each.commission * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</td>
+                                    <td>{Number(each.balance * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</td>
+                                </tr>                        
+                            ))
+                        }
                     </tbody>
                     </table>
                 </div>

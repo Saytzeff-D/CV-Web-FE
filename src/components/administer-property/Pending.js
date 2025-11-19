@@ -1,12 +1,12 @@
 import CloseIcon from "../../assets/close-icon.png";
 import CancelIcon from "../../assets/cancel-icon.png";
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Alert, Dialog, DialogContent, DialogTitle, Snackbar } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
 const Pending = (props) => {
-  const { properties, isLoading } = props;
+  const { properties, isLoading, update } = props;
   const uri = useSelector((state) => state.UriReducer.uri);
   const [openDelete, setOpenDelete] = useState(false);
   const [openApprove, setOpenApprove] = useState(false);
@@ -14,6 +14,8 @@ const Pending = (props) => {
   const [loading, setLoading] = useState(false);
   const currency = useSelector((state) => state.CurrencyReducer.currency);
   const rates = useSelector((state) => state.CurrencyReducer.rates);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleApproveClick = (property) => {
     setSelectedProperty(property);
@@ -25,9 +27,27 @@ const Pending = (props) => {
     setOpenDelete(true);
   };
 
+  const handleDelete = () =>{
+    setLoading(true);
+    axios.delete(`${uri}property/delete/${selectedProperty.id}`, {
+        headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
+    })
+    .then(response => {
+        console.log("Property deleted successfully:", response.data);
+        setOpenDelete(false);
+        setLoading(false);
+        setSuccessMessage("Property deleted successfully.");
+        update(Math.random()*1000);        
+    })
+    .catch(error => {
+        setLoading(false);
+        setErrorMessage("Error deleting property. Try again.");
+        console.error("Error deleting property:", error);
+    });
+  }
+
   const handleApprove = async () => {
     if (!selectedProperty) return;
-
     setLoading(true);
     try {
       const response = await axios.patch(
@@ -38,13 +58,12 @@ const Pending = (props) => {
             Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
           },
         }
-      );
-      console.log("Approved:", response.data);
-      alert("Property approved successfully!");
+      );      
+      setSuccessMessage(response.data.message);
       setOpenApprove(false);
-    } catch (error) {
-      console.error("Approval failed:", error);
-      alert("Failed to approve property. Try again.");
+      update(Math.random()*1000);  
+    } catch (error) {      
+      setErrorMessage("Failed to approve property. Try again.");
     } finally {
       setLoading(false);
     }
@@ -214,9 +233,21 @@ const Pending = (props) => {
           </div>
         </div>
 
+        <Snackbar open={Boolean(successMessage)} autoHideDuration={6000} onClose={() => setSuccessMessage("")}>
+          <Alert variant="filled" severity="success">
+            {successMessage}
+          </Alert>
+        </Snackbar>
+        <Snackbar open={Boolean(errorMessage)} autoHideDuration={6000} onClose={() => setErrorMessage("")}>
+          <Alert variant="filled" severity="error">
+            {errorMessage}
+          </Alert>
+        </Snackbar>
+
         {/* DELETE DIALOG */}
         <Dialog
           open={openDelete}
+          maxWidth={'xs'}
           onClose={() => setOpenDelete(false)}
           aria-labelledby="modal-title"
         >
@@ -226,14 +257,19 @@ const Pending = (props) => {
           <DialogContent>
             <p className="text-success h6">Are you sure you want to delete?</p>
             <div className="d-flex justify-content-between mt-4">
-              <div onClick={() => setOpenDelete(false)} className="cursor-pointer">
-                <img src={CancelIcon} alt="Close" width={"20px"} height={"20px"} />
-                <p className="text-success">Cancel</p>
-              </div>
-              <div className="cursor-pointer">
-                <img src={CloseIcon} alt="Close" width={"20px"} height={"20px"} />
-                <p className="text-danger">Delete</p>
-              </div>
+              <div>
+                <button
+                  onClick={() => setOpenDelete(false)}
+                  className="btn btn-secondary"
+                >
+                  Close
+                </button>
+              </div>              
+              <div>
+                <button onClick={handleDelete} className="btn btn-danger" disabled={loading}>
+                  {loading ? "Deleting..." : "Yes, Delete"}
+                </button>
+              </div>              
             </div>
           </DialogContent>
         </Dialog>
@@ -241,6 +277,7 @@ const Pending = (props) => {
         {/* APPROVE DIALOG */}
         <Dialog
           open={openApprove}
+          maxWidth={'xs'}
           onClose={() => setOpenApprove(false)}
           aria-labelledby="approve-dialog"
         >
@@ -248,38 +285,24 @@ const Pending = (props) => {
             Approve Property
           </DialogTitle>
           <DialogContent>
-            <p className="text-success h6">
+            <p className="text-dark h6">
               Are you sure you want to approve{" "}
               <strong>{selectedProperty?.name}</strong>?
             </p>
             <div className="d-flex justify-content-between mt-4">
-              <div
-                onClick={() => setOpenApprove(false)}
-                className="cursor-pointer"
-              >
-                <img
-                  src={CancelIcon}
-                  alt="Close"
-                  width={"20px"}
-                  height={"20px"}
-                />
-                <p className="text-success">Cancel</p>
-              </div>
-              <div
-                className="cursor-pointer"
-                onClick={handleApprove}
-                style={{ opacity: loading ? 0.7 : 1 }}
-              >
-                <img
-                  src={CloseIcon}
-                  alt="Approve"
-                  width={"20px"}
-                  height={"20px"}
-                />
-                <p className="text-success">
+              <div>
+                <button
+                  onClick={() => setOpenApprove(false)}
+                  className="btn btn-secondary"
+                >
+                  Close
+                </button>
+              </div>              
+              <div>
+                <button onClick={handleApprove} className="btn btn-success" disabled={loading}>
                   {loading ? "Approving..." : "Yes, Approve"}
-                </p>
-              </div>
+                </button>
+              </div>              
             </div>
           </DialogContent>
         </Dialog>

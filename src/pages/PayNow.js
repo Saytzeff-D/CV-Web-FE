@@ -1,4 +1,5 @@
-import { Alert } from "@mui/material";
+import { Alert, Snackbar, Dialog, DialogContent } from "@mui/material";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +9,9 @@ const PayNow = () => {
   const navigate = useNavigate();
   const currency  = useSelector(state=>state.CurrencyReducer.currency)
   const [propertyForPayment, setPropertyForPayment] = useState(null);
+  const uri = useSelector(state=>state.UriReducer.uri)
+  const [openDialog, setOpenDialog] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (!sessionStorage.getItem('propertyForPayment')) {
@@ -18,7 +22,25 @@ const PayNow = () => {
   }, [navigate]);
 
   const handlePay = () => {
-    navigate('/transaction-status');
+    setOpenDialog(true);
+    setErrorMessage('')
+    const value = {
+      currency,
+      propertyId: propertyForPayment.id,
+      purpose: propertyForPayment.type == 'inspection' ? 'inspection_fee' : propertyForPayment.type,
+      inspectionDate
+    }
+    axios.post(`${uri}payment/property/initialize`, value, {
+      headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
+    }).then((response) => {
+      window.location.href = response.data.paymentLink;
+      console.log("Payment initiation response:", response.data);      
+    }).catch((error) => {
+      setOpenDialog(false);
+      setErrorMessage("Failed to initiate payment. Please try again.");
+      console.error("Error initiating payment:", error);
+      // alert("Failed to initiate payment. Please try again.");
+    });
   };
 
   return (
@@ -37,7 +59,7 @@ const PayNow = () => {
             )
           }
           {
-            propertyForPayment && propertyForPayment.type === 'checkout' && (
+            propertyForPayment && propertyForPayment.type !== 'inspection' && (
               <Alert severity="info" className="mt-3">
                 You are about to pay for the purchase of <strong>{propertyForPayment.name}</strong>.
               </Alert>
@@ -85,6 +107,26 @@ const PayNow = () => {
             </p>
         </div>
         </div>
+
+        <Dialog open={openDialog} PaperProps={{
+          style: {
+          backgroundColor: 'transparent',
+          boxShadow: 'none',
+          }
+      }}
+      >
+          <DialogContent>
+              <p>
+                  <span className='spinner-border text-white'></span>
+              </p>
+          </DialogContent>
+      </Dialog>
+
+      <Snackbar open={Boolean(errorMessage)} autoHideDuration={6000} onClose={() => setErrorMessage("")}>
+        <Alert variant="filled" severity="error">
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

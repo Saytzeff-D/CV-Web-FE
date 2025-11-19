@@ -33,6 +33,7 @@ const AllUsers = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
+        console.log("Fetched users:", res.data);
         setUsers(res.data.allCustomers);
       })
       .catch((err) => {

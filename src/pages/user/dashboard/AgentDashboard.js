@@ -40,6 +40,8 @@ const AgentDashboard = () => {
                 console.log(res.data);
             })
             .catch((err)=>{
+                sessionStorage.removeItem('userToken')
+                sessionStorage.removeItem('avatar')
                 navigate('/login')
             })            
         }
