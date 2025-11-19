@@ -92,7 +92,7 @@ const Shortlet = () => {
                 Home / <span className="text-theme">Shortlet / Shortlet in {type} </span>
             </p>
             <FilterBar type={'shortlet'} properties={properties} setFilteredProperties={setFilteredProperties} />
-            <div className="row">
+            <div className="row w-100 px-md-0 px-4">
                 {
                     filteredProperties.length == 0 && !isLoading && !errorMessage
                     ? (

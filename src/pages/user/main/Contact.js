@@ -17,7 +17,7 @@ const Contact = () => {
 
                 <div className="row align-items-center">
                     {/* Contact Info */}
-                    <div className="col-md-4 mb-4">
+                    <div className="col-lg-4 col-md-5 mb-4">
                         <div className="text-center bg-light border p-5 mb-3"> 
                             <p>
                                 <i className="fs-2 fa fa-envelope-o"></i>
@@ -25,7 +25,7 @@ const Contact = () => {
                             <p className="my-0">
                                 Email Us
                             </p>                   
-                            <a className="text-dark" href="mailto:candvproperty@gmail.com">
+                            <a className="text-dark text-break" href="mailto:candvproperty@gmail.com">
                                 candvproperty@gmail.com
                             </a>
                         </div>
@@ -54,8 +54,13 @@ const Contact = () => {
                     </div>
 
                     {/* Map */}
-                    <div className="col-md-8 mb-4">                    
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.4032778835667!2d4.2629811750089734!3d8.162061691868658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10370daf3fc49367%3A0xb7eea39b9bbe7be3!2sFacebook%20complex!5e0!3m2!1sen!2sng!4v1763461293494!5m2!1sen!2sng" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <div className="col-lg-8 col-md-7 mb-4">                    
+                    <iframe 
+                        className="w-100"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.4032778835667!2d4.2629811750089734!3d8.162061691868658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10370daf3fc49367%3A0xb7eea39b9bbe7be3!2sFacebook%20complex!5e0!3m2!1sen!2sng!4v1763461293494!5m2!1sen!2sng"                         
+                        height="650" 
+                        style={{border:0}} 
+                        allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
 

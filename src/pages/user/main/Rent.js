@@ -91,7 +91,7 @@ const Rent = () => {
                 Home / <span className="text-theme">Rent / {type} for rent</span>
             </p>
             <FilterBar type={'rent'} properties={properties} setFilteredProperties={setFilteredProperties} />
-            <div className="row">
+            <div className="row w-100 px-md-0 px-4">
                 {
                     filteredProperties.length == 0 && !isLoading && !errorMessage
                     ? (
