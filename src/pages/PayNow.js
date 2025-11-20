@@ -27,18 +27,17 @@ const PayNow = () => {
     const value = {
       currency,
       propertyId: propertyForPayment.id,
-      purpose: propertyForPayment.type == 'inspection' ? 'inspection_fee' : propertyForPayment.type,
-      inspectionDate
+      purpose: propertyForPayment.purpose == 'inspection' ? 'inspection_fee' : propertyForPayment.purpose,
+      inspectionDate,
+      durationMonths: 1
     }
     axios.post(`${uri}payment/property/initialize`, value, {
       headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
     }).then((response) => {
-      window.location.href = response.data.paymentLink;
-      console.log("Payment initiation response:", response.data);      
+      window.location.href = response.data.paymentLink;         
     }).catch((error) => {
       setOpenDialog(false);
-      setErrorMessage("Failed to initiate payment. Please try again.");
-      console.error("Error initiating payment:", error);
+      setErrorMessage(error.response?.data?.message || "Failed to initiate payment. Please try again.");      
       // alert("Failed to initiate payment. Please try again.");
     });
   };

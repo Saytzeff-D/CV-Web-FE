@@ -14,6 +14,7 @@ const TransactionStatus = () => {
     const [tryAgain, setTryAgain] = React.useState(false);
 
     useEffect(()=>{
+        setOpenDialog(true);
         const queryParams = new URLSearchParams(window.location.search);
         const ref = queryParams.get('trxref');
         axios.get(`${uri}payment/verify/${ref}`, {
@@ -56,6 +57,9 @@ const TransactionStatus = () => {
                     <div className="pt-4">
                         <button className='btn btn-success' onClick={()=>setTryAgain(!tryAgain)}>
                             Try Again
+                        </button>
+                        <button className='btn btn-secondary ms-4' onClick={()=>navigate('/client/dashboard')}>
+                            Go Home
                         </button>
                     </div>
                 </div>

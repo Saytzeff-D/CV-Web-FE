@@ -34,7 +34,7 @@ const Login = () => {
       setIsLoading(true)
       axios.post(`${uri}auth/login`, values)
       .then((res)=>{
-        console.log(res.data);
+        sessionStorage.getItem('postLoginRedirect') && navigate(-1)
         sessionStorage.setItem('userToken', res.data.token)
         res.data.role == 'customer' ? navigate('/client/dashboard') : navigate('/agent/dashboard')
         res.data.role == 'customer' ? sessionStorage.setItem('route', ' /client/dashboard') : sessionStorage.setItem('route', '/agent/dashboard ')
