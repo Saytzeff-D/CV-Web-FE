@@ -1,4 +1,4 @@
-import { Alert, Snackbar, Dialog, DialogContent } from "@mui/material";
+import { Alert, Snackbar, Dialog, DialogContent, duration } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -22,25 +22,54 @@ const PayNow = () => {
   }, [navigate]);
 
   const handlePay = () => {
-    setOpenDialog(true);
-    setErrorMessage('')
-    const value = {
-      currency,
-      propertyId: propertyForPayment.id,
-      purpose: propertyForPayment.purpose == 'inspection' ? 'inspection_fee' : propertyForPayment.purpose,
-      inspectionDate,
-      durationMonths: 1
+    if (propertyForPayment.purpose === 'inspection' && !inspectionDate) {
+      setErrorMessage("Please select an inspection date.");
+      return;
     }
-    axios.post(`${uri}payment/property/initialize`, value, {
+    setOpenDialog(true);
+    setErrorMessage('')    
+    axios.post(`${uri}payment/property/initialize`, getValue(propertyForPayment.purpose), {
       headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
     }).then((response) => {
       window.location.href = response.data.paymentLink;         
     }).catch((error) => {
       setOpenDialog(false);
-      setErrorMessage(error.response?.data?.message || "Failed to initiate payment. Please try again.");      
-      // alert("Failed to initiate payment. Please try again.");
+      setErrorMessage(error.response?.data?.message || "Failed to initiate payment. Please try again.");            
     });
   };
+
+  const getValue = (purpose) =>{
+    if(purpose === 'inspection'){
+        return {
+          currency,
+          propertyId: propertyForPayment.id,
+          purpose: 'inspection_fee',
+          startDate: inspectionDate          
+        }
+    } else if(purpose === 'sale'){
+        return {
+          currency,
+          propertyId: propertyForPayment.id,
+          purpose             
+        }
+    } else if (purpose === 'rent'){
+        return {
+          currency,
+          propertyId: propertyForPayment.id,
+          purpose,
+          durationMonths: Number(propertyForPayment.durationMonths),  
+          startDate: propertyForPayment.startDate       
+        }
+    } else if (purpose === 'shortlet'){
+        return {
+          currency,
+          propertyId: propertyForPayment.id,
+          purpose,
+          durationDays: Number(propertyForPayment.durationDays),  
+          startDate: propertyForPayment.startDate       
+        }
+    }
+  }
 
   return (
     <div className="container-fluid py-5">
@@ -51,14 +80,14 @@ const PayNow = () => {
           <h4 className="fw-bold">Pay Now</h4>
 
           {
-            propertyForPayment && propertyForPayment.type === 'inspection' && (
+            propertyForPayment && propertyForPayment.purpose === 'inspection' && (
               <Alert severity="info" className="mt-3">
                 You are about to pay for an inspection of <strong>{propertyForPayment.name}</strong> scheduled on <strong>{inspectionDate || "N/A"}</strong>.
               </Alert>
             )
           }
           {
-            propertyForPayment && propertyForPayment.type !== 'inspection' && (
+            propertyForPayment && propertyForPayment.purpose !== 'inspection' && (
               <Alert severity="info" className="mt-3">
                 You are about to pay for the purchase of <strong>{propertyForPayment.name}</strong>.
               </Alert>
@@ -68,13 +97,13 @@ const PayNow = () => {
           <h5 className="fw-semibold mt-4">{propertyForPayment && propertyForPayment.name}</h5>
 
           <h2 className="fw-bold mt-3">{Number(propertyForPayment && propertyForPayment.fee).toLocaleString('en-NG', {style: 'currency', currency})}</h2>
-          <small className="text-muted">{propertyForPayment && propertyForPayment.type === 'inspection' ? 'per Inspection' : 'outright'}</small>
+          <small className="text-muted">{propertyForPayment && propertyForPayment.purpose === 'inspection' ? 'per Inspection' : 'outright'}</small>
 
           <div className="border-bottom my-3"></div>
 
           {/* DATE PICKER */}
           {
-            propertyForPayment && propertyForPayment.type === 'inspection' && (
+            propertyForPayment && propertyForPayment.purpose === 'inspection' && (
               <div className="mb-4">
                 <label className="form-label fw-semibold">Select Inspection Date</label>
                 <input

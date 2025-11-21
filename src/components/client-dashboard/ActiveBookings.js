@@ -32,8 +32,8 @@ const ActiveBookings = (props) => {
                                     <td>{booking.name}</td>
                                     <td>{booking.address}</td>
                                     <td>{booking.type}</td>
-                                    <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
-                                    <td><span className={`badge ${booking.status === 'Active' ? 'bg-success' : 'bg-danger'}`}>{booking.status}</span></td>
+                                    <td>{new Date(booking.start_date).toLocaleDateString()}</td>
+                                    <td><span className={`badge ${booking.status === 'active' ? 'bg-success' : 'bg-danger'}`}>{booking.status}</span></td>
                                 </tr>
                             ))
                         }

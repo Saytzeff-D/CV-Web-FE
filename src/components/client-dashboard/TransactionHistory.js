@@ -1,5 +1,9 @@
+import { useSelector } from "react-redux";
+
 const TransactionHistory = (props) => {
     const {transactions, isLoading} = props;
+    const currency = useSelector(state=>state.CurrencyReducer.currency);
+    const rates = useSelector(state=>state.CurrencyReducer.rates);
     return (
     <>
         <h4 className="fw-bold mb-3 text-success">Transaction History</h4>
@@ -34,7 +38,7 @@ const TransactionHistory = (props) => {
                                 <td><span className="badge bg-success">{trx.reference}</span></td>
                                 <td>{trx.name}</td>
                                 <td>{trx.type.toUpperCase()}</td>
-                                <td>{trx.amount}</td>
+                                <td>{Number(trx.amount * (rates[currency] || 1)).toLocaleString('en-NG', {style: 'currency', currency})}</td>
                                 <td><span className={`badge ${trx.status === "success" ? "bg-success" : "bg-warning text-dark"}`}>{trx.status}</span></td>
                             </tr>
                         ))

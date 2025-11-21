@@ -78,7 +78,7 @@ const AddProperty = () => {
         images,
         coordinates: selectedCoordinates        
       };
-      if (images.length !== 0) {
+      if (images.length >= 4) {
         setIsLoading(true);
         console.log("Submitted Property:", finalData);
         axios.post(`${uri}property/create`, finalData, {
@@ -99,7 +99,7 @@ const AddProperty = () => {
             console.error("Error submitting property:", err);
           });
       } else {
-        alert("Please upload at least one image.");
+        setErrorMessage('You need to upload at least 4 images');
       }                
     },
   });
@@ -167,8 +167,7 @@ const AddProperty = () => {
 
   const processImages = (e)=>{
       let files = e.target.files
-      if (files.length < 4) {
-          console.log('You need to upload at least 4 images');
+      if (images.length + files.length < 4) {          
           setErrorMessage('You need to upload at least 4 images');
       } else {
         const allValid = Array.from(files).every(file => file.type == 'image/png' || file.type == 'image/jpg' || file.type == 'image/jpeg');

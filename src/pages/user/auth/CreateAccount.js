@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import { createAccountSchema } from "../../../schemas";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Alert } from "@mui/material";
+import { Alert, Dialog, DialogContent, DialogTitle } from "@mui/material";
 
 const CreateAccount = () => {
     const uri = useSelector(state=>state.UriReducer.uri)
@@ -15,6 +15,7 @@ const CreateAccount = () => {
     const [error, setError] = useState('');
     const [err, setErr] = useState('');
     const location = useLocation()
+    const [showRoleModal, setShowRoleModal] = useState(false);
     
     useEffect(() => {    
         const params = new URLSearchParams(location.search);
@@ -56,7 +57,60 @@ const CreateAccount = () => {
   })  
 
   return (
-    <>        
+    <>     
+
+        <Dialog open={showRoleModal} maxWidth="xs" fullWidth onClose={() => setShowRoleModal(false)}>
+            <DialogTitle className="fw-bold">Sign Up With Google</DialogTitle>
+
+            <DialogContent>
+                <p className="">Select your account type</p>
+                <div className="d-flex justify-content-between">
+                    <div>
+                        <button
+                            onClick={() => {
+                                window.location.href = `${uri}auth/google/register?type=customer`;
+                            }}                    
+                            className="btn px-5 d-flex align-items-center justify-content-center border my-0"
+                            style={{
+                            borderRadius: "6px",
+                            backgroundColor: "#fafafa",
+                            fontWeight: 500,
+                            padding: "10px",
+                            }}
+                        >
+                            <img
+                            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                            alt="Google"
+                            style={{ height: "18px", marginRight: "8px" }}
+                            />
+                            Customer
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            onClick={() => {
+                                window.location.href = `${uri}auth/google/register?type=agent`;
+                            }}
+                            className="btn px-5 d-flex align-items-center justify-content-center border my-0"
+                            style={{
+                            borderRadius: "6px",
+                            backgroundColor: "#fafafa",
+                            fontWeight: 500,
+                            padding: "10px",
+                            }}
+                        >
+                            <img
+                            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                            alt="Google"
+                            style={{ height: "18px", marginRight: "8px" }}
+                            />
+                            Agent
+                        </button>
+                    </div>
+                </div>                
+            </DialogContent>
+        </Dialog>
+   
         <div
             className="d-flex justify-content-center align-items-center py-1"
             style={{ minHeight: "100vh" }}
@@ -97,7 +151,7 @@ const CreateAccount = () => {
                     Apple
                 </button>
                 <button
-                    onClick={()=>window.location.href = `${uri}auth/google/register`}
+                    onClick={() => setShowRoleModal(true)}                    
                     className="btn d-flex align-items-center justify-content-center border my-0"
                     style={{
                     borderRadius: "6px",

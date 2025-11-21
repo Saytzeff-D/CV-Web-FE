@@ -1,9 +1,6 @@
 const initState = {
     currency: 'NGN',
-    rates: {
-        USD: 0.00065,
-        GBP: 0.00052,
-        EUR: 0.00060,
+    rates: { 
         NGN: 1
     }
 }

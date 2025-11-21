@@ -56,7 +56,9 @@ const Sale = (props) =>{
                         </li>
                     </ul>
                 </div>
-                <button className="btn btn-outline-dark w-100">Contact Agent</button>
+                <button disabled={property.phone_number == null} onClick={()=>window.open(`https://wa.me/${property.phone_number}`)} className="btn btn-outline-dark w-100">
+                    Contact Agent
+                </button>
                 <p className="small fw-bold text-center text-info mt-1">
                     {property.paid == 1 ? (<><i className="fa fa-danger"></i> Not Available</>) : (<><i className="fa fa-success"></i> Available for {property.category}</>)}
                 </p>                  

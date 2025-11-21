@@ -70,3 +70,8 @@ export const addBlogSchema = yup.object().shape({
     subtitle: yup.string().required('Required'),
     content: yup.string().required('Required')
 })
+
+export const resetPasswordSchema = yup.object().shape({
+    password: yup.string().min(8, 'Password must be at least 8 characters').required('Required'),
+    confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Required')
+})

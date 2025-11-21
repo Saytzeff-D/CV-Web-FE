@@ -1,8 +1,45 @@
 import React from "react";
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
+import { useSelector } from "react-redux";
+import { useFormik } from "formik";
+import { contactSchema } from "../../../schemas";
+import axios from "axios";
+import { Alert, Snackbar } from "@mui/material";
 
 const Contact = () => {
+    const uri = useSelector(state=>state.UriReducer.uri)
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [successMessage, setSuccessMessage] = React.useState('');
+    const [errorMessage, setErrorMessage] = React.useState('');
+
+    const {handleBlur, handleChange, handleSubmit, values, touched, errors} = useFormik({
+        initialValues: {
+            name: '',
+            email: '',
+            subject: '',
+            message: ''
+        },
+        validationSchema: contactSchema,
+        onSubmit: (values, { resetForm }) => {
+            setIsLoading(true);
+            axios.post(`${uri}contact/create`, values)
+            .then((res)=>{
+                setIsLoading(false);
+                setSuccessMessage(res.data.message);
+                setErrorMessage('');
+                resetForm();
+                console.log(res.data.message);
+            })
+            .catch((err)=>{
+                setIsLoading(false);
+                setErrorMessage(err.response?.data?.message || "Failed to send message. Please try again.");
+                setSuccessMessage('');
+                console.log(err);
+                console.log(err.response?.data?.message || "Failed to send message. Please try again.");
+            })
+        }
+    })
     return (
         <div>
             <Navbar />            
@@ -68,28 +105,42 @@ const Contact = () => {
                 <div className="row mt-5">
                     <div className="col-md-6 mx-auto">
                         <h4 className="mb-4 text-center fw-bold">Send a message</h4>
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <div className="mb-3">
-                                <input type="text" className="form-control" placeholder="Your Name" required />
+                                <input value={values.name} type="text" name="name" onBlur={handleBlur} onChange={handleChange} className={`form-control ${errors.name && touched.name ? 'is-invalid' : ''}`} placeholder="Your Name" required />
                             </div>
                             <div className="mb-3">
-                                <input type="email" className="form-control" placeholder="Your Email" required />
+                                <input value={values.email} type="email" name="email" onBlur={handleBlur} onChange={handleChange} className={`form-control ${errors.email && touched.email ? 'is-invalid' : ''}`} placeholder="Your Email" required />
                             </div>                            
                             <div className="mb-3">
-                                <input type="text" className="form-control" placeholder="Subject" />
+                                <input value={values.subject} type="text" name="subject" onBlur={handleBlur} onChange={handleChange} className={`form-control ${errors.subject && touched.subject ? 'is-invalid' : ''}`} placeholder="Subject" required />
                             </div>
                             <div className="mb-3">
-                                <textarea className="form-control" rows="5" placeholder="Message"></textarea>
+                                <textarea value={values.message} name="message" onBlur={handleBlur} onChange={handleChange} className={`form-control ${errors.message && touched.message ? 'is-invalid' : ''}`} rows="5" placeholder="Message" required></textarea>
                             </div>
                             <div className="text-center">
-                                <button type="submit" className="btn btn-success px-5 w-100">
-                                    Send Message
+                                <button disabled={isLoading} type="submit" className="btn btn-success px-5 w-100">
+                                    {isLoading ? 'Sending...' : 'Send Message'}
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
                 </section>
+
+                <Snackbar
+                    open={!!successMessage || !!errorMessage}
+                    autoHideDuration={6000}
+                    onClose={() => {
+                        setSuccessMessage('');
+                        setErrorMessage('');
+                    }}
+                    message={successMessage || errorMessage}
+                >
+                    <Alert variant="filled" severity={successMessage ? "success" : "error"}>
+                        {successMessage || errorMessage}
+                    </Alert>
+                </Snackbar>
             <Footer />
         </div>
     );

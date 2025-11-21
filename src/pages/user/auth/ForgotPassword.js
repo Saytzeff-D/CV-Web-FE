@@ -20,8 +20,9 @@ const ForgotPassword = () => {
             setIsLoading(true)
             axios.post(`${uri}auth/verify-forgot-password`, { email, code: parseInt(code) })
             .then((res) => {
+                sessionStorage.setItem('resetToken', res.data.token)
+                navigate('/reset-password')
                 console.log(res.data)
-                // navigate('/reset-password')
             })
             .catch((err) => {
                 setIsLoading(false)

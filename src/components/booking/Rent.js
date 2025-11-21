@@ -19,13 +19,20 @@ const Rent = (props) =>{
             setShowLoginPrompt(true);
             return;
         }
-        if(type === 'rent' || type === 'shortlet'){
+        if(purpose !== 'inspection'){
             if(startDate == '' || endDate == ''){
                 alert("Please select start and end dates.");
                 return;
             }
         }
-        sessionStorage.setItem('propertyForPayment', JSON.stringify({purpose, name: property.name, fee: purpose == 'inspection' ? Number(property.inspection_fee) * rates[currency] : Number(property.total_price) * rates[currency] * (duration !== 0 ? duration : 1), id: property.id}));
+        sessionStorage.setItem('propertyForPayment', JSON.stringify({
+            purpose, 
+            name: property.name, 
+            fee: purpose == 'inspection' ? Number(property.inspection_fee) * rates[currency] : Number(property.total_price) * rates[currency] * (duration !== 0 ? duration : 1), 
+            id: property.id, 
+            durationMonths:startDate && endDate ? duration : null, 
+            startDate:startDate ? startDate : null
+        }));
         navigate(`/pay-now`);
     }    
 
@@ -107,12 +114,12 @@ const Rent = (props) =>{
                             </ul>
                         </div>
 
-                        <button className="btn btn-outline-dark w-100">
+                        <button disabled={property.phone_number == null} onClick={()=>window.open(`https://wa.me/${property.phone_number}`)} className="btn btn-outline-dark w-100">
                         Contact Agent
                         </button>
                     </div>
 
-                    <p className="small text-center text-muted mt-1">
+                    <p className="small fw-bold text-center text-info mt-1">
                         {property.paid == 1 ? (<><i className="fa fa-danger"></i> Not Available</>) : (<><i className="fa fa-success"></i> Available for {property.category}</>)}
                     </p>
 
@@ -122,15 +129,7 @@ const Rent = (props) =>{
                         <div className="d-flex justify-content-between small mb-1">
                         <span>Apartment rent x {duration} year{duration > 1 ? "s" : ""}</span>
                         <span className="fw-semibold">{Number((property.total_price * rates[currency]) * duration).toLocaleString('en-NG', { style: 'currency', currency })}</span>
-                        </div>
-                        <div className="d-flex justify-content-between small mb-1">
-                        <span>Agent & Cleaning Fee</span>
-                        <span className="fw-semibold">₦40,000</span>
-                        </div>
-                        <div className="d-flex justify-content-between small">
-                        <span>C&V Services Fee</span>
-                        <span className="fw-semibold">₦10,000</span>
-                        </div>
+                        </div>                        
                     </div>
 
                     {/* BENEFITS */}

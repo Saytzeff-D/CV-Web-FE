@@ -270,16 +270,7 @@ const ApartmentDetails = () => {
                 />
               </div>
             ))}
-          </div>
-
-          {/* <Button 
-            className="mt-3" 
-            variant="outlined" 
-            fullWidth 
-            onClick={() => setShowGallery(false)}
-          >
-            Close
-          </Button> */}
+          </div>          
         </DialogContent>
       </Dialog>
 

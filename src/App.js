@@ -31,8 +31,21 @@ import EditBlog from './pages/admin/EditBlog';
 import GoogleAuth from './GoogleAuth';
 import PayNow from './pages/PayNow';
 import TransactionStatus from './pages/TransactionStatus';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 
 function App() {
+  const uri = useSelector(state=>state.UriReducer.uri)
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    axios.post(`${uri}payment/update-rates`).then((res)=>{
+      let { usd, gbp, eur } = res.data.data
+      dispatch({type: 'SET_EXCHANGE_RATE', payload: { NGN: 1, USD: usd, GBP: gbp, EUR: eur}})      
+    }).catch((err)=>{
+      console.log("Error updating currency rates");
+    })
+  }, [])
   return (
     <div className="App">
       <BrowserRouter>

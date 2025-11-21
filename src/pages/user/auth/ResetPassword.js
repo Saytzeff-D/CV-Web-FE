@@ -1,17 +1,41 @@
-import { Dialog, DialogContent } from "@mui/material";
+import { Alert, Dialog, DialogContent, Snackbar } from "@mui/material";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import resetPasswordSuccessImage from '../../../assets/passkey 1.png'
+import { useFormik } from "formik";
+import { resetPasswordSchema } from "../../../schemas";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const ResetPassword = () => {  
-    const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate()
+    const [showPassword, setShowPassword] = useState(false);    
     const [open, setOpen] = useState(false);
+    const uri = useSelector(state=>state.UriReducer.uri)  
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState('')
 
-    const reset = () => {        
-        setOpen(true)
-        // Verification logic here
-    }
+    const {handleBlur, handleChange, handleSubmit, touched, errors} = useFormik({
+        initialValues: {
+        password: '',
+        confirmPassword: ''
+        },
+        validationSchema: resetPasswordSchema,
+        onSubmit: (values) => {
+            setIsLoading(true)
+            axios.post(`${uri}auth/reset-password`, values, {
+                headers: { Authorization: `Bearer ${sessionStorage.getItem('resetToken')}` }
+            })
+                .then((res)=>{
+                    setIsLoading(false)
+                    setOpen(true)
+                    console.log(res.data)
+                })
+                .catch((err)=>{
+                    setIsLoading(false)                    
+                    err.response ? setError(err.response.data.message) : setError('An error occurred')
+                })
+            }
+    })
 
   return (
     <>        
@@ -43,8 +67,11 @@ const ResetPassword = () => {
                     Password
                     </label>
                     <input
+                    name="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     type={showPassword ? "text" : "password"}
-                    className="form-control"
+                    className={"form-control" + (touched.password && errors.password ? " is-invalid" : "")}
                     placeholder="••••••••"
                     style={{
                         border: "1px solid #e9e9e9",
@@ -70,8 +97,11 @@ const ResetPassword = () => {
                     Confirm Password
                     </label>
                     <input
+                    name="confirmPassword"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     type="password"
-                    className="form-control"
+                    className={"form-control" + (touched.confirmPassword && errors.confirmPassword ? " is-invalid" : "")}
                     placeholder="••••••••"
                     style={{
                         border: "1px solid #e9e9e9",
@@ -82,8 +112,9 @@ const ResetPassword = () => {
                 </div>
 
                 <button
-                    onClick={reset}
+                    onClick={handleSubmit}
                     type="submit"
+                    disabled={isLoading}
                     className="btn w-100 fw-semibold"
                     style={{
                     backgroundColor: "#004225",
@@ -92,11 +123,17 @@ const ResetPassword = () => {
                     height: "45px",
                     }}
                 >
-                    Reset Password
+                    {isLoading ? 'Please wait...' : 'Reset Password'}
                 </button>                
                 </div>
             </div>
         </div>
+
+        <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={() => setError('')}>
+            <Alert variant="filled" severity="error">
+                {error}
+            </Alert>
+        </Snackbar>
 
         <Dialog open={open} maxWidth="xs" fullWidth>
             <DialogContent>
