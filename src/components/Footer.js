@@ -24,9 +24,9 @@ const Footer = ()=>{
                             </p>
                             <hr />
                             <div className="d-flex gap-4">
-                                <Link to="#"><i className="fa fa-whatsapp fa-lg text-dark"></i></Link>
-                                <Link to="#"><i className="fa fa-instagram fa-lg text-dark"></i></Link>
-                                <Link to="#"><i className="fa fa-facebook fa-lg text-dark"></i></Link>
+                                <Link to="https://wa.me/+2348114590077"><i className="fa fa-whatsapp fa-lg text-dark"></i></Link>
+                                <Link to="https://instagram.com/chuks_vin_property"><i className="fa fa-instagram fa-lg text-dark"></i></Link>
+                                <Link to="https://facebook.com/share/1Lxv6VJj74"><i className="fa fa-facebook fa-lg text-dark"></i></Link>
                                 <Link to="#"><i className="fa fa-linkedin fa-lg text-dark"></i></Link>
                             </div>
                         </div>
