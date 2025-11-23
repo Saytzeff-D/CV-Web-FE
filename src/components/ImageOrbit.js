@@ -74,7 +74,7 @@ export default function ImageOrbit({ intervalMs = 3000 /* total per step */, ani
         <div className="orbit-stage w-100" aria-hidden={false}>
           {/* Top */}
           <div className="slot slot-top">
-            <img src={images[positions.top].image} alt="" className="slot-img" />
+            <img src={images[positions.top]?.image} alt="" className="slot-img" />
           </div>
 
           {/* Right */}
