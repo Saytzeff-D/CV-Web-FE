@@ -79,17 +79,17 @@ export default function ImageOrbit({ intervalMs = 3000 /* total per step */, ani
 
           {/* Right */}
           <div className="slot slot-right">
-            <img src={images[positions.right].image} alt="" className="slot-img" />
+            <img src={images[positions.right]?.image} alt="" className="slot-img" />
           </div>
 
           {/* Bottom */}
           <div className="slot slot-bottom">
-            <img src={images[positions.bottom].image} alt="" className="slot-img" />
+            <img src={images[positions.bottom]?.image} alt="" className="slot-img" />
           </div>
 
           {/* Left */}
           <div className="slot slot-left">
-            <img src={images[positions.left].image} alt="" className="slot-img" />
+            <img src={images[positions.left]?.image} alt="" className="slot-img" />
           </div>
 
           {/* Center */}

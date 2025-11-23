@@ -13,7 +13,7 @@ import { Skeleton, Dialog, DialogContent } from "@mui/material";
 
 const ClientDashboard = () => {
     const uri = useSelector(state=>state.UriReducer.uri)
-    const recommendedProperties = data.recommendedProperties;
+    const [recommendedProperties, setRecommendedProperties] = useState([]);
     const [activeTab, setActiveTab] = useState("transactions");
     const token = sessionStorage.getItem('userToken')
     const navigate = useNavigate()
@@ -23,6 +23,8 @@ const ClientDashboard = () => {
     const [transactions, setTransactions] = useState([])
     const [bookings, setBookings] = useState([])
     const [openDialog, setOpenDialog] = useState(true)
+    const currency = useSelector(state=>state.CurrencyReducer.currency)
+    const rates = useSelector(state=>state.CurrencyReducer.rates);
 
     useEffect(()=>{
         if(!token){
@@ -49,10 +51,15 @@ const ClientDashboard = () => {
         }
     },[uri])
 
+    const encode = (str) => {
+        return btoa(str.toString());
+    }
+
     useEffect(()=>{
         axios.get(`${uri}property/recommended`, {
             headers: { Authorization: `Bearer ${token}` }
         }).then((res)=>{
+            setRecommendedProperties(res.data.data);
             console.log("Recommended properties:", res.data);
         }).catch((err)=>{
             console.log(err);
@@ -123,25 +130,21 @@ const ClientDashboard = () => {
                                 <div className="card border-0 shadow-sm">
                                 <div className="position-relative overflow-hidden rounded">
                                     <img
-                                    src={property.image}
+                                    src={property.main_photo}
                                     className="card-img-top"
-                                    alt={property.title}
+                                    alt={property.name}
                                     style={{ height: "180px", objectFit: "cover" }}
-                                />
-                                <button type="button"
-                                    className="btn btn-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center text-white bg-transparent" style={{zIndex: 2}}>
-                                    <i className="fa fa-heart-o"></i>
-                                </button>
-        
-                                <Link to={'/buy/house'}
+                                />                                
+
+                                <Link to={property.type === 'land' ? `/land/rent/${encode(property.id)}` : `/apartment/rent/${encode(property.id)}`}
                                     className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
                                     See More
                                 </Link>
                                 </div>
                                 <div className="card-body">
-                                    <h6 className="fw-bold">{property.title}</h6>
-                                    <p className="mb-1 text-muted small">{property.location}</p>
-                                    <p className="fw-bold text-success">{property.price}</p>
+                                    <h6 className="fw-bold">{property.name}</h6>
+                                    <p className="mb-1 text-muted small">{property.address}</p>
+                                    <p className="fw-bold text-success">{Number(property.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</p>
                                 </div>
                                 </div>
                             </div>

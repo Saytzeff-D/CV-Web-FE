@@ -121,7 +121,23 @@ const PropertiesForYou = () => {
             </div>
             <div ref={containerRef1} className="d-flex flex-row flex-nowrap overflow-auto my-5" style={{ scrollBehavior: "smooth" }}>
               {
-                properties.sale && !isLoading ?
+                isLoading ? (
+                  <div className="row w-100">
+                      {
+                        [1,2,3,4].map((_, index)=>(
+                          <div className="col-md-3" key={index}>
+                            <Skeleton variant="rectangular" width={260} height={180} />
+                            <Box sx={{ pt: 0.5 }}>
+                              <Skeleton />
+                              <Skeleton width="60%" />
+                            </Box>
+                          </div>
+                        ))
+                      }
+                  </div>
+                )
+                : 
+                properties.sale && properties.sale.length > 0 ?
                 properties.sale.map((each, i)=>(
                   <div className="me-3" key={i}>
                     <div className="card border-0" style={{ minWidth: "16rem" }}>
@@ -133,13 +149,13 @@ const PropertiesForYou = () => {
                             <i className={savedProperties.includes(each.id) ? "fa fa-heart text-success" : "fa fa-heart-o"}></i>
                         </button>
 
-                        <Link to={each.type === 'land' ? `/land/sale/${encode(each.id)}` : `/apartment/sale/${encode(each.id)}`}
+                        <Link to={each.type === 'land' ? `/land/rent/${encode(each.id)}` : `/apartment/rent/${encode(each.id)}`}
                             className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
                             See More
                         </Link>
                         </div>
 
-                    <div className="card-body px-0 pt-3">
+                      <div className="card-body px-0 pt-3">
                           <h6 className="card-title mb-1">{each.name}</h6>
                           <h6 className="fw-bold mb-2">{Number(each.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h6>
                           {
@@ -156,31 +172,16 @@ const PropertiesForYou = () => {
                               </div>
                           }
                           <p className="text-muted small mt-2">{each.address}</p>
-                      </div>                      
+                      </div>
                     </div>
                   </div>
                 ))
-                : (
-                  <div className="row w-100">
-                      {
-                        [1,2,3,4].map((_, index)=>(
-                          <div className="col-md-3" key={index}>
-                            <Skeleton variant="rectangular" width={260} height={180} />
-                            <Box sx={{ pt: 0.5 }}>
-                              <Skeleton />
-                              <Skeleton width="60%" />
-                            </Box>
-                          </div>
-                        ))
-                      }
-                  </div>
-                )
-              }
-              {
-                !isLoading && properties.sale.length == 0 &&
-                <Alert severity="info" className="my-4">
-                  No properties available...
-                </Alert>
+                 :
+                 (
+                  <Alert severity="info" className="my-4">
+                    No properties available...
+                  </Alert>
+                )              
               }
             </div>
           </div>
@@ -204,7 +205,23 @@ const PropertiesForYou = () => {
             </div>
             <div ref={containerRef2} className="d-flex flex-row flex-nowrap overflow-auto my-5" style={{ scrollBehavior: "smooth" }}>
               {
-                properties.rent && !isLoading ?
+                isLoading ? (
+                  <div className="row w-100">
+                      {
+                        [1,2,3,4].map((_, index)=>(
+                          <div className="col-md-3" key={index}>
+                            <Skeleton variant="rectangular" width={260} height={180} />
+                            <Box sx={{ pt: 0.5 }}>
+                              <Skeleton />
+                              <Skeleton width="60%" />
+                            </Box>
+                          </div>
+                        ))
+                      }
+                  </div>
+                )
+                : 
+                properties.rent && properties.rent.length > 0 ?
                 properties.rent.map((each, i)=>(
                   <div className="me-3" key={i}>
                     <div className="card border-0" style={{ minWidth: "16rem" }}>
@@ -243,29 +260,13 @@ const PropertiesForYou = () => {
                     </div>
                   </div>
                 ))
-                : (
-                  <div className="row w-100">
-                      {
-                        [1,2,3,4].map((_, index)=>(
-                          <div className="col-md-3" key={index}>
-                            <Skeleton variant="rectangular" width={260} height={180} />
-                            <Box sx={{ pt: 0.5 }}>
-                              <Skeleton />
-                              <Skeleton width="60%" />
-                            </Box>
-                          </div>
-                        ))
-                      }
-                  </div>
-                )                
-              }
-              {
-                !isLoading && properties.rent.length == 0 && (
+                 :
+                 (
                   <Alert severity="info" className="my-4">
                     No properties available...
                   </Alert>
-                )
-              }
+                )              
+              }              
             </div>
           </div>
 
@@ -288,7 +289,23 @@ const PropertiesForYou = () => {
             </div>
             <div ref={containerRef3} className="d-flex flex-row flex-nowrap overflow-auto my-5" style={{ scrollBehavior: "smooth" }}>
               {
-                properties.shortlet && !isLoading ?
+                isLoading ? (
+                  <div className="row w-100">
+                      {
+                        [1,2,3,4].map((_, index)=>(
+                          <div className="col-md-3" key={index}>
+                            <Skeleton variant="rectangular" width={260} height={180} />
+                            <Box sx={{ pt: 0.5 }}>
+                              <Skeleton />
+                              <Skeleton width="60%" />
+                            </Box>
+                          </div>
+                        ))
+                      }
+                  </div>
+                )
+                : 
+                properties.shortlet && properties.shortlet.length > 0 ?
                 properties.shortlet.map((each, i)=>(
                   <div className="me-3" key={i}>
                     <div className="card border-0" style={{ minWidth: "16rem" }}>
@@ -300,7 +317,7 @@ const PropertiesForYou = () => {
                             <i className={savedProperties.includes(each.id) ? "fa fa-heart text-success" : "fa fa-heart-o"}></i>
                         </button>
 
-                        <Link to={each.type === 'land' ? `/land/shortlet/${encode(each.id)}` : `/apartment/shortlet/${encode(each.id)}`}
+                        <Link to={each.type === 'land' ? `/land/rent/${encode(each.id)}` : `/apartment/rent/${encode(each.id)}`}
                             className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
                             See More
                         </Link>
@@ -326,29 +343,14 @@ const PropertiesForYou = () => {
                       </div>
                     </div>
                   </div>
-                )) : (
-                  <div className="row w-100">
-                      {
-                        [1,2,3,4].map((_, index)=>(
-                          <div className="col-md-3" key={index}>
-                            <Skeleton variant="rectangular" width={260} height={180} />
-                            <Box sx={{ pt: 0.5 }}>
-                              <Skeleton />
-                              <Skeleton width="60%" />
-                            </Box>
-                          </div>
-                        ))
-                      }
-                  </div>
-                ) 
+                ))
+                 :
+                 (
+                  <Alert severity="info" className="my-4">
+                    No properties available...
+                  </Alert>
+                )              
               }
-                {
-                  !isLoading && properties.shortlet.length == 0 && (
-                    <Alert severity="info" className="my-4">
-                      No properties available...
-                    </Alert>
-                  )
-                }
             </div>
           </div>
         </div>
