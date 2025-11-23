@@ -1,4 +1,4 @@
-import { Alert, Snackbar, Dialog, DialogContent, duration } from "@mui/material";
+import { Alert, Snackbar, Dialog, DialogContent, duration, Button } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -26,11 +26,12 @@ const PayNow = () => {
       setErrorMessage("Please select an inspection date.");
       return;
     }
-    setOpenDialog(true);
+    setOpenDialog(true);  
     setErrorMessage('')    
     axios.post(`${uri}payment/property/initialize`, getValue(propertyForPayment.purpose), {
       headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
     }).then((response) => {
+      setOpenDialog(false);
       window.location.href = response.data.paymentLink;         
     }).catch((error) => {
       setOpenDialog(false);
@@ -87,11 +88,16 @@ const PayNow = () => {
             )
           }
           {
-            propertyForPayment && propertyForPayment.purpose !== 'inspection' && (
+            propertyForPayment && propertyForPayment.purpose !== 'inspection' && propertyForPayment.paid !== 1 
+            ? (
               <Alert severity="info" className="mt-3">
-                You are about to pay for the purchase of <strong>{propertyForPayment.name}</strong>.
+                You are about to pay for the {propertyForPayment.purpose} of <strong>{propertyForPayment.name}</strong>.
               </Alert>
             )
+            :
+            <Alert severity="warning" className="mt-3">
+              This property is not available at the moment.<br /> Contact the agent for more information.
+            </Alert>
           }
 
           <h5 className="fw-semibold mt-4">{propertyForPayment && propertyForPayment.name}</h5>
@@ -115,12 +121,12 @@ const PayNow = () => {
               </div>
             )
           }
-          <button onClick={()=>handlePay()} className="btn btn-success">
+          <Button variant="contained" disabled={propertyForPayment && propertyForPayment.paid === 1} onClick={()=>handlePay()} color="success" className="rounded-0">
             Check Out
-          </button>
-          <button onClick={()=>navigate(-1)} className="btn btn-danger ms-3">
+          </Button>
+          <Button variant="contained" onClick={()=>navigate(-1)} color="error" className="ms-3">
             Cancel
-          </button>
+          </Button>
 
         </div>
       </div>

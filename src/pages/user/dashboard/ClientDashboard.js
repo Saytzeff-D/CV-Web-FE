@@ -48,6 +48,16 @@ const ClientDashboard = () => {
             })            
         }
     },[uri])
+
+    useEffect(()=>{
+        axios.get(`${uri}property/recommended`, {
+            headers: { Authorization: `Bearer ${token}` }
+        }).then((res)=>{
+            console.log("Recommended properties:", res.data);
+        }).catch((err)=>{
+            console.log(err);
+        })
+    }, [uri])
     return (
         <>
             <Navbar />

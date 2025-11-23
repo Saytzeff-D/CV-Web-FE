@@ -1,9 +1,17 @@
 import React, { useEffect, useRef } from "react";
 import Spotlight1 from "../assets/spotlight-3.png";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { Alert, Skeleton } from "@mui/material";
 
 const Spotlight = () => {
   const sliderRef = useRef(null);
-  const spotArray = [Spotlight1, Spotlight1, Spotlight1, Spotlight1]
+  const [spotArray, setSpotArray] = React.useState([])
+  const uri = useSelector(state=>state.UriReducer.uri)
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const currency  = useSelector(state=>state.CurrencyReducer.currency)
+  const rates = useSelector(state=>state.CurrencyReducer.rates);
 
   // Auto-slide effect
   useEffect(() => {
@@ -20,6 +28,17 @@ const Spotlight = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(()=>{
+    axios.get(`${uri}property/spotlight`).then((response) => {
+      setIsLoading(false);
+      console.log("Fetched spotlight properties:", response.data);
+      setSpotArray(response.data.data)
+    }).catch((error) => {
+      setIsLoading(false);
+      setErrorMessage("Failed to load spotlight properties.");
+    });
+  }, [])
 
   const scroll = (direction) => {
     const { current } = sliderRef;
@@ -58,29 +77,36 @@ const Spotlight = () => {
 
       <div ref={sliderRef} className="d-flex flex-row flex-nowrap overflow-auto my-5" style={{ scrollBehavior: "smooth" }}>
         {
+          !isLoading && !errorMessage &&
             spotArray.map((each, i)=>(
               <div className="me-4" key={i}>
                     <div className="card border-0" style={{ minWidth: "32rem", flexShrink: 0}}>
                         <div className="row g-0">
                             <div className="col-6">
-                                <img src={each} className="img-fluid rounded-start" alt="Spotlight" />
+                                <img src={each.main_photo} className="rounded-start" alt="Spotlight" height={'350'} width={'100%'} />
                             </div>
                             <div className="col-6 bg-light px-4">
-                                <h6 className="text-muted pb-5 pt-3">No 1 Real estate agency</h6>
+                                <h6 className="text-muted pb-5 pt-3">{each.name}</h6>
                                 <p className="text-dark pt-5 pb-0 mb-0">
-                                    Luxury 4 bedroom detached duplex with boys quarter
+                                    {each.about.slice(0, 50)}
                                 </p>  
                                 <p className="text-muted pb-4 fw-semibold">
-                                    Ajah Lagos
+                                    {each.address}
                                 </p>
                                 <strong>
-                                    N200,000
+                                    {Number(each.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}
                                 </strong>                        
                             </div>
                         </div>
                     </div>
                 </div>
             ))
+        }
+        { isLoading &&
+            <Skeleton variant="rectangular" width={500} height={200} className="me-4" />
+        }
+        { errorMessage &&
+            <Alert severity="error">{errorMessage}</Alert>
         }
       </div>
       <div className="d-flex justify-content-between flex-md-row flex-column text-center mt-5 px-5 py-4">

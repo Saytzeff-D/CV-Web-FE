@@ -28,10 +28,11 @@ const Shortlet = (props) =>{
         sessionStorage.setItem('propertyForPayment', JSON.stringify({
             purpose, 
             name: property.name, 
-            fee: purpose == 'inspection' ? Number(property.inspection_fee) * rates[currency] : Number(property.total_price) * rates[currency] * (duration !== 0 ? duration : 1), 
+            fee: purpose == 'inspection' ? Number(property.inspection_fee) * rates[currency] : Number(property.total_price) * rates[currency] * (duration !== 0 ? duration : 1) + Number(property.inspection_fee), 
             id: property.id, 
             durationDays:startDate && endDate ? duration : null, 
-            startDate:startDate ? startDate : null
+            startDate:startDate ? startDate : null,
+            paid: property.paid
         }));
         navigate(`/pay-now`);
     }    
@@ -70,14 +71,17 @@ const Shortlet = (props) =>{
                         <h4 className="fw-bold mb-2">{Number(property.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h4>
                         <span className="text-muted">/ per day</span>
 
-                        <div className="mt-3 dropdown">
+                        <button onClick={()=>payNow(property.category)} className="btn btn-success w-100 mb-3 mt-2">
+                            <span className="small">Book Now</span>
+                        </button>
+                        {/* <div className="mt-3 dropdown">
                             <button className="btn btn-success w-100 mb-3 mt-2 dropddown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Schedule for Inspection
+                                Book Now
                             </button>
                             <ul className="dropdown-menu w-75 text-center p-2">
                                 <li>
                                 <button onClick={()=>payNow('inspection')} className="btn btn-success w-100 mb-2">
-                                    Schedule for Inspection
+                                    Book Now for Inspection
                                 </button>
                                 </li>
                                 <li>
@@ -87,7 +91,7 @@ const Shortlet = (props) =>{
                                 </button>
                                 </li>
                             </ul>
-                        </div>
+                        </div> */}
 
                         <button disabled={property.phone_number == null} onClick={()=>window.open(`https://wa.me/${property.phone_number}`)} className="btn btn-outline-dark w-100">
                             Contact Agent
@@ -102,9 +106,13 @@ const Shortlet = (props) =>{
                     <div className="px-4 py-3 border-top">
                         <h6 className="fw-bold small mb-2">Price Details</h6>
                         <div className="d-flex justify-content-between small mb-1">
-                        <span>Apartment shortlet x {duration} day{duration > 1 ? "s" : ""}</span>
-                        <span className="fw-semibold">{Number((property.total_price * rates[currency]) * duration).toLocaleString('en-NG', {style: 'currency', currency})}</span>
+                            <span>Apartment shortlet x {duration} day{duration > 1 ? "s" : ""}</span>
+                            <span className="fw-semibold">{Number((property.total_price * rates[currency]) * duration).toLocaleString('en-NG', {style: 'currency', currency})}</span>
                         </div>                        
+                        <div className="d-flex justify-content-between small mb-1">
+                            <span>Caution Fee</span>
+                            <span className="fw-semibold">{Number((property.inspection_fee * rates[currency])).toLocaleString('en-NG', {style: 'currency', currency})}</span>
+                        </div>
                     </div>
 
                     {/* BENEFITS */}

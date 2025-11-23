@@ -5,42 +5,42 @@
             "role": "Director",
             "text": "As a team, we were able to streamline our process like never before. It's a game-changer.",
             "rating": 5,
-            "img": "https://picsum.photos/600/400?random=1"
+            "img": "https://randomuser.me/api/portraits/women/1.jpg"
         },
         {
             "name": "Mr. Bayo",            
             "role": "Operations Lead",
             "text": "We had been struggling with inefficient workflows for months... Then we found this platform, and it was a breath of fresh air.",
             "rating": 5,
-            "img": "https://picsum.photos/600/400?random=1"
+            "img": "https://randomuser.me/api/portraits/men/2.jpg"
         },
         {
             "name": "Tunde Anifowose",            
             "role": "CEO",
             "text": "I couldn't be happier with how everything worked out. The impact on our team’s efficiency was immediate.",
             "rating": 5,
-            "img": "https://picsum.photos/600/400?random=1"
+            "img": "https://randomuser.me/api/portraits/men/3.jpg"
         },
         {
             "name": "Anna B",            
             "role": "Sales Rep",
             "text": "This solution enabled us to scale quickly. We felt supported at every step of the way.",
             "rating": 4,
-            "img": "https://picsum.photos/600/400?random=1"
+            "img": "https://randomuser.me/api/portraits/women/4.jpg"
         },
         {
             "name": "Segun Toba",        
             "role": "Student",
             "text": "It was a breath of fresh air. Not only did it integrate perfectly with our existing tech stack.",
             "rating": 4,
-            "img": "https://picsum.photos/600/400?random=1"
+            "img": "https://randomuser.me/api/portraits/men/5.jpg"
         },
         {
             "name": "Tobi Akoni",            
             "role": "CTO",
             "text": "This solution enabled us to scale quickly. We felt supported at every step of the way.",
             "rating": 5,
-            "img": "https://picsum.photos/600/400?random=1"
+            "img": "https://randomuser.me/api/portraits/men/6.jpg"
         }
     ],
     "blogs": [

@@ -31,7 +31,8 @@ const Rent = (props) =>{
             fee: purpose == 'inspection' ? Number(property.inspection_fee) * rates[currency] : Number(property.total_price) * rates[currency] * (duration !== 0 ? duration : 1), 
             id: property.id, 
             durationMonths:startDate && endDate ? duration : null, 
-            startDate:startDate ? startDate : null
+            startDate:startDate ? startDate : null,
+            paid: property.paid
         }));
         navigate(`/pay-now`);
     }    

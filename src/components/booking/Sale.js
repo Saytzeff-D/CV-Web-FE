@@ -17,7 +17,9 @@ const Sale = (props) =>{
             setShowLoginPrompt(true);
             return;
         }        
-        sessionStorage.setItem('propertyForPayment', JSON.stringify({purpose, name: property.name, fee: purpose == 'inspection' ? Number(property.inspection_fee) * rates[currency] : Number(property.total_price) * rates[currency] * (duration !== 0 ? duration : 1), id: property.id}));
+        sessionStorage.setItem('propertyForPayment', JSON.stringify({
+            purpose, name: property.name, fee: purpose == 'inspection' ? Number(property.inspection_fee) * rates[currency] : Number(property.total_price) * rates[currency] * (duration !== 0 ? duration : 1), id: property.id, paid: property.paid
+        }));
         navigate(`/pay-now`);
     }        
 

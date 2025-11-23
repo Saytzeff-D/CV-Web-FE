@@ -116,22 +116,22 @@ const Buy = () => {
                             </div>
 
                             <div className="card-body px-0 pt-3">
-                            <h6 className="card-title mb-1">{each.name}</h6>
-                            <h6 className="fw-bold mb-2">{Number(each.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h6>
-                            {
-                                each.type == 'land'
-                                ?
-                                <div className="d-flex flex-wrap text-muted small">
-                                    <div>{Number(each.land_size).toLocaleString()} Sqm</div>                        
-                                </div>
-                                :
-                                <div className="d-flex flex-wrap text-muted small">
-                                    <div className="me-3"><i className="fa fa-regular fa-bed"></i> {each.bedrooms} beds</div>
-                                    <div className="me-3"><i className="fa fa-regular fa-toilet"></i> {each.toilets} toilets</div>
-                                    <div className="me-3"><i className="fa fa-regular fa-bath"></i> {each.bathrooms} baths</div>
-                                </div>
-                            }
-                            <p className="text-muted small mt-2">{each.address}</p>
+                                <h6 className="card-title mb-1">{each.name}</h6>
+                                <h6 className="fw-bold mb-2">{Number(each.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h6>
+                                {
+                                    each.type == 'land'
+                                    ?
+                                    <div className="d-flex flex-wrap text-muted small">
+                                        <div>{Number(each.land_size).toLocaleString()} Sqm</div>                        
+                                    </div>
+                                    :
+                                    <div className="d-flex flex-wrap text-muted small">
+                                        <div className="me-3"><i className="fa fa-regular fa-bed"></i> {each.bedrooms} beds</div>
+                                        <div className="me-3"><i className="fa fa-regular fa-toilet"></i> {each.toilets} toilets</div>
+                                        <div className="me-3"><i className="fa fa-regular fa-bath"></i> {each.bathrooms} baths</div>
+                                    </div>
+                                }
+                                <p className="text-muted small mt-2">{each.address}</p>
                             </div>
                         </div>
                         </div>
