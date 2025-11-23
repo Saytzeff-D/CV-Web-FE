@@ -95,12 +95,12 @@ export default function ImageOrbit({ intervalMs = 3000 /* total per step */, ani
           {/* Center */}
           <div className="slot slot-center">
             <img
-              src={images[positions.center].image}
+              src={images[positions.center]?.image}
               alt=""
               className={`center-img ${captionVisible ? "enter" : "exit"}`}
             />
             <div className={`center-caption ${captionVisible ? "show" : "hide"}`}>
-              {images[positions.center].category}
+              {images[positions.center]?.category}
             </div>
           </div>
         </div>
