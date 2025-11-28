@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-import data from "../../data.json"
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { addPropertySchema } from "../../schemas";
 import { Snackbar, Button, IconButton, Alert } from "@mui/material";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
+import Underline from "@tiptap/extension-underline";
 
 const AddProperty = () => {
   const [featuredOptions, setFeaturedOptions] = useState([]);
@@ -72,6 +76,14 @@ const AddProperty = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const editor = useEditor({
+    extensions: [StarterKit.configure({link: false, underline: false}), Link, Image, Underline],
+    content: "",
+    onUpdate: ({ editor }) => {
+      formik.setFieldValue("about", editor.getHTML());
+    },
+  });
 
 
   const formik = useFormik({
@@ -475,19 +487,133 @@ const AddProperty = () => {
           }
 
         {/* Description */}
-        <div className="mb-3">
-          <label className="form-label fw-semibold">Write About this Property?</label>
-          <textarea
-            name="about"            
-            rows="3"
-            placeholder="Describe the property"
-            className={`form-control ${
-                formik.touched.about && formik.errors.about ? "is-invalid" : ""
-              }`}
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-          />
-        </div>
+        <div className="mb-4">
+            <label className="form-label fw-semibold">Write about this Property</label>
+
+            <div className="border rounded bg-white">
+              <div className="border-bottom p-2 d-flex gap-2 flex-wrap">
+                {/* Bold */}
+                <button
+                  type="button"
+                  className={`btn btn-sm ${
+                    editor?.isActive("bold") ? "btn-dark" : "btn-outline-secondary"
+                  }`}
+                  onClick={() => editor.chain().focus().toggleBold().run()}
+                >
+                  <b>B</b>
+                </button>
+
+                {/* Italic */}
+                <button
+                  type="button"
+                  className={`btn btn-sm ${
+                    editor?.isActive("italic") ? "btn-dark" : "btn-outline-secondary"
+                  }`}
+                  onClick={() => editor.chain().focus().toggleItalic().run()}
+                >
+                  <i>I</i>
+                </button>
+
+                {/* Underline */}
+                <button
+                  type="button"
+                  className={`btn btn-sm ${
+                    editor?.isActive("underline") ? "btn-dark" : "btn-outline-secondary"
+                  }`}
+                  onClick={() => editor.chain().focus().toggleUnderline().run()}
+                >
+                  <u>U</u>
+                </button>
+
+                {/* Headings */}
+                {[1, 2, 3].map((level) => (
+                  <button
+                    key={level}
+                    type="button"
+                    className={`btn btn-sm ${
+                      editor?.isActive("heading", { level }) ? "btn-dark" : "btn-outline-secondary"
+                    }`}
+                    onClick={() => editor.chain().focus().toggleHeading({ level }).run()}
+                  >
+                    H{level}
+                  </button>
+                ))}
+
+                {/* Bullet List */}
+                <button
+                  type="button"
+                  className={`btn btn-sm ${
+                    editor?.isActive("bulletList") ? "btn-dark" : "btn-outline-secondary"
+                  }`}
+                  onClick={() => editor.chain().focus().toggleBulletList().run()}
+                >
+                  • List
+                </button>
+
+                {/* Ordered List */}
+                <button
+                  type="button"
+                  className={`btn btn-sm ${
+                    editor?.isActive("orderedList") ? "btn-dark" : "btn-outline-secondary"
+                  }`}
+                  onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                >
+                  1.
+                </button>
+
+                {/* Paragraph */}
+                <button
+                  type="button"
+                  className={`btn btn-sm ${
+                    editor?.isActive("paragraph") ? "btn-dark" : "btn-outline-secondary"
+                  }`}
+                  onClick={() => editor.chain().focus().setParagraph().run()}
+                >
+                  ¶
+                </button>
+
+                {/* Link */}
+                <button
+                  type="button"
+                  className={`btn btn-sm ${
+                    editor?.isActive("link") ? "btn-dark" : "btn-outline-secondary"
+                  }`}
+                  onClick={() => {
+                    const url = prompt("Enter URL");
+                    if (url) editor.chain().focus().setLink({ href: url }).run();
+                  }}
+                >
+                  🔗
+                </button>
+
+                {/* Undo */}
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-secondary"
+                  onClick={() => editor.chain().focus().undo().run()}
+                >
+                  ↺
+                </button>
+
+                {/* Redo */}
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-secondary"
+                  onClick={() => editor.chain().focus().redo().run()}
+                >
+                  ↻
+                </button>                
+              </div>
+
+              <EditorContent editor={editor} className="p-3" />
+            </div>
+
+            {formik.touched.about && formik.errors.about && (
+              <div className="invalid-feedback d-block">
+                {formik.errors.about}
+              </div>
+            )}
+          </div>
 
 
         {/* Features */}

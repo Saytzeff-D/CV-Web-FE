@@ -4,9 +4,7 @@ const Details = ({ property }) => {
     return (
         <div>       
             <h5 className="fw-bold mt-4">About this Land</h5>
-            <p className="text-muted">
-                {property.about}
-            </p>
+            <p className="text-muted" dangerouslySetInnerHTML={{ __html: property.about }}></p>            
             <p className="text-muted">
                 Location: {property.address}.
             </p>

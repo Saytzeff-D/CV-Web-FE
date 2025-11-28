@@ -34,8 +34,7 @@ const PropertiesForYou = () => {
       axios.get(`${uri}customer/saved-properties`, {
           headers: { Authorization: `Bearer ${sessionStorage.getItem('userToken')}` }
       })
-      .then(res => {
-          console.log("Saved properties:", res.data);
+      .then(res => {          
           setSavedProperties(res.data.savedProperties.map(prop => prop.id));
       })
       .catch(err => {
@@ -65,8 +64,7 @@ const PropertiesForYou = () => {
    useEffect(()=>{
     axios.get(`${uri}property/for-you`)
       .then(response => {
-        setProperties(response.data.data);
-        console.log("Properties for you:", response.data);
+        setProperties(response.data.data);        
         setIsLoading(false);
       })
       .catch(error => {

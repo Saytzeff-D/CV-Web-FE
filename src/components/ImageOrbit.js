@@ -43,7 +43,7 @@ export default function ImageOrbit({ intervalMs = 3000 /* total per step */, ani
   useEffect(()=>{
     axios.get(`${uri}property/top-categories`).then((response) => {
       setIsLoading(false);
-      setImages((prev) => [...prev, ...response.data.data]);      
+      setImages((prev) => [ ...response.data.data, ...prev ].slice(0, 5)); // take first 5 only 
     }).catch((error) => {
       setIsLoading(false);
       setErrorMessage("Failed to load top categories.");

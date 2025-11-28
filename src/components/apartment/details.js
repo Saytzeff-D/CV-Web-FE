@@ -33,9 +33,7 @@ const Details = ({ property }) => {
             </div>
 
             <h5 className="fw-bold mt-4">About this place</h5>
-            <p className="text-muted">
-                {property.about}
-            </p>
+            <p className="text-muted" dangerouslySetInnerHTML={{ __html: property.about }}></p>
 
             <h6 className="fw-bold mt-4">What this place offers</h6>
             <ul className="offer-list text-muted small">

@@ -31,8 +31,7 @@ const Spotlight = () => {
 
   useEffect(()=>{
     axios.get(`${uri}property/spotlight`).then((response) => {
-      setIsLoading(false);
-      console.log("Fetched spotlight properties:", response.data);
+      setIsLoading(false);      
       setSpotArray(response.data.data)
     }).catch((error) => {
       setIsLoading(false);
