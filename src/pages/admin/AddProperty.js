@@ -26,6 +26,8 @@ const AddProperty = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const token = sessionStorage.getItem('userToken')
   const route = sessionStorage.getItem('route')
+  const suggestionRef = React.useRef(null);
+  const inputRef = React.useRef(null);
 
   const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoicGF4ZGF2IiwiYSI6ImNtaGdmbDhwbzBnbmMybXM3ZW84ZThsbDcifQ.EHc4njJ4J2q3-sNv9taX_A";
 
@@ -55,6 +57,23 @@ const AddProperty = () => {
     }
   }, [uri]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        suggestionRef.current &&
+        !suggestionRef.current.contains(event.target) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target)
+      ) {
+        setSuggestions([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -79,25 +98,26 @@ const AddProperty = () => {
         coordinates: selectedCoordinates        
       };
       if (images.length >= 4) {
-        setIsLoading(true);
-        console.log("Submitted Property:", finalData);
-        axios.post(`${uri}property/create`, finalData, {
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        })
-          .then((res) => {
-            setIsLoading(false);
-            // resetForm();
-            // setBedrooms('Any');
-            // setBathrooms('Any');
-            // setFeatures([]);
-            route == '/admin/dashboard' ? navigate('/admin/property-manager') : navigate('/agent/dashboard')
-            setSuccessMessage("Property submitted successfully!");
+        if (!selectedCoordinates) {
+          setErrorMessage('Please select a nearest address from the suggestions');
+          return;
+        } else {
+          setIsLoading(true);
+          console.log("Submitted Property:", finalData);
+          axios.post(`${uri}property/create`, finalData, {
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
           })
-          .catch((err) => {
-            setIsLoading(false);
-            setErrorMessage("Failed to submit property. Kindly try again");
-            console.error("Error submitting property:", err);
-          });
+            .then((res) => {
+              setIsLoading(false);            
+              route == '/admin/dashboard' ? navigate('/admin/property-manager') : navigate('/agent/dashboard')
+              setSuccessMessage("Property submitted successfully!");
+            })
+            .catch((err) => {
+              setIsLoading(false);
+              setErrorMessage("Failed to submit property. Kindly try again");
+              console.error("Error submitting property:", err);
+            });
+        }
       } else {
         setErrorMessage('You need to upload at least 4 images');
       }                
@@ -186,7 +206,7 @@ const AddProperty = () => {
   }
 
   const handleSuggestionClick = (place) => {
-    formik.setFieldValue("address", place.place_name);
+    // formik.setFieldValue("address", place.place_name);
     setSelectedCoordinates({
       latitude: place.geometry.coordinates[1],
       longitude: place.geometry.coordinates[0],
@@ -232,7 +252,8 @@ const AddProperty = () => {
             <input
                 type="text"
                 name="address"  
-                value={formik.values.address}              
+                value={formik.values.address}   
+                ref={inputRef}           
                 placeholder="Start typing address..."
                 className={`form-control ${
                 formik.touched.address && formik.errors.address ? "is-invalid" : ""
@@ -244,25 +265,29 @@ const AddProperty = () => {
 
           {/* Suggestions Dropdown */}
           {suggestions.length > 0 && (
-            <ul
-              className="list-group position-absolute w-100 shadow-sm"
-              style={{
-                zIndex: 1050,
-                maxHeight: "200px",
-                overflowY: "auto",
-              }}
-            >
-              {suggestions.map((place) => (
-                <li
-                  key={place.id}
-                  className="list-group-item list-group-item-action"
-                  onClick={() => handleSuggestionClick(place)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {place.place_name}
-                </li>
-              ))}
-            </ul>
+            <div ref={suggestionRef}>
+              <p className="small text-muted my-0 text-danger fw-semibold">Select the nearest location</p>
+
+              <ul
+                className="list-group position-absolute w-100 shadow-sm"
+                style={{
+                  zIndex: 1050,
+                  maxHeight: "200px",
+                  overflowY: "auto",
+                }}
+              >
+                {suggestions.map((place) => (
+                  <li
+                    key={place.id}
+                    className="list-group-item list-group-item-action"
+                    onClick={() => handleSuggestionClick(place)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {place.place_name}
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
 
           {loading && (
