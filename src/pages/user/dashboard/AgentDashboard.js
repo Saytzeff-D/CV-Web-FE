@@ -102,7 +102,7 @@ const AgentDashboard = () => {
                         <ListedProperties properties={properties} />
                         )}
                         {activeTab === "withdrawal" && (
-                        <Withdrawal />
+                        <Withdrawal balance={balance} />
                         )}
                     </div>                    
                 </div>
