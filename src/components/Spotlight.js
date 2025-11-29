@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import Spotlight1 from "../assets/spotlight-3.png";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Alert, Skeleton } from "@mui/material";
