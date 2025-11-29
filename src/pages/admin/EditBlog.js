@@ -90,7 +90,7 @@ const EditBlog = () => {
 
   const editor = useEditor({
     extensions: [StarterKit.configure({link: false, underline: false}), Link, Image, Underline],
-    content: "",
+    content: edit ? JSON.parse(edit).content : "",
     onUpdate: ({ editor }) => {
       formik.setFieldValue("content", editor.getHTML());
     },
@@ -378,7 +378,7 @@ const EditBlog = () => {
             type="submit"
             className="btn btn-success px-5 mt-3"
           >
-            {isLoading ? "Adding Blog..." : "Add Blog"}
+            {isLoading ? "Editing Blog..." : "Edit Blog"}
           </button>
         </form>
 

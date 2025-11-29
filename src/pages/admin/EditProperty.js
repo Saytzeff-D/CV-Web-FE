@@ -6,6 +6,11 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { addPropertySchema } from "../../schemas";
 import { Snackbar, Button, IconButton } from "@mui/material";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
+import Underline from "@tiptap/extension-underline";
 
 const EditProperty = () => {
   const [featuredOptions, setFeaturedOptions] = useState([]);
@@ -26,6 +31,8 @@ const EditProperty = () => {
   const token = sessionStorage.getItem('userToken')
   const route = sessionStorage.getItem('route')
   const edit = sessionStorage.getItem('editProperty')
+  const suggestionRef = React.useRef(null);
+  const inputRef = React.useRef(null);
 
   useEffect(() => {
     setBathrooms(edit ? JSON.parse(edit).bathrooms : 'Any');
@@ -37,6 +44,21 @@ const EditProperty = () => {
 
   const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoicGF4ZGF2IiwiYSI6ImNtaGdmbDhwbzBnbmMybXM3ZW84ZThsbDcifQ.EHc4njJ4J2q3-sNv9taX_A";
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        suggestionRef.current &&
+        !suggestionRef.current.contains(event.target) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target)
+      ) {
+        setSuggestions([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const handleFeatureToggle = (feature) => {
     setFeatures((prev) =>
       prev.includes(feature)
@@ -72,8 +94,7 @@ const EditProperty = () => {
       category: edit ? JSON.parse(edit).category : "",
       total_price: edit ? JSON.parse(edit).total_price : "",
       type: edit ? JSON.parse(edit).type : "",
-      inspection_fee: edit ? JSON.parse(edit).inspection_fee : "",
-      about: edit ? JSON.parse(edit).about : "",
+      inspection_fee: edit ? JSON.parse(edit).inspection_fee : "",      
       land_size: edit ? JSON.parse(edit).land_size : ""      
     },
     validationSchema: addPropertySchema,
@@ -93,11 +114,7 @@ const EditProperty = () => {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       })
         .then((res) => {
-          setIsLoading(false);
-          // resetForm();
-          // setBedrooms('Any');
-          // setBathrooms('Any');
-          // setFeatures([]);
+          setIsLoading(false);          
           route == '/admin/dashboard' ? navigate('/admin/property-manager') : navigate('/agent/dashboard')
           setSuccessMessage("Property submitted successfully!");
         })
@@ -106,6 +123,14 @@ const EditProperty = () => {
           setErrorMessage("Failed to submit property. Kindly try again");
           console.error("Error submitting property:", err);
         });    
+    },
+  });
+
+  const editor = useEditor({
+    extensions: [StarterKit.configure({link: false, underline: false}), Link, Image, Underline],
+    content: edit ? JSON.parse(edit).about : "",
+    onUpdate: ({ editor }) => {
+      formik.setFieldValue("about", editor.getHTML());
     },
   });
 
@@ -165,7 +190,7 @@ const EditProperty = () => {
   );
 
   const handleSuggestionClick = (place) => {
-    formik.setFieldValue("address", place.place_name);
+    // formik.setFieldValue("address", place.place_name);
     setSelectedCoordinates({
       latitude: place.geometry.coordinates[1],
       longitude: place.geometry.coordinates[0],
@@ -221,35 +246,42 @@ const EditProperty = () => {
                 name="address"  
                 value={formik.values.address}              
                 placeholder="Start typing address..."
-                className={`form-control ${
-                formik.touched.address && formik.errors.address ? "is-invalid" : ""
-              }`}
+                className={
+                  `form-control ${
+                    formik.touched.address && formik.errors.address ? "is-invalid" : ""
+                  }`
+                }
                 onBlur={formik.handleBlur}
                 onChange={handleAddressChange}
                 autoComplete="off"
+                ref={inputRef}
             />
 
           {/* Suggestions Dropdown */}
           {suggestions.length > 0 && (
-            <ul
-              className="list-group position-absolute w-100 shadow-sm"
-              style={{
-                zIndex: 1050,
-                maxHeight: "200px",
-                overflowY: "auto",
-              }}
-            >
-              {suggestions.map((place) => (
-                <li
-                  key={place.id}
-                  className="list-group-item list-group-item-action"
-                  onClick={() => handleSuggestionClick(place)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {place.place_name}
-                </li>
-              ))}
-            </ul>
+            <div ref={suggestionRef}>
+              <p className="small text-muted my-0 text-danger fw-semibold">Select the nearest location</p>
+
+              <ul
+                className="list-group position-absolute w-100 shadow-sm"
+                style={{
+                  zIndex: 1050,
+                  maxHeight: "200px",
+                  overflowY: "auto",
+                }}
+              >
+                {suggestions.map((place) => (
+                  <li
+                    key={place.id}
+                    className="list-group-item list-group-item-action"
+                    onClick={() => handleSuggestionClick(place)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {place.place_name}
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
 
           {loading && (
@@ -313,7 +345,7 @@ const EditProperty = () => {
             </select>
           </div>
           <div className="col-md-6">
-            <label className="form-label fw-semibold">Property Inspection Fees</label>
+            <label className="form-label fw-semibold">{formik.values.category == 'shortlet' ? 'Caution' : 'Inspection'} Fees</label>
             <input
               type="number"
               name="inspection_fee"            
@@ -441,20 +473,133 @@ const EditProperty = () => {
             </div>
           }
 
-        {/* Description */}
-        <div className="mb-3">
-          <label className="form-label fw-semibold">Write About this Property?</label>
-          <textarea
-            name="about"            
-            rows="3"
-            placeholder="Describe the property"
-            className={`form-control ${
-                formik.touched.about && formik.errors.about ? "is-invalid" : ""
-              }`}
-            value={formik.values.about}
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-          />
+        {/* Description */}       
+        <div className="mb-4">
+          <label className="form-label fw-semibold">Write about this Property</label>
+
+          <div className="border rounded bg-white">
+            <div className="border-bottom p-2 d-flex gap-2 flex-wrap">
+              {/* Bold */}
+              <button
+                type="button"
+                className={`btn btn-sm ${
+                  editor?.isActive("bold") ? "btn-dark" : "btn-outline-secondary"
+                }`}
+                onClick={() => editor.chain().focus().toggleBold().run()}
+              >
+                <b>B</b>
+              </button>
+
+              {/* Italic */}
+              <button
+                type="button"
+                className={`btn btn-sm ${
+                  editor?.isActive("italic") ? "btn-dark" : "btn-outline-secondary"
+                }`}
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+              >
+                <i>I</i>
+              </button>
+
+              {/* Underline */}
+              <button
+                type="button"
+                className={`btn btn-sm ${
+                  editor?.isActive("underline") ? "btn-dark" : "btn-outline-secondary"
+                }`}
+                onClick={() => editor.chain().focus().toggleUnderline().run()}
+              >
+                <u>U</u>
+              </button>
+
+              {/* Headings */}
+              {[1, 2, 3].map((level) => (
+                <button
+                  key={level}
+                  type="button"
+                  className={`btn btn-sm ${
+                    editor?.isActive("heading", { level }) ? "btn-dark" : "btn-outline-secondary"
+                  }`}
+                  onClick={() => editor.chain().focus().toggleHeading({ level }).run()}
+                >
+                  H{level}
+                </button>
+              ))}
+
+              {/* Bullet List */}
+              <button
+                type="button"
+                className={`btn btn-sm ${
+                  editor?.isActive("bulletList") ? "btn-dark" : "btn-outline-secondary"
+                }`}
+                onClick={() => editor.chain().focus().toggleBulletList().run()}
+              >
+                • List
+              </button>
+
+              {/* Ordered List */}
+              <button
+                type="button"
+                className={`btn btn-sm ${
+                  editor?.isActive("orderedList") ? "btn-dark" : "btn-outline-secondary"
+                }`}
+                onClick={() => editor.chain().focus().toggleOrderedList().run()}
+              >
+                1.
+              </button>
+
+              {/* Paragraph */}
+              <button
+                type="button"
+                className={`btn btn-sm ${
+                  editor?.isActive("paragraph") ? "btn-dark" : "btn-outline-secondary"
+                }`}
+                onClick={() => editor.chain().focus().setParagraph().run()}
+              >
+                ¶
+              </button>
+
+              {/* Link */}
+              <button
+                type="button"
+                className={`btn btn-sm ${
+                  editor?.isActive("link") ? "btn-dark" : "btn-outline-secondary"
+                }`}
+                onClick={() => {
+                  const url = prompt("Enter URL");
+                  if (url) editor.chain().focus().setLink({ href: url }).run();
+                }}
+              >
+                🔗
+              </button>
+
+              {/* Undo */}
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary"
+                onClick={() => editor.chain().focus().undo().run()}
+              >
+                ↺
+              </button>
+
+              {/* Redo */}
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary"
+                onClick={() => editor.chain().focus().redo().run()}
+              >
+                ↻
+              </button>                
+            </div>
+
+            <EditorContent editor={editor} className="p-3" />
+          </div>
+
+          {formik.touched.about && formik.errors.about && (
+            <div className="invalid-feedback d-block">
+              {formik.errors.about}
+            </div>
+          )}
         </div>
 
 
