@@ -85,8 +85,7 @@ const Spotlight = () => {
                             </div>
                             <div className="col-6 bg-light px-4">
                                 <h6 className="text-muted pb-5 pt-3">{each.name}</h6>
-                                <p className="text-dark pt-5 pb-0 mb-0">
-                                    {each.about.slice(0, 50)}
+                                <p className="text-dark pt-5 pb-0 mb-0" dangerouslySetInnerHTML={{__html: each.about.length > 50 ? each.about.slice(0, 60) + '...' : each.about}}>
                                 </p>  
                                 <p className="text-muted pb-4 fw-semibold">
                                     {each.address}
