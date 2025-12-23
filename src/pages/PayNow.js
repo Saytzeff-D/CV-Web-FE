@@ -89,12 +89,15 @@ const PayNow = () => {
           }
           {
             propertyForPayment && propertyForPayment.purpose !== 'inspection' && propertyForPayment.paid !== 1 
-            ? (
+            && (
               <Alert severity="info" className="mt-3">
                 You are about to pay for the {propertyForPayment.purpose} of <strong>{propertyForPayment.name}</strong>.
               </Alert>
             )
-            :
+          }
+          {
+            propertyForPayment && propertyForPayment.paid === 1 
+            &&
             <Alert severity="warning" className="mt-3">
               This property is not available at the moment.<br /> Contact the agent for more information.
             </Alert>

@@ -42,7 +42,7 @@ const Apartment = (props) => {
     }
     return (
         <div className='d-flex justify-content-center'>
-        <div className='col-md-9'>
+        <div className=''>
             {/* Property List */}
             {
                 isLoading && (
@@ -54,47 +54,52 @@ const Apartment = (props) => {
                     <p className="text-center text-muted">None of the pending apartments have been approved.</p>
                 )
             }
+            <div className="row w-100">
             {
                 properties.map((p) => (
-                <div key={p.id} className="row align-items-center mb-4 w-100">
-                <div className="col-md-5">
-                    <img
-                    src={p.main_photo}
-                    alt={p.name}
-                    className="rounded"
-                    style={{ width: "100%", height: "200px" }}
-                    />
-                </div>
-                <div className="col-md-7">
-                    <div className='d-flex justify-content-between flex-md-row flex-column'>
-                        <div>
-                            <h6 className="fw-semibold my-2">{p.name}</h6>
-                            <p className="text-muted small mb-1">{p.address}</p>
-                            <h6 className="fw-bold mb-2">{Number(p.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h6>
+                    <div className="col-md-6">
+                        <div key={p.id} className="row align-items-center mb-4 w-100">
+                        <div className="col-md-5">
+                            <img
+                            src={p.main_photo}
+                            alt={p.name}
+                            className="rounded"
+                            style={{ width: "100%", height: "200px" }}
+                            />
                         </div>
-                        <div>
-                            <button onClick={()=>editProperty(p)} className="btn btn-outline-success btn-sm me-2 mb-2">
-                                Edit
-                            </button>                            
-                            <button onClick={() => openDelete(p.id)} className="btn btn-outline-danger btn-sm mb-2">
-                                Delete
-                            </button>
+                        <div className="col-md-7">
+                            <div className='d-flex justify-content-between flex-md-row flex-column'>
+                                <div>
+                                    <h6 className="fw-semibold my-2">{p.name}</h6>
+                                    <p className="text-muted small mb-1">{p.address}</p>
+                                    <h6 className="fw-bold mb-2">{Number(p.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h6>
+                                </div>
+                                <div>
+                                    <button onClick={()=>editProperty(p)} className="btn btn-outline-success btn-sm me-2 mb-2">
+                                        Edit
+                                    </button>                            
+                                    <button onClick={() => openDelete(p.id)} className="btn btn-outline-danger btn-sm mb-2">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="d-flex align-items-center text-muted small gap-3">
+                                <span>
+                                    <i className="fas fa-bed"></i> {p.bedrooms} beds
+                                </span>
+                                <span>
+                                    <i className="fas fa-toilet"></i> {p.toilets} toilet
+                                </span>
+                                <span>
+                                    <i className="fas fa-bath"></i> {p.bathrooms} bath
+                                </span>
+                            </div>
+                        </div>
                         </div>
                     </div>
-                    <div className="d-flex align-items-center text-muted small gap-3">
-                        <span>
-                            <i className="fas fa-bed"></i> {p.bedrooms} beds
-                        </span>
-                        <span>
-                            <i className="fas fa-toilet"></i> {p.toilets} toilet
-                        </span>
-                        <span>
-                            <i className="fas fa-bath"></i> {p.bathrooms} bath
-                        </span>
-                    </div>
-                </div>
-                </div>
-            ))}
+                ))
+            }
+            </div>
 
             <Dialog open={open} aria-labelledby="modal-title" aria-describedby="modal-description">
                 <DialogTitle id="modal-title" className="text-success">Delete Property</DialogTitle>

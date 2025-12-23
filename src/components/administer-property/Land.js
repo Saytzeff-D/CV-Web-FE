@@ -37,7 +37,7 @@ const Land = (props) => {
     }
     return (
         <div className='d-flex justify-content-center'>
-        <div className='col-md-9'>
+        <div className=''>
             {/* Property List */}
             {
                 isLoading ? (
@@ -49,8 +49,10 @@ const Land = (props) => {
                     <p className="text-center text-muted">None of the pending land properties have been approved.</p>
                 )
             }
+            <div className="row w-100">
             {
                 properties.map((p) => (
+                <div className="col-md-6">
                 <div key={p.id} className="row align-items-center mb-4 w-100">
                 <div className="col-md-5">
                     <img
@@ -81,7 +83,9 @@ const Land = (props) => {
                     </div>
                 </div>
                 </div>
+                </div>
             ))}
+            </div>
 
             <Dialog open={open} aria-labelledby="modal-title" aria-describedby="modal-description">
                 <DialogTitle id="modal-title" className="text-success">Delete Property</DialogTitle>

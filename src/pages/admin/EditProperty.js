@@ -95,17 +95,19 @@ const EditProperty = () => {
       total_price: edit ? JSON.parse(edit).total_price : "",
       type: edit ? JSON.parse(edit).type : "",
       inspection_fee: edit ? JSON.parse(edit).inspection_fee : "",      
-      land_size: edit ? JSON.parse(edit).land_size : ""      
+      land_size: edit ? JSON.parse(edit).land_size : "",
+      about: edit ? JSON.parse(edit).about : "",      
     },
     validationSchema: addPropertySchema,
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: (values) => {
+      console.log('me')
       const finalData = {
         ...values,
         bedrooms,
         bathrooms,
         toilets,
         parking_space: parking,
-        amenities:features.filter((item, index) => features.indexOf(item) === index && item !== undefined),
+        amenities: features.filter((item, index) => features.indexOf(item) === index && item !== undefined),
         coordinates: selectedCoordinates        
       };
       setIsLoading(true);
@@ -222,7 +224,7 @@ const EditProperty = () => {
       </div>
 
     <div className="d-flex justify-content-center">
-      <form className="col-md-8" onSubmit={formik.handleSubmit}>
+      <div className="col-md-8">
         {/* Row 1 */}
         <div className="row mb-3">
           <div className="col-md-6">
@@ -630,10 +632,10 @@ const EditProperty = () => {
           </div>
         </div>        
 
-        <button disabled={isLoading} onClick={formik.handleSubmit} type="button" className="btn btn-success px-5">
+        <button disabled={isLoading} onClick={formik.handleSubmit} type="submit" className="btn btn-success px-5">
           {isLoading ? "Editting Property..." : "Edit Property"}
         </button>
-      </form>
+      </div>
       <Snackbar
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       open={!!successMessage}
