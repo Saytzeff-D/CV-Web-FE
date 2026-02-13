@@ -1,5 +1,5 @@
 const initState = {
-    uri: 'https://api.cvproperties.co/api/'
+    uri: 'https://cv-web-be.onrender.com/api/'
 }
 
 const UriReducer = (state=initState, action)=>{
