@@ -34,6 +34,9 @@ import TransactionStatus from './pages/TransactionStatus';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import RefundPolicy from './pages/RefundPolicy';
 
 function App() {
   const uri = useSelector(state=>state.UriReducer.uri)
@@ -81,6 +84,9 @@ function App() {
         <Route path='/pay-now' element={<PayNow />} />
         <Route path='/payment/verify/' element={<TransactionStatus />} />
         <Route path='/dashboard' element={<GoogleAuth />} />
+        <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+        <Route path='/terms-of-service' element={<TermsOfService />} />
+        <Route path='/refund-policy' element={<RefundPolicy />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
       </BrowserRouter>
