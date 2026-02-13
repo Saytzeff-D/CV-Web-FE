@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 import Newsletter from "../../../components/Newsletter";
@@ -10,6 +10,9 @@ import WhatClientsSay from "../../../components/WhatClientSay";
 import ImageOrbit from "../../../components/ImageOrbit";
 
 const Home = () => {
+    useEffect(() => {
+        document.title = "CV Properties - Home";
+      }, []);
     return (
         <div>
             <Navbar />            

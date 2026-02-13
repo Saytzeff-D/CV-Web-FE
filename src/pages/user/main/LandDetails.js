@@ -26,6 +26,7 @@ const LandDetails = () => {
   const [showGallery, setShowGallery] = useState(false);
 
   useEffect(()=>{
+    document.title = "CV Properties - Land Details";
     fetchSavedProperties();
     axios.get(`${uri}property/${decode(id)}`)
       .then((response) => {        

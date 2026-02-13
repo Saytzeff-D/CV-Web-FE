@@ -1,7 +1,11 @@
+import { useEffect } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 
 const TermsOfService = () => {
+  useEffect(() => {
+      document.title = "CV Properties - Terms of Service";
+    }, []);
   return (
     <>
     <Navbar />
@@ -12,7 +16,7 @@ const TermsOfService = () => {
           <h1 className="fw-bold text-center mb-3">Terms of Service</h1>
 
           <div className="text-muted mb-4">            
-            <div><strong>Last Updated:</strong> February 8, 2026</div>
+            <div><strong>Last Updated:</strong> {new Date('2026-02-08').toLocaleDateString()}</div>
           </div>
 
           <p>

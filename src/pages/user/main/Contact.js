@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 import { useSelector } from "react-redux";
@@ -8,6 +8,9 @@ import axios from "axios";
 import { Alert, Snackbar } from "@mui/material";
 
 const Contact = () => {
+    useEffect(() => {
+        document.title = "CV Properties - Contact Us";
+    }, []);
     const uri = useSelector(state=>state.UriReducer.uri)
     const [isLoading, setIsLoading] = React.useState(false);
     const [successMessage, setSuccessMessage] = React.useState('');

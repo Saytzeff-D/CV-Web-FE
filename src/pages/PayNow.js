@@ -14,6 +14,7 @@ const PayNow = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
+    document.title = "CV Properties - Pay Now";
     if (!sessionStorage.getItem('propertyForPayment')) {
       navigate(-1);
       return;

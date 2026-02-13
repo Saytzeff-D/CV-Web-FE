@@ -15,7 +15,8 @@ const Blog = () => {
   const [isFetching, setIsFetching] = useState(true)
   const [error, setError] = useState('')
 
-  useEffect(() => {    
+  useEffect(() => {  
+    document.title = "CV Properties - Blog";  
     axios.get(`${uri}blog/all`)
       .then(response => {
         setIsFetching(false)

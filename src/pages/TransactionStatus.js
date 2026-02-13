@@ -14,6 +14,7 @@ const TransactionStatus = () => {
     const [tryAgain, setTryAgain] = React.useState(false);
 
     useEffect(()=>{
+        document.title = "CV Properties - Transaction Status";
         setOpenDialog(true);
         const queryParams = new URLSearchParams(window.location.search);
         const ref = queryParams.get('trxref');

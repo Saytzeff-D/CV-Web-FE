@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const RefundPolicy = () => {
+  useEffect(() => {
+    document.title = "CV Properties - Refund Policy";
+  }, []);
   return (
     <div className="legal-page">
     <Navbar />

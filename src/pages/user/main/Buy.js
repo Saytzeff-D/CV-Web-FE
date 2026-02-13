@@ -21,7 +21,8 @@ const Buy = () => {
     const [savedProperties, setSavedProperties] = useState([])
     const rates = useSelector(state=>state.CurrencyReducer.rates);
 
-    useEffect(()=>{        
+    useEffect(()=>{    
+        document.title = `CV Properties - Buy ${type === 'all' ? 'Properties' : type.charAt(0).toUpperCase() + type.slice(1)}`;    
         fetchProperties();
         fetchSavedProperties();
     }, [uri, type])

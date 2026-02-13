@@ -1,7 +1,11 @@
+import { useEffect } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 
 const PrivacyPolicy = () => {
+  useEffect(() => {
+    document.title = "CV Properties - Privacy Policy";
+  }, []);
   return (
     <>
     <Navbar />

@@ -22,6 +22,7 @@ const Shortlet = () => {
     const navigate = useNavigate();
 
     useEffect(()=>{
+        document.title = `CV Properties - Shortlet ${type === 'all' ? 'Properties' : type.charAt(0).toUpperCase() + type.slice(1)}`;
         fetchProperties()
         fetchSavedProperties();
     }, [uri, type])

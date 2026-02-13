@@ -22,6 +22,7 @@ const Rent = () => {
     const navigate = useNavigate();
 
     useEffect(()=>{
+        document.title = `CV Properties - Rent ${type === 'all' ? 'Properties' : type.charAt(0).toUpperCase() + type.slice(1)}`;
         fetchProperties()
         fetchSavedProperties();
     }, [uri, type])

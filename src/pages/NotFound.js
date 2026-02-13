@@ -1,7 +1,11 @@
+import { useEffect } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 
 const NotFound = () => {
+    useEffect(() => {
+        document.title = "CV Properties - Page Not Found";
+      }, []);
     return (
         <div>
             <Navbar />
