@@ -20,7 +20,7 @@ const Footer = ()=>{
                     <div className="col-md-6 mb-4">
                         <div className="col-md-6">
                             <p className="small">
-                                CV property incorporates proven, professional state of-the-art techniques
+                                CV property incorporates proven, professional state-of-the-art techniques to ensure the best real estate experience.
                             </p>
                             <hr />
                             <div className="d-flex gap-4">
@@ -34,11 +34,11 @@ const Footer = ()=>{
                     <div className="col-md-6 mb-4">
                         <div className="row pb-5">
                             <div className="col-md-4 col-6">
-                                <p className="fw-bold">Useful Links</p>
+                                <p className="fw-bold">Special Web Links</p>
                                 <ul className="list-unstyled">
-                                    <li><Link to="/about" className="text-muted text-decoration-none">About</Link></li>
-                                    <li><Link to="/buy/all" className="text-muted text-decoration-none">Properties</Link></li>
-                                    <li><Link to="/blog" className="text-muted text-decoration-none">Blog</Link></li>
+                                    <li><Link to="/privacy-policy" className="text-muted text-decoration-none">Privacy Policy</Link></li>
+                                    <li><Link to="/terms-of-service" className="text-muted text-decoration-none">Terms of Service</Link></li>
+                                    <li><Link to="/refund-policy" className="text-muted text-decoration-none">Refund Policy</Link></li>
                                     <li><Link to="/contact" className="text-muted text-decoration-none">Contact</Link></li>
                                 </ul>
                             </div>

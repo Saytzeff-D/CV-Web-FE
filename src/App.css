@@ -479,3 +479,103 @@ ul .booking-features::before {
   margin-block-end: 0 !important;
   line-height: 1.2 !important;
 }
+/* New Beginning */
+.mobile-app-section {
+    background: #071226;
+    border-radius: 32px;
+    overflow: hidden; /* Important */
+    min-height: 520px;
+}
+
+.image-wrapper {
+    height: 100%;
+    border-radius: 55px 55px 55px 55px;
+    overflow: hidden;
+}
+@media (max-width: 991px) {
+    .image-wrapper {
+        border-radius: 10px 10px 10px 10px;
+    }
+}
+.mobile-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+@media (max-width: 576px) {
+  .btn-store {
+    width: 100%;
+  }
+}
+.qr-box {
+  width: 56px;
+  height: 56px;
+  background: white;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #071226;
+}
+
+@media (max-width: 991px) {
+  .mobile-app-section {
+    text-align: center;
+  }
+
+  .mobile-preview {
+    margin-top: 2rem;
+  }
+
+  .qr-box {
+    margin: auto;
+  }
+}
+.advert-card {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.05);
+  overflow: hidden;
+}
+
+.feature-pill {
+  background: #f5f5f5;
+  border-radius: 30px;
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+.testimonial-box {
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 24px;
+  background: #fafafa;
+}
+
+.expert-card {
+  position: absolute;
+  width: 320px;
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.12);
+}
+
+.search-card {
+  position: absolute;
+  top: 10%;
+  left: -10px;
+  background: white;
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+@media(max-width:991px) {
+  .advert-card h1 {
+    font-size: 2rem;
+  }
+}

@@ -1,4 +1,33 @@
 {
+    "experts": [
+        {
+            "name": "David Miller",
+            "role": "Master Electrician",
+            "rating": 4.9,
+            "price": "$85/hr",
+            "image": "https://randomuser.me/api/portraits/men/32.jpg",
+            "top": "20%",
+            "left": "15%"
+        },
+        {
+            "name": "Elena Rodriguez",
+            "role": "Senior UI/UX Designer",
+            "rating": 5.0,
+            "price": "$120/hr",
+            "image": "https://randomuser.me/api/portraits/women/44.jpg",
+            "top": "45%",
+            "left": "12%"
+        },
+        {
+            "name": "Marcus Thorne",
+            "role": "Home Renovation Expert",
+            "rating": 4.8,
+            "price": "$95/hr",
+            "image": "https://randomuser.me/api/portraits/men/55.jpg",
+            "top": "65%",
+            "left": "25%"
+        }
+    ],
     "testimonials": [
         {
             "name": "Maya K.",            

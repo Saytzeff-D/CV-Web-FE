@@ -8,6 +8,8 @@ import Spotlight from "../../../components/Spotlight";
 import ImageSlider from "../../../components/ImageSlider";
 import WhatClientsSay from "../../../components/WhatClientSay";
 import ImageOrbit from "../../../components/ImageOrbit";
+import ExperienceMore from "../../../components/ExperienceMore";
+import GrowYourBusiness from "../../../components/GrowYourBusiness";
 
 const Home = () => {
     useEffect(() => {
@@ -17,10 +19,11 @@ const Home = () => {
         <div>
             <Navbar />            
             <Header />
-            <PropertiesForYou />
-            <ImageSlider />
-            <ImageOrbit />
+            <PropertiesForYou />                    
             <Spotlight />
+            <ImageSlider />
+            <GrowYourBusiness />
+            <ExperienceMore />
             <WhatClientsSay />
             <Newsletter />
             <Footer />
