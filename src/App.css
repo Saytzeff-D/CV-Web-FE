@@ -579,3 +579,266 @@ ul .booking-features::before {
     font-size: 2rem;
   }
 }
+/* ServiceProviders */
+.property-card {
+  background: linear-gradient(90deg, #014b14, #0b6321);
+  border-radius: 20px;
+}
+
+.verification-card {
+  border: 2px dashed #198754;
+  border-radius: 20px;
+}
+
+.verify-icon {
+  width: 70px;
+  height: 70px;
+  background: #0d6b1c;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+}
+
+.providers-wrapper {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+}
+
+.providers-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.provider-card {
+  min-width: 250px;
+  background: #f8f9fa;
+  border-radius: 18px;
+  padding: 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.provider-img {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.provider-image-wrapper {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.verified-badge {
+    position: absolute;
+    bottom: 2px;
+    right: -2px;
+
+    width: 24px;
+    height: 24px;
+
+    background: #198754;
+    color: white;
+
+    border: 2px solid white;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 11px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .property-card {
+    text-align: center;
+    padding: 2rem !important;
+  }
+
+  .property-card h2 {
+    font-size: 1.8rem;
+  }
+
+  .verification-card {
+    padding: 2rem !important;
+  }
+
+  .provider-card {
+    min-width: 220px;
+  }
+}
+
+@media (max-width: 576px) {
+  .property-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .provider-card {
+    min-width: 200px;
+  }
+}
+/* Featured Properties */
+.feature-box {
+  background: #f6faf7;
+  border-radius: 18px;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  height: 100%;
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  background: #0b6b2c;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.roommate-card {
+  background: #f8faf8;
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .card-img-top {
+    height: 200px !important;
+  }
+
+  .feature-box {
+    text-align: center;
+    flex-direction: column;
+  }
+
+  .roommate-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .card-body h4 {
+    font-size: 1.3rem;
+  }
+
+  .card-body h5 {
+    font-size: 1rem;
+  }
+
+  .roommate-card {
+    border-radius: 15px;
+    padding: 1rem;
+  }
+
+  .feature-box {
+    padding: 1rem;
+  }
+}
+/* TopCategories */
+.search-box {
+  background: #fff;
+}
+
+.search-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  border-radius: 18px;
+  background: #f8f9fa;
+}
+
+.search-input i {
+  color: #0d6b2f;
+}
+
+.stat-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+}
+
+.filter-card {
+  background: #fff;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+
+.neighbourhood-card {
+  background: #111827;
+  color: white;
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.property-card {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,.05);
+  height: 100%;
+}
+
+.property-image {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+
+@media (max-width: 991px) {
+
+  .search-box {
+    padding: 20px;
+  }
+
+  .property-image {
+    height: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .search-input {
+    padding: 12px;
+  }
+
+  .property-image {
+    height: 200px;
+  }
+
+  .property-card h4 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .property-image {
+    height: 180px;
+  }
+
+  .search-box,
+  .filter-card,
+  .property-card {
+    border-radius: 18px;
+  }
+
+  .property-card .d-flex {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

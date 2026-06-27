@@ -10,6 +10,8 @@ import WhatClientsSay from "../../../components/WhatClientSay";
 import ImageOrbit from "../../../components/ImageOrbit";
 import ExperienceMore from "../../../components/ExperienceMore";
 import GrowYourBusiness from "../../../components/GrowYourBusiness";
+import ServiceProvidersSection from "../../../components/ServiceProviders";
+import TopCategories from "../../../components/TopCategories";
 
 const Home = () => {
     useEffect(() => {
@@ -18,9 +20,10 @@ const Home = () => {
     return (
         <div>
             <Navbar />            
-            <Header />
+            <TopCategories />
             <PropertiesForYou />                    
             <Spotlight />
+            <ServiceProvidersSection />
             <ImageSlider />
             <GrowYourBusiness />
             <ExperienceMore />

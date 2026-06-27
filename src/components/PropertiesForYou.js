@@ -64,7 +64,8 @@ const PropertiesForYou = () => {
    useEffect(()=>{
     axios.get(`${uri}property/for-you`)
       .then(response => {
-        setProperties(response.data.data);        
+        setProperties([...response.data.data.sale, ...response.data.data.rent, ...response.data.data.shortlet]);
+        console.log([response.data.data.sale, response.data.data.rent, response.data.data.shortlet])
         setIsLoading(false);
       })
       .catch(error => {
@@ -74,312 +75,161 @@ const PropertiesForYou = () => {
    }, [])
 
   return (
-    <div className="container my-5">
-      <h2 className="my-4">Properties For You</h2>
-      <p className="text-muted mb-4">
-        Tailored Property Listings to Match Your Lifestyle
-      </p>
-      
-      <div className="">
-        <ul className="nav nav-tabs mb-3">
-          <li className="nav-item">
-            <button className="nav-link active border-0 text-dark" data-bs-toggle="tab" data-bs-target="#buy">
-              Buy
-            </button>
-          </li>
-          <li className="nav-item">
-            <button className="nav-link border-0 text-dark" data-bs-toggle="tab" data-bs-target="#rent">
-              Rent
-            </button>
-          </li>
-          <li className="nav-item">
-            <button className="nav-link border-0 text-dark" data-bs-toggle="tab" data-bs-target="#shortlet">
-              Shortlet
-            </button>
-          </li>
-        </ul>
+    <section className="container py-5">
+      {/* Heading */}
+      <div className="mb-4 text-center text-md-start">
+        <h2 className="fw-bold">Featured Properties</h2>
+        <p className="text-muted">
+          Explore our most premium listings handpicked for you
+        </p>
+      </div>
 
-        <div className="tab-content">
-          <div className="tab-pane fade show active" id="buy">
-            <div className="d-flex justify-content-end d-md-none">
-              <button
-                className="btn btn-light btn-sm me-2 rounded-circle"
-                onClick={() => scroll("left", containerRef1)}
-                style={{width: '35px', height: '35px'}}
-              >
-                <i className="fa-solid fa-chevron-left"></i>
-              </button>
-              <button
-                className="btn btn-light btn-sm rounded-circle"
-                style={{width: '35px', height: '35px'}}
-                onClick={() => scroll("right", containerRef1)}
-              >
-                <i className="fa-solid fa-chevron-right"></i>
-              </button>
-            </div>
-            <div ref={containerRef1} className="d-flex flex-row flex-nowrap overflow-auto my-5" style={{ scrollBehavior: "smooth" }}>
-              {
-                isLoading ? (
-                  <div className="row w-100">
-                      {
-                        [1,2,3,4].map((_, index)=>(
-                          <div className="col-md-3" key={index}>
-                            <Skeleton variant="rectangular" width={260} height={180} />
-                            <Box sx={{ pt: 0.5 }}>
-                              <Skeleton />
-                              <Skeleton width="60%" />
-                            </Box>
-                          </div>
-                        ))
-                      }
-                  </div>
-                )
-                : 
-                properties.sale && properties.sale.length > 0 ?
-                properties.sale.map((each, i)=>(
-                  <div className="me-3" key={i}>
-                    <div className="card border-0" style={{ minWidth: "16rem" }}>
-                      <div className="position-relative overflow-hidden rounded">                
-                        <img src={each.main_photo} className="card-img-top" alt="Property" height={'200px'} />
-                        
-                        <button onClick={() => handleSaveProperty(each.id)} type="button"
-                            className="btn btn-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center text-white bg-transparent" style={{zIndex: 2}}>
-                            <i className={savedProperties.includes(each.id) ? "fa fa-heart text-success" : "fa fa-heart-o"}></i>
-                        </button>
+      {/* Property Cards */}
+      <div className="row g-4">
+        {properties.map((property) => (
+          <div key={property.id} className="col-12 col-md-6 col-lg-4">
+            <div className="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+              <div className="position-relative">
+                <img
+                  src={property.main_photo}
+                  alt={property.name}
+                  className="card-img-top"
+                  style={{ height: "220px", objectFit: "cover" }}
+                />
 
-                        <Link to={each.type === 'land' ? `/land/sale/${encode(each.id)}` : `/apartment/sale/${encode(each.id)}`}
-                            className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
-                            See More
-                        </Link>
-                        </div>
+                <span className="badge bg-light text-success position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill">
+                  Verified
+                </span>
 
-                      <div className="card-body px-0 pt-3">
-                          <h6 className="card-title mb-1">{each.name}</h6>
-                          <h6 className="fw-bold mb-2">{Number(each.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h6>
-                          {
-                              each.type == 'land'
-                              ?
-                              <div className="d-flex flex-wrap text-muted small">
-                                  <div>{Number(each.land_size).toLocaleString()} Sqm</div>                        
-                              </div>
-                              :
-                              <div className="d-flex flex-wrap text-muted small">
-                                  <div className="me-3"><i className="fa fa-regular fa-bed"></i> {each.bedrooms} beds</div>
-                                  <div className="me-3"><i className="fa fa-regular fa-toilet"></i> {each.toilets} toilets</div>
-                                  <div className="me-3"><i className="fa fa-regular fa-bath"></i> {each.bathrooms} baths</div>
-                              </div>
-                          }
-                          <p className="text-muted small mt-2">{each.address}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))
-                 :
-                 (
-                  <Alert severity="info" className="my-4">
-                    No properties available...
-                  </Alert>
-                )              
-              }
+                <span className="position-absolute top-0 end-0 m-3 text-warning fw-bold">
+                  ☆ {property.rating}
+                </span>
+              </div>
+
+              <div className="card-body">
+                <h4 className="fw-bold">{property.total_price}</h4>
+
+                <h5 className="mt-3">{property.name}</h5>
+
+                <p className="text-muted small">
+                  <i className="fa fa-map-marker-alt me-2"></i>
+                  {property.address}
+                </p>
+
+                <hr />
+
+                <div className="d-flex justify-content-between text-muted small flex-wrap">
+                  <span>
+                    <i className="fa fa-bed me-1"></i>
+                    {property.bedrooms} Beds
+                  </span>
+
+                  <span>
+                    <i className="fa fa-bath me-1"></i>
+                    {property.bathrooms} Baths
+                  </span>
+
+                  <span>
+                    <i className="fa fa-expand me-1"></i>
+                    {property.land_size} sqft
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
+        ))}
+      </div>
 
-          <div className="tab-pane fade" id="rent">
-            <div className="d-flex justify-content-end d-md-none">
-              <button
-                className="btn btn-light btn-sm me-2 rounded-circle"
-                onClick={() => scroll("left", containerRef2)}
-                style={{width: '35px', height: '35px'}}
-              >
-                <i className="fa-solid fa-chevron-left"></i>
-              </button>
-              <button
-                className="btn btn-light btn-sm rounded-circle"
-                style={{width: '35px', height: '35px'}}
-                onClick={() => scroll("right", containerRef2)}
-              >
-                <i className="fa-solid fa-chevron-right"></i>
-              </button>
+      {/* Features */}
+      <div className="row g-3 mt-5">
+        <div className="col-12 col-md-4">
+          <div className="feature-box">
+            <div className="feature-icon">
+              <i className="fa fa-shield"></i>
             </div>
-            <div ref={containerRef2} className="d-flex flex-row flex-nowrap overflow-auto my-5" style={{ scrollBehavior: "smooth" }}>
-              {
-                isLoading ? (
-                  <div className="row w-100">
-                      {
-                        [1,2,3,4].map((_, index)=>(
-                          <div className="col-md-3" key={index}>
-                            <Skeleton variant="rectangular" width={260} height={180} />
-                            <Box sx={{ pt: 0.5 }}>
-                              <Skeleton />
-                              <Skeleton width="60%" />
-                            </Box>
-                          </div>
-                        ))
-                      }
-                  </div>
-                )
-                : 
-                properties.rent && properties.rent.length > 0 ?
-                properties.rent.map((each, i)=>(
-                  <div className="me-3" key={i}>
-                    <div className="card border-0" style={{ minWidth: "16rem" }}>
-                      <div className="position-relative overflow-hidden rounded">                
-                        <img src={each.main_photo} className="card-img-top" alt="Property" height={'200px'} />
-                        
-                        <button onClick={() => handleSaveProperty(each.id)} type="button"
-                            className="btn btn-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center text-white bg-transparent" style={{zIndex: 2}}>
-                            <i className={savedProperties.includes(each.id) ? "fa fa-heart text-success" : "fa fa-heart-o"}></i>
-                        </button>
 
-                        <Link to={each.type === 'land' ? `/land/rent/${encode(each.id)}` : `/apartment/rent/${encode(each.id)}`}
-                            className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
-                            See More
-                        </Link>
-                        </div>
-
-                      <div className="card-body px-0 pt-3">
-                          <h6 className="card-title mb-1">{each.name}</h6>
-                          <h6 className="fw-bold mb-2">{Number(each.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h6>
-                          {
-                              each.type == 'land'
-                              ?
-                              <div className="d-flex flex-wrap text-muted small">
-                                  <div>{Number(each.land_size).toLocaleString()} Sqm</div>                        
-                              </div>
-                              :
-                              <div className="d-flex flex-wrap text-muted small">
-                                  <div className="me-3"><i className="fa fa-regular fa-bed"></i> {each.bedrooms} beds</div>
-                                  <div className="me-3"><i className="fa fa-regular fa-toilet"></i> {each.toilets} toilets</div>
-                                  <div className="me-3"><i className="fa fa-regular fa-bath"></i> {each.bathrooms} baths</div>
-                              </div>
-                          }
-                          <p className="text-muted small mt-2">{each.address}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))
-                 :
-                 (
-                  <Alert severity="info" className="my-4">
-                    No properties available...
-                  </Alert>
-                )              
-              }              
+            <div>
+              <h6 className="fw-bold">Verified Listings</h6>
+              <small className="text-muted">
+                Every property is hand-verified by our team.
+              </small>
             </div>
           </div>
+        </div>
 
-          <div className="tab-pane fade" id="shortlet">
-            <div className="d-flex justify-content-end d-md-none">
-              <button
-                className="btn btn-light btn-sm me-2 rounded-circle"
-                onClick={() => scroll("left", containerRef3)}
-                style={{width: '35px', height: '35px'}}
-              >
-                <i className="fa-solid fa-chevron-left"></i>
-              </button>
-              <button
-                className="btn btn-light btn-sm rounded-circle"
-                style={{width: '35px', height: '35px'}}
-                onClick={() => scroll("right", containerRef3)}
-              >
-                <i className="fa-solid fa-chevron-right"></i>
-              </button>
+        <div className="col-12 col-md-4">
+          <div className="feature-box">
+            <div className="feature-icon">
+              <i className="fa fa-user-shield"></i>
             </div>
-            <div ref={containerRef3} className="d-flex flex-row flex-nowrap overflow-auto my-5" style={{ scrollBehavior: "smooth" }}>
-              {
-                isLoading ? (
-                  <div className="row w-100">
-                      {
-                        [1,2,3,4].map((_, index)=>(
-                          <div className="col-md-3" key={index}>
-                            <Skeleton variant="rectangular" width={260} height={180} />
-                            <Box sx={{ pt: 0.5 }}>
-                              <Skeleton />
-                              <Skeleton width="60%" />
-                            </Box>
-                          </div>
-                        ))
-                      }
-                  </div>
-                )
-                : 
-                properties.shortlet && properties.shortlet.length > 0 ?
-                properties.shortlet.map((each, i)=>(
-                  <div className="me-3" key={i}>
-                    <div className="card border-0" style={{ minWidth: "16rem" }}>
-                      <div className="position-relative overflow-hidden rounded">                
-                        <img src={each.main_photo} className="card-img-top" alt="Property" height={'200px'} />
-                        
-                        <button onClick={() => handleSaveProperty(each.id)} type="button"
-                            className="btn btn-sm position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center text-white bg-transparent" style={{zIndex: 2}}>
-                            <i className={savedProperties.includes(each.id) ? "fa fa-heart text-success" : "fa fa-heart-o"}></i>
-                        </button>
 
-                        <Link to={each.type === 'land' ? `/land/shortlet/${encode(each.id)}` : `/apartment/shortlet/${encode(each.id)}`}
-                            className="overlay d-flex align-items-center justify-content-center text-decoration-none text-uppercase fw-bold text-white">
-                            See More
-                        </Link>
-                        </div>
+            <div>
+              <h6 className="fw-bold">Secure Payments</h6>
+              <small className="text-muted">
+                Encrypted transactions with multiple payment options.
+              </small>
+            </div>
+          </div>
+        </div>
 
-                      <div className="card-body px-0 pt-3">
-                          <h6 className="card-title mb-1">{each.name}</h6>
-                          <h6 className="fw-bold mb-2">{Number(each.total_price * rates[currency]).toLocaleString('en-NG', {style: 'currency', currency})}</h6>
-                          {
-                              each.type == 'land'
-                              ?
-                              <div className="d-flex flex-wrap text-muted small">
-                                  <div>{Number(each.land_size).toLocaleString()} Sqm</div>                        
-                              </div>
-                              :
-                              <div className="d-flex flex-wrap text-muted small">
-                                  <div className="me-3"><i className="fa fa-regular fa-bed"></i> {each.bedrooms} beds</div>
-                                  <div className="me-3"><i className="fa fa-regular fa-toilet"></i> {each.toilets} toilets</div>
-                                  <div className="me-3"><i className="fa fa-regular fa-bath"></i> {each.bathrooms} baths</div>
-                              </div>
-                          }
-                          <p className="text-muted small mt-2">{each.address}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))
-                 :
-                 (
-                  <Alert severity="info" className="my-4">
-                    No properties available...
-                  </Alert>
-                )              
-              }
+        <div className="col-12 col-md-4">
+          <div className="feature-box">
+            <div className="feature-icon">
+              <i className="fa fa-bolt"></i>
+            </div>
+
+            <div>
+              <h6 className="fw-bold">24/7 Support</h6>
+              <small className="text-muted">
+                Our concierge team is always available.
+              </small>
             </div>
           </div>
         </div>
       </div>
 
-      <Dialog open={showLoginPrompt} onClose={() => setShowLoginPrompt(false)}>
-        <DialogTitle className="fw-bold">Login Required</DialogTitle>
-        <DialogContent>
-            <p>You need to log in to save this property.</p>
-            <Button 
-                variant="contained" 
-                fullWidth 
-                onClick={() => navigate('/login')}
-                style={{ marginTop: "10px" }}
-                className="bg-success"
-            >
-                Login
-            </Button>
+      {/* Roommate Section */}
+      <div className="roommate-card mt-5">
+        <div className="row align-items-center">
+          <div className="col-lg-8 text-center text-lg-start">
+            <span className="badge bg-success-subtle text-success mb-3">
+              NEW FEATURE
+            </span>
 
-            <Button 
-                variant="outlined" 
-                fullWidth 
-                onClick={() => setShowLoginPrompt(false)}
-                style={{ marginTop: "10px" }}
-            >
-                Cancel
-            </Button>
-        </DialogContent>
-    </Dialog>
-    </div>
+            <h3 className="fw-bold">Need a roommate?</h3>
+
+            <p className="text-muted">
+              Find trusted roommates in your area — match by budget,
+              location and lifestyle.
+            </p>
+
+            <div className="d-flex gap-3 flex-column flex-sm-row justify-content-center justify-content-lg-start">
+              <button className="btn btn-success rounded-pill px-4">
+                Find a Roommate
+              </button>
+
+              <button className="btn btn-link text-dark text-decoration-none">
+                Advertise your room
+              </button>
+            </div>
+
+            <small className="text-muted d-block mt-3">
+              Safety tip: Verify ID before meeting
+            </small>
+          </div>
+
+          <div className="col-lg-4 text-center mt-4 mt-lg-0">
+            <img
+              src="/images/roommates.png"
+              alt="roommates"
+              className="img-fluid"
+              style={{ maxWidth: "220px" }}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
   );
-}
+};
 
 export default PropertiesForYou;

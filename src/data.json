@@ -1,4 +1,46 @@
 {
+    "providers": [
+        {
+            "id": 1,
+            "name": "Agent John Doe",
+            "role": "Senior Real Estate Consultant",
+            "image": "https://randomuser.me/api/portraits/men/1.jpg",
+            "reviews": 120,
+            "verified": true
+        },
+        {
+            "id": 2,
+            "name": "Agent Jane Smith",
+            "role": "Senior Real Estate Consultant",
+            "image": "https://randomuser.me/api/portraits/women/2.jpg",
+            "reviews": 120,
+            "verified": true
+        },
+        {
+            "id": 3,
+            "name": "Agent Michael",
+            "role": "Senior Real Estate Consultant",
+            "image": "https://randomuser.me/api/portraits/men/3.jpg",
+            "reviews": 120,
+            "verified": true
+        },
+        {
+            "id": 4,
+            "name": "Agent Sarah",
+            "role": "Senior Real Estate Consultant",
+            "image": "https://randomuser.me/api/portraits/women/4.jpg",
+            "reviews": 120,
+            "verified": true
+        },
+        {
+            "id": 5,
+            "name": "Agent Promise",
+            "role": "Senior Real Estate Consultant",
+            "image": "https://randomuser.me/api/portraits/men/5.jpg",
+            "reviews": 120,
+            "verified": true
+        }
+    ],
     "experts": [
         {
             "name": "David Miller",
