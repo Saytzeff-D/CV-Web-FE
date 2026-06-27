@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import ViewToggle from "./ViewToggle";
+import { Box, Slider, Typography } from "@mui/material";
 
 const categories = [
   {
@@ -22,6 +24,12 @@ const categories = [
 ];
 
 const TopCategories = () => {
+    const [priceRange, setPriceRange] = useState([1500000, 2000000]);
+    const priceFilter = (val)=>{
+    setPriceRange(val)    
+    // const filtered = properties.filter(each => Number(String(each.total_price).replace(/[^0-9.]/g, '')) >= val[0] && Number(String(each.total_price).replace(/[^0-9.]/g, '')) <= val[1])
+    // setFilteredProperties(filtered)    
+  }
   return (
     <div className="container py-4 mt-5 pt-5">
 
@@ -33,23 +41,11 @@ const TopCategories = () => {
             Find Your Perfect Stay
           </h1>
 
-          <small className="text-success">
-            <i className="fa fa-map-marker-alt me-1"></i>
+          <div className="location-pill d-inline-flex align-items-center">
+            <i className="fa fa-map-marker-alt me-2"></i>
             Lagos, Nigeria
-          </small>
         </div>
-
-        <div className="d-flex gap-2">
-          <button className="btn btn-light rounded-pill px-4">
-            <i className="fa fa-list me-2"></i>
-            List View
-          </button>
-
-          <button className="btn btn-light rounded-pill px-4">
-            <i className="fa fa-map me-2"></i>
-            Map View
-          </button>
-        </div>
+        </div>        
 
       </div>
 
@@ -60,31 +56,63 @@ const TopCategories = () => {
         <div className="row align-items-center g-3">
 
           <div className="col-lg-3">
-            <div className="search-input">
-              <i className="fa fa-search"></i>
-              <div>
-                <small className="text-muted">LOCATION</small>
-                <div>Where are you going?</div>
-              </div>
+            <div className="search-field">
+                <label className="small text-muted fw-semibold">
+                    LOCATION
+                </label>
+
+                <div className="input-group">
+                    <span className="input-group-text bg-transparent border-0">
+                        <i className="fa fa-search"></i>
+                    </span>
+
+                    <input
+                        type="text"
+                        className="form-control border-0 shadow-none"
+                        placeholder="Where are you going?"
+                    />
+                </div>
             </div>
           </div>
 
           <div className="col-lg-3">
-            <div className="search-input">
-              <i className="fa fa-calendar"></i>
-              <div>
-                <small className="text-muted">CHECK IN - OUT</small>
-                <div>Add dates</div>
-              </div>
+            <div className="search-field">
+                <label className="small text-muted fw-semibold">
+                    CHECK IN-OUT
+                </label>
+
+                <div className="input-group">
+                    <span className="input-group-text bg-transparent border-0">
+                        <i className="fa fa-calendar"></i>
+                    </span>
+
+                    <input
+                        type="date"
+                        className="form-control border-0 shadow-none"
+                        placeholder="Add Dates"
+                    />
+                </div>
             </div>
           </div>
 
           <div className="col-lg-3">
-            <div className="search-input">
-              <i className="fa fa-users"></i>
-              <div>
-                <small className="text-muted">GUESTS</small>
-                <div>Add guests</div>
+            <div className="search-field">
+              <label className="small text-muted fw-semibold">
+                GUESTS
+              </label>
+
+              <div className="input-group">
+                <span className="input-group-text bg-transparent border-0">
+                  <i className="fa fa-users"></i>
+                </span>
+
+                <select className="form-select border-0 shadow-none">
+                    <option>1 Guest</option>
+                    <option>2 Guests</option>
+                    <option>3 Guests</option>
+                    <option>4 Guests</option>
+                    <option>5+ Guests</option>
+                </select>
               </div>
             </div>
           </div>
@@ -103,35 +131,91 @@ const TopCategories = () => {
 
       <div className="row g-3 mb-4">
 
-        <div className="col-md-3 col-6">
-          <div className="stat-card">
-            <small className="text-muted">AVG NIGHTLY</small>
-            <h5>₦45,000</h5>
-          </div>
-        </div>
-
-        <div className="col-md-3 col-6">
-          <div className="stat-card">
-            <small className="text-muted">OCCUPANCY</small>
-            <h5>78.5%</h5>
-          </div>
-        </div>
-
-        <div className="col-md-3 col-6">
-          <div className="stat-card">
-            <small className="text-muted">AVG STAY</small>
-            <h5>4.2 Nights</h5>
-          </div>
-        </div>
-
-        <div className="col-md-3 col-6">
-          <div className="stat-card">
-            <small className="text-muted">BOOKING GROWTH</small>
-            <h5>54%</h5>
-          </div>
-        </div>
-
+  <div className="col-md-3 col-6">
+    <div className="stat-card d-flex align-items-center gap-3">
+      <div className="stat-icon">
+        <i className="fa fa-line-chart"></i>
       </div>
+
+      <div>
+        <small className="text-muted d-block">AVG NIGHTLY</small>
+
+        <div className="d-flex align-items-center gap-2">
+          <h5 className="mb-0 fw-bold">₦45,000</h5>
+
+          <small className="text-success fw-semibold">
+            <i className="fa fa-arrow-up me-1"></i>
+            +12%
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div className="col-md-3 col-6">
+    <div className="stat-card d-flex align-items-center gap-3">
+      <div className="stat-icon">
+        <i className="fa fa-users"></i>
+      </div>
+
+      <div>
+        <small className="text-muted d-block">OCCUPANCY</small>
+
+        <div className="d-flex align-items-center gap-2">
+          <h5 className="mb-0 fw-bold">78.5%</h5>
+
+          <small className="text-success fw-semibold">
+            <i className="fa fa-arrow-up me-1"></i>
+            +6.2%
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div className="col-md-3 col-6">
+    <div className="stat-card d-flex align-items-center gap-3">
+      <div className="stat-icon">
+        <i className="fa fa-calendar"></i>
+      </div>
+
+      <div>
+        <small className="text-muted d-block">AVG STAY</small>
+
+        <div className="d-flex align-items-center gap-2">
+          <h5 className="mb-0 fw-bold">4.2 Nights</h5>
+
+          <small className="text-danger fw-semibold">
+            <i className="fa fa-arrow-down me-1"></i>
+            -2.1%
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div className="col-md-3 col-6">
+    <div className="stat-card d-flex align-items-center gap-3">
+      <div className="stat-icon">
+        <i className="fa fa-bolt"></i>
+      </div>
+
+      <div>
+        <small className="text-muted d-block">BOOKING GROWTH</small>
+
+        <div className="d-flex align-items-center gap-2">
+          <h5 className="mb-0 fw-bold">54%</h5>
+
+          <small className="text-success fw-semibold">
+            <i className="fa fa-arrow-up me-1"></i>
+            +18%
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 
       <div className="row">
 
@@ -144,16 +228,25 @@ const TopCategories = () => {
             <div className="d-flex justify-content-between mb-4">
               <h6 className="fw-bold">Filters</h6>
               <small className="text-success">Reset</small>
+            </div>            
+
+            <Box>
+            <Typography variant="subtitle2" className="fw-bold mb-2">
+                Price Range (NGN)
+            </Typography>
+            <div className="d-flex justify-content-between mb-2">
+                <span>₦{priceRange[0].toLocaleString()}</span>
+                <span>₦{priceRange[1].toLocaleString()}</span>
             </div>
-
-            <label className="fw-semibold mb-3">
-              Price Range (NGN)
-            </label>
-
-            <input
-              type="range"
-              className="form-range mb-4"
+            <Slider
+                value={priceRange}
+                onChange={(e, val) => priceFilter(val)}
+                min={200000}
+                max={5000000}
+                step={50000}
+                sx={{ color: "green" }}
             />
+            </Box>
 
             <h6 className="fw-bold mt-4">
               Property Type
@@ -299,7 +392,7 @@ const TopCategories = () => {
                       <h5>{property.title}</h5>
 
                       <h4 className="fw-bold">
-                        {property.price}
+                        {property.price.toLocaleString()}
                       </h4>
                     </div>
 
