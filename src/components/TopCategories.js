@@ -1,259 +1,90 @@
-import React, { useState } from "react";
-import ViewToggle from "./ViewToggle";
-import { Box, Slider, Typography } from "@mui/material";
-
-const categories = [
-  {
-    id: 1,
-    title: "Skyline Penthouse 1",
-    location: "Victoria Island, Lagos",
-    price: "₦120,000",
-    image: "/images/property1.jpg",
-    instantBook: true,
-    videoTour: true,
-  },
-  {
-    id: 2,
-    title: "Skyline Penthouse 2",
-    location: "Victoria Island, Lagos",
-    price: "₦240,000",
-    image: "/images/property2.jpg",
-    instantBook: false,
-    videoTour: false,
-  },
-];
+import React, { useState, useEffect, useRef } from "react";
+import { Box, Skeleton, Slider, Typography } from "@mui/material";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const TopCategories = () => {
-    const [priceRange, setPriceRange] = useState([1500000, 2000000]);
-    const priceFilter = (val)=>{
-    setPriceRange(val)    
-    // const filtered = properties.filter(each => Number(String(each.total_price).replace(/[^0-9.]/g, '')) >= val[0] && Number(String(each.total_price).replace(/[^0-9.]/g, '')) <= val[1])
-    // setFilteredProperties(filtered)    
-  }
+  const uri = useSelector((state) => state.UriReducer.uri);
+
+  const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [priceRange, setPriceRange] = useState([500000, 2000000]);
+
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    axios
+      .get(`${uri}property/for-you`)
+      .then((response) => {
+        setCategories([
+          ...response.data.data.sale,
+          ...response.data.data.rent,
+          ...response.data.data.shortlet,
+        ]);
+      })
+      .catch((error) => {
+        setErrorMessage(
+          error.response?.data?.message ||
+            "Failed to fetch properties. Please try again."
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  const priceFilter = (val) => {
+    setPriceRange(val);
+  };
+
+  const scroll = (direction) => {
+    if (!scrollRef.current) return;
+
+    scrollRef.current.scrollBy({
+      left: direction === "left" ? -450 : 450,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <div className="container py-4 mt-5 pt-5">
-
-      {/* HEADER */}
-      <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-
-        <div>
-          <h1 className="fw-bold display-6 mb-1">
-            Find Your Perfect Stay
-          </h1>
-
-          <div className="location-pill d-inline-flex align-items-center">
-            <i className="fa fa-map-marker-alt me-2"></i>
-            Lagos, Nigeria
-        </div>
-        </div>        
-
-      </div>
-
-      {/* SEARCH BOX */}
-
-      <div className="search-box shadow-sm rounded-4 p-3 mb-4">
-
-        <div className="row align-items-center g-3">
-
-          <div className="col-lg-3">
-            <div className="search-field">
-                <label className="small text-muted fw-semibold">
-                    LOCATION
-                </label>
-
-                <div className="input-group">
-                    <span className="input-group-text bg-transparent border-0">
-                        <i className="fa fa-search"></i>
-                    </span>
-
-                    <input
-                        type="text"
-                        className="form-control border-0 shadow-none"
-                        placeholder="Where are you going?"
-                    />
-                </div>
-            </div>
-          </div>
-
-          <div className="col-lg-3">
-            <div className="search-field">
-                <label className="small text-muted fw-semibold">
-                    CHECK IN-OUT
-                </label>
-
-                <div className="input-group">
-                    <span className="input-group-text bg-transparent border-0">
-                        <i className="fa fa-calendar"></i>
-                    </span>
-
-                    <input
-                        type="date"
-                        className="form-control border-0 shadow-none"
-                        placeholder="Add Dates"
-                    />
-                </div>
-            </div>
-          </div>
-
-          <div className="col-lg-3">
-            <div className="search-field">
-              <label className="small text-muted fw-semibold">
-                GUESTS
-              </label>
-
-              <div className="input-group">
-                <span className="input-group-text bg-transparent border-0">
-                  <i className="fa fa-users"></i>
-                </span>
-
-                <select className="form-select border-0 shadow-none">
-                    <option>1 Guest</option>
-                    <option>2 Guests</option>
-                    <option>3 Guests</option>
-                    <option>4 Guests</option>
-                    <option>5+ Guests</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-lg-3">
-            <button className="btn btn-success rounded-4 w-100 py-3">
-              <i className="fa fa-search me-2"></i>
-              Search
-            </button>
-          </div>
-
-        </div>
-      </div>
-
-      {/* STATS */}
-
-      <div className="row g-3 mb-4">
-
-  <div className="col-md-3 col-6">
-    <div className="stat-card d-flex align-items-center gap-3">
-      <div className="stat-icon">
-        <i className="fa fa-line-chart"></i>
-      </div>
-
-      <div>
-        <small className="text-muted d-block">AVG NIGHTLY</small>
-
-        <div className="d-flex align-items-center gap-2">
-          <h5 className="mb-0 fw-bold">₦45,000</h5>
-
-          <small className="text-success fw-semibold">
-            <i className="fa fa-arrow-up me-1"></i>
-            +12%
-          </small>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div className="col-md-3 col-6">
-    <div className="stat-card d-flex align-items-center gap-3">
-      <div className="stat-icon">
-        <i className="fa fa-users"></i>
-      </div>
-
-      <div>
-        <small className="text-muted d-block">OCCUPANCY</small>
-
-        <div className="d-flex align-items-center gap-2">
-          <h5 className="mb-0 fw-bold">78.5%</h5>
-
-          <small className="text-success fw-semibold">
-            <i className="fa fa-arrow-up me-1"></i>
-            +6.2%
-          </small>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div className="col-md-3 col-6">
-    <div className="stat-card d-flex align-items-center gap-3">
-      <div className="stat-icon">
-        <i className="fa fa-calendar"></i>
-      </div>
-
-      <div>
-        <small className="text-muted d-block">AVG STAY</small>
-
-        <div className="d-flex align-items-center gap-2">
-          <h5 className="mb-0 fw-bold">4.2 Nights</h5>
-
-          <small className="text-danger fw-semibold">
-            <i className="fa fa-arrow-down me-1"></i>
-            -2.1%
-          </small>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div className="col-md-3 col-6">
-    <div className="stat-card d-flex align-items-center gap-3">
-      <div className="stat-icon">
-        <i className="fa fa-bolt"></i>
-      </div>
-
-      <div>
-        <small className="text-muted d-block">BOOKING GROWTH</small>
-
-        <div className="d-flex align-items-center gap-2">
-          <h5 className="mb-0 fw-bold">54%</h5>
-
-          <small className="text-success fw-semibold">
-            <i className="fa fa-arrow-up me-1"></i>
-            +18%
-          </small>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
-
+    <div className="container py-5">
       <div className="row">
-
         {/* FILTERS */}
-
         <div className="col-lg-3 mb-4">
-
           <div className="filter-card">
 
             <div className="d-flex justify-content-between mb-4">
               <h6 className="fw-bold">Filters</h6>
-              <small className="text-success">Reset</small>
-            </div>            
+
+              <button className="btn btn-sm border-0">
+                <small className="fw-bold text-success">Reset</small>
+              </button>
+            </div>
 
             <Box>
-            <Typography variant="subtitle2" className="fw-bold mb-2">
+              <Typography variant="subtitle2" className="fw-bold mb-2">
                 Price Range (NGN)
-            </Typography>
-            <div className="d-flex justify-content-between mb-2">
+              </Typography>
+
+              <div className="d-flex justify-content-between mb-2">
                 <span>₦{priceRange[0].toLocaleString()}</span>
                 <span>₦{priceRange[1].toLocaleString()}</span>
-            </div>
-            <Slider
+              </div>
+
+              <Slider
                 value={priceRange}
                 onChange={(e, val) => priceFilter(val)}
                 min={200000}
                 max={5000000}
                 step={50000}
                 sx={{ color: "green" }}
-            />
+              />
             </Box>
 
-            <h6 className="fw-bold mt-4">
-              Property Type
-            </h6>
+            <h6 className="fw-bold mt-4">Property Type</h6>
 
             <div className="d-flex flex-wrap gap-2 mt-3">
-
               {[
                 "Land",
                 "Apartments",
@@ -269,7 +100,6 @@ const TopCategories = () => {
                   {item}
                 </button>
               ))}
-
             </div>
 
             <div className="mt-4">
@@ -288,42 +118,18 @@ const TopCategories = () => {
             <button className="btn btn-dark rounded-pill w-100 mt-4">
               Show 142 Results
             </button>
-
           </div>
-
-          {/* NEIGHBORHOOD */}
-
-          <div className="neighbourhood-card mt-4">
-
-            <small className="text-success">
-              Neighbourhood: Lekki
-            </small>
-
-            <div className="row text-center mt-4">
-
-              <div className="col">
-                <h6>₦85k/night</h6>
-                <small>Price</small>
-              </div>
-
-              <div className="col">
-                <h6>92%</h6>
-                <small>Occupancy</small>
-              </div>
-
-            </div>
-
-          </div>
-
         </div>
 
-        {/* PROPERTY GRID */}
-
+        {/* PROPERTIES */}
         <div className="col-lg-9">
 
           <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
 
             <div className="d-flex gap-2 flex-wrap">
+              <span className="text-muted fw-bold">
+                Trending:
+              </span>
 
               {[
                 "Lekki Phase 1",
@@ -331,106 +137,214 @@ const TopCategories = () => {
                 "Victoria Island",
                 "Ikoyi",
               ].map((trend) => (
-                <span
+                <button
                   key={trend}
-                  className="badge bg-light text-dark px-3 py-2"
+                  className="btn border-0 badge bg-light text-dark px-3 py-2"
                 >
                   {trend}
-                </span>
+                </button>
               ))}
-
             </div>
 
-            <small className="text-success">
-              <i className="fa fa-star-o"></i>
-              {" "}My Saved Searches (4)
-            </small>
+            <button className="btn btn-sm border-0 text-success fw-bold">
+              <i className="fa fa-star-o"></i> My Saved Searches (4)
+            </button>
 
           </div>
 
-          <h2 className="fw-bold">
-            Top Categories
-          </h2>
+          {/* HEADER */}
+          <div className="d-flex justify-content-between align-items-center mb-4">
 
-          <p className="text-muted">
-            Handpicked premium listings with live availability
-          </p>
+            <div>
+              <h2 className="fw-bold mb-1">
+                Top Categories
+              </h2>
 
-          <div className="row g-4">
+              <p className="text-muted mb-0">
+                Handpicked premium listings with live availability
+              </p>
+            </div>
 
-            {categories.map((property) => (
+            <div className="d-flex gap-2">
 
-              <div className="col-md-6" key={property.id}>
+              <button
+                className="btn rounded-circle border category-arrow"
+                onClick={() => scroll("left")}
+              >
+                <i className="fa fa-arrow-left"></i>
+              </button>
 
-                <div className="property-card">
+              <button
+                className="btn btn-dark rounded-circle category-arrow"
+                onClick={() => scroll("right")}
+              >
+                <i className="fa fa-arrow-right"></i>
+              </button>
 
-                  <div className="position-relative">
+            </div>
 
-                    <img
-                      src={property.image}
-                      className="property-image"
-                      alt=""
-                    />
+          </div>
 
-                    {property.instantBook && (
-                      <span className="badge bg-success position-absolute top-0 start-0 m-3">
-                        Instant Book
-                      </span>
-                    )}
+          {/* SCROLLABLE CARDS */}
+          <div
+            ref={scrollRef}
+            className="category-scroll-container"
+          >
+            {isLoading ? (
+              Array.from({ length: 2 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="category-card-wrapper"
+                >
+                  <Skeleton
+                    variant="rectangular"
+                    height={450}
+                    sx={{ borderRadius: "20px" }}
+                  />
+                </div>
+              ))
+            ) : (
+              categories.map((property) => (
+                <div
+                  key={property.id}
+                  className="category-card-wrapper"
+                >
+                  <div className="property-card-home">
 
-                    {property.videoTour && (
-                      <span className="badge bg-dark position-absolute top-0 start-0 m-3 ms-5">
-                        Video Tour
-                      </span>
-                    )}
+                    <div className="position-relative">
 
-                  </div>
+                      <img
+                        src={property.main_photo}
+                        className="property-image"
+                        alt=""
+                      />
 
-                  <div className="p-3">
+                      <div className="position-absolute top-0 start-0 d-flex gap-2 m-3">
 
-                    <div className="d-flex justify-content-between">
-                      <h5>{property.title}</h5>
+                        <span className="badge bg-success rounded-pill px-3 py-2">
+                          <i className="fa fa-bolt me-1"></i>
+                          Instant Book
+                        </span>
 
-                      <h4 className="fw-bold">
-                        {property.price.toLocaleString()}
-                      </h4>
-                    </div>
+                        <span className="badge bg-secondary rounded-pill px-3 py-2">
+                          <i className="fa fa-play-circle me-1"></i>
+                          Video Tour
+                        </span>
 
-                    <small className="text-muted">
-                      <i className="fa fa-map-marker-alt me-1"></i>
-                      {property.location}
-                    </small>
+                      </div>
 
-                    <div className="d-flex justify-content-between mt-4 text-muted">
-
-                      <small>4 Beds</small>
-                      <small>4.5 Baths</small>
-                      <small>3200 sqft</small>
-
-                    </div>
-
-                    <div className="text-end mt-3">
-
-                      <button className="btn btn-link text-success">
-                        View Details →
+                      <button
+                        className="btn btn-light rounded-circle position-absolute top-0 end-0 m-3"
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                        }}
+                      >
+                        <i className="fa fa-star-o text-warning"></i>
                       </button>
 
                     </div>
 
+                    <div className="p-4">
+
+                      <div className="d-flex justify-content-between align-items-start">
+
+                        <div>
+                          <h6 className="fw-bold">
+                            {property.name.split(" ").slice(0, 3).join(" ")}
+                          </h6>
+
+                          <small className="text-muted">
+                            <i className="fa fa-map-marker-alt me-1"></i>
+                            {property.address.split(",").slice(0, 2).join(",")}
+                          </small>
+                        </div>
+
+                        <div className="text-end">
+                          <h6 className="fw-bold">
+                            {parseInt(
+                              property.total_price
+                            ).toLocaleString("en-NG", {
+                              style: "currency",
+                              currency: "NGN",
+                            })}
+                          </h6>
+
+                          <small className="text-uppercase text-muted">
+                            Per Night
+                          </small>
+                        </div>
+
+                      </div>
+
+                      <div className="d-flex justify-content-between mt-4 text-muted">
+
+                        <small>
+                          <i className="fa fa-bed me-1"></i>
+                          4 Beds
+                        </small>
+
+                        <small>
+                          <i className="fa fa-bath me-1"></i>
+                          4.5 Baths
+                        </small>
+
+                        <small>
+                          <i className="fa fa-expand me-1"></i>
+                          3200 sqft
+                        </small>
+
+                      </div>
+
+                      <div className="d-flex justify-content-between align-items-center mt-4">
+
+                        <div className="d-flex align-items-center">
+
+                          <div className="avatar-stack">
+                            <img
+                              src="https://i.pravatar.cc/40?img=1"
+                              className="avatar-img"
+                            />
+
+                            <img
+                              src="https://i.pravatar.cc/40?img=2"
+                              className="avatar-img"
+                            />
+
+                            <img
+                              src="https://i.pravatar.cc/40?img=3"
+                              className="avatar-img"
+                            />
+                          </div>
+
+                          <span className="small text-muted ms-2">
+                            +12
+                          </span>
+
+                        </div>
+
+                        <button className="btn text-success border-0 fw-bold">
+                          View Details ↗
+                        </button>
+
+                      </div>
+
+                    </div>
+
                   </div>
-
                 </div>
-
-              </div>
-
-            ))}
-
+              ))
+            )}
           </div>
 
+          {!isLoading && categories.length === 0 && (
+            <p className="text-center text-muted mt-4">
+              {errorMessage || "No properties found"}
+            </p>
+          )}
+
         </div>
-
       </div>
-
     </div>
   );
 };

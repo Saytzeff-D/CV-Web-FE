@@ -50,7 +50,7 @@ const Spotlight = () => {
   };
 
   return (
-    <div className="container-fluid my-5">
+    <div className="container my-5">
         <h2 className="mb-4">Spotlight</h2>
         <p className="text-muted mb-0">
             See some Of Our Elegant Propreties

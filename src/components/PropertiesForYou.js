@@ -86,11 +86,18 @@ const PropertiesForYou = () => {
 
       {/* Property Cards */}
       <div className="row g-4">
-        {properties.map((property) => (
-          <div key={property.id} className="col-12 col-md-6 col-lg-4">
-            <div className="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
-              <div className="position-relative">
-                <img
+        {isLoading ? (
+          Array.from({ length: 3 }).map((_, index) => (
+            <div key={index} className="col-12 col-md-6 col-lg-4">
+              <Skeleton variant="rectangular" height={300} />
+            </div>
+          ))
+        ) : (        
+            properties.filter((each, i)=>i < 3).map((property) => (
+            <div key={property.id} className="col-12 col-md-6 col-lg-4">
+              <div className="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+                <div className="position-relative">
+                  <img
                   src={property.main_photo}
                   alt={property.name}
                   className="card-img-top"
@@ -107,7 +114,7 @@ const PropertiesForYou = () => {
               </div>
 
               <div className="card-body">
-                <h4 className="fw-bold">{property.total_price}</h4>
+                <h4 className="fw-bold">{parseInt(property.total_price).toLocaleString('en-NG', { style: 'currency', currency: 'NGN' })}</h4>
 
                 <h5 className="mt-3">{property.name}</h5>
 
@@ -137,7 +144,8 @@ const PropertiesForYou = () => {
               </div>
             </div>
           </div>
-        ))}
+        )))
+      }
       </div>
 
       {/* Features */}
@@ -219,12 +227,22 @@ const PropertiesForYou = () => {
           </div>
 
           <div className="col-lg-4 text-center mt-4 mt-lg-0">
-            <img
-              src="/images/roommates.png"
-              alt="roommates"
-              className="img-fluid"
-              style={{ maxWidth: "220px" }}
-            />
+            <div className="avatar-stack">
+              <img
+                src="https://i.pravatar.cc/40?img=1"
+                className="avatar-img"
+              />
+
+              <img
+                src="https://i.pravatar.cc/40?img=2"
+                className="avatar-img"
+              />
+
+              <img
+                src="https://i.pravatar.cc/40?img=3"
+                className="avatar-img"
+              />
+            </div>
           </div>
         </div>
       </div>

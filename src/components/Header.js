@@ -6,56 +6,184 @@ import Carousel3 from "../assets/carousel-3.png";
 const Header = () => {
     const images = [Carousel1, Carousel2, Carousel3];
   return (
-    <div id="headerCarousel" className="carousel slide pt-lg-0 pt-5" data-bs-ride="carousel">
-        <div className="carousel-indicators d-none d-md-flex">
-            {images.map((image, index) => (
-            <button
-                key={index}
-                type="button"
-                data-bs-target="#headerCarousel"
-                data-bs-slide-to={index}
-                className={index === 0 ? "active" : ""}
-                aria-current={index === 0 ? "true" : undefined}
-                aria-label={`Slide ${index + 1}`}
-            ></button>
-            ))}
-        </div>
-      <div className="carousel-inner">
-        {images.map((image, index) => (
-          <div
-            key={index}
-            className={`carousel-item ${index === 0 ? "active" : ""}`}
-          >
-            <img
-              src={image}
-              className="d-block w-100"
-              alt={`Slide ${index + 1}`}
-            />
-          </div>
-        ))}
-      </div>
-
-      <div className="position-absolute top-50 start-50 translate-middle
-    w-100 px-3 text-white"
-     style={{ transform: "translate(-50%, -60%)" }}>
-        <div className="d-flex justify-content-center">
-          <div className="col-lg-5">
-            <p className="fw-bold pt-lg-0 pt-5 mt-lg-0 mb-0">No 1 Real estate agency</p>
-            <h1 className="fw-bold fs-1 fs-md-1">Find your Dream Property with Us</h1>
-            <div className="input-group mt-4 w-100">
-              <input
-                type="text"
-                className="form-control rounded-0"
-                placeholder="Enter your address • city • zipcode"
-              />
-              <button className="btn btn-black rounded-0 p-md-3 fw-light" type="button">
-                <i className="fa fa-search fw-light"></i> Search
-              </button>
+    <div className="container py-4 mt-5 pt-5">
+      <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+      
+              <div>
+                <h1 className="fw-bold display-6 mb-1">
+                  Find Your Perfect Stay
+                </h1>
+      
+                <div className="location-pill d-inline-flex align-items-center">
+                  <i className="fa fa-map-marker-alt me-2"></i>
+                  Lagos, Nigeria
+              </div>
+              </div>        
+      
+            </div>
+      
+            {/* SEARCH BOX */}
+      
+            <div className="search-box shadow-sm rounded-4 p-3 mb-4">
+      
+              <div className="row align-items-center g-3">
+      
+                <div className="col-lg-3">
+                  <div className="search-field">
+                      <label className="small text-muted fw-semibold">
+                          LOCATION
+                      </label>
+      
+                      <div className="input-group">
+                          <span className="input-group-text bg-transparent border-0">
+                              <i className="fa fa-search"></i>
+                          </span>
+      
+                          <input
+                              type="text"
+                              className="form-control border-0 shadow-none"
+                              placeholder="Where are you going?"
+                          />
+                      </div>
+                  </div>
+                </div>
+      
+                <div className="col-lg-3">
+                  <div className="search-field">
+                      <label className="small text-muted fw-semibold">
+                          CHECK IN-OUT
+                      </label>
+      
+                      <div className="input-group">
+                          <span className="input-group-text bg-transparent border-0">
+                              <i className="fa fa-calendar"></i>
+                          </span>
+      
+                          <input
+                              type="date"
+                              className="form-control border-0 shadow-none"
+                              placeholder="Add Dates"
+                          />
+                      </div>
+                  </div>
+                </div>
+      
+                <div className="col-lg-3">
+                  <div className="search-field">
+                    <label className="small text-muted fw-semibold">
+                      GUESTS
+                    </label>
+      
+                    <div className="input-group">
+                      <span className="input-group-text bg-transparent border-0">
+                        <i className="fa fa-users"></i>
+                      </span>
+      
+                      <select className="form-select border-0 shadow-none">
+                          <option>1 Guest</option>
+                          <option>2 Guests</option>
+                          <option>3 Guests</option>
+                          <option>4 Guests</option>
+                          <option>5+ Guests</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+      
+                <div className="col-lg-3">
+                  <button className="btn btn-success rounded-4 w-100 py-3">
+                    <i className="fa fa-search me-2"></i>
+                    Search
+                  </button>
+                </div>
+      
+              </div>
+            </div>
+      
+            {/* STATS */}
+      
+            <div className="row g-3 mb-4">
+      
+        <div className="col-md-3 col-6">
+          <div className="stat-card d-flex align-items-center gap-3">
+            <div className="stat-icon">
+              <i className="fa fa-line-chart"></i>
+            </div>
+      
+            <div>
+              <small className="text-muted d-block">AVG NIGHTLY</small>
+      
+              <div className="d-flex align-items-center gap-2">
+                <h5 className="mb-0 fw-bold">₦45,000</h5>
+      
+                <small className="text-success fw-semibold">            
+                  +12%
+                </small>
+              </div>
             </div>
           </div>
         </div>
-    </div>
-
+      
+        <div className="col-md-3 col-6">
+          <div className="stat-card d-flex align-items-center gap-3">
+            <div className="stat-icon">
+              <i className="fa fa-users"></i>
+            </div>
+      
+            <div>
+              <small className="text-muted d-block">OCCUPANCY</small>
+      
+              <div className="d-flex align-items-center gap-2">
+                <h5 className="mb-0 fw-bold">78.5%</h5>
+      
+                <small className="text-success fw-semibold">            
+                  +6.2%
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div className="col-md-3 col-6">
+          <div className="stat-card d-flex align-items-center gap-3">
+            <div className="stat-icon">
+              <i className="fa fa-calendar"></i>
+            </div>
+      
+            <div>
+              <small className="text-muted d-block">AVG STAY</small>
+      
+              <div className="d-flex align-items-center gap-2">
+                <h5 className="mb-0 fw-bold">4.2 Nights</h5>
+      
+                <small className="text-danger fw-semibold">            
+                  -2.1%
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div className="col-md-3 col-6">
+          <div className="stat-card d-flex align-items-center gap-3">
+            <div className="stat-icon">
+              <i className="fa fa-bolt"></i>
+            </div>
+      
+            <div>
+              <small className="text-muted d-block">BOOKING GROWTH</small>
+      
+              <div className="d-flex align-items-center gap-2">
+                <h5 className="mb-0 fw-bold">54%</h5>
+      
+                <small className="text-success fw-semibold">            
+                  +18%
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
