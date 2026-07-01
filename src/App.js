@@ -37,6 +37,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import RefundPolicy from './pages/RefundPolicy';
+import Dashboard from './pages/Dashboard';
+import HeroSection from './components/client-dashboard/HeroSection';
+import Bookings from './components/client-dashboard/Booking';
 
 function App() {
   const uri = useSelector(state=>state.UriReducer.uri)
@@ -87,6 +90,10 @@ function App() {
         <Route path='/privacy-policy' element={<PrivacyPolicy />} />
         <Route path='/terms-of-service' element={<TermsOfService />} />
         <Route path='/refund-policy' element={<RefundPolicy />} />
+        <Route path='/user' element={<Dashboard />}>
+          <Route path='/user/' element={<HeroSection />} />
+          <Route path='/user/bookings' element={<Bookings />} />
+        </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>
       </BrowserRouter>

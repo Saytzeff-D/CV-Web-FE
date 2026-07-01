@@ -978,3 +978,29 @@ ul .booking-features::before {
     height: 38px;
   }
 }
+/* Hero Section */
+@media (max-width:768px){
+
+    .hero-banner{
+        height:180px;
+    }
+
+    .hero-banner h1{
+        font-size:30px;
+    }
+
+    .hero-banner p{
+        font-size:14px;
+    }
+
+}
+.bg-sidebar {
+  background-color: #081B0E !important;
+  color: #FFFFFF !important;
+}
+.tool-bar {
+    width: 800px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    /* align-items: center; */
+}
