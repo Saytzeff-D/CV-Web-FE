@@ -7,7 +7,9 @@ import {
   ChatBubbleOutline,
 } from "@mui/icons-material";
 
-import HeroImage from "../../assets/hero-image.png" // your image
+import HeroImage from "../../../assets/hero-image.png" // your image
+import GridDashboard from "../../../components/client-dashboard/GridDashboard";
+import DashboardFooter from "../../../components/DashboardFooter";
 
 const HeroSection = () => {
   const stats = [
@@ -178,6 +180,8 @@ const HeroSection = () => {
         </button>
 
       </div>
+      <GridDashboard />
+      <DashboardFooter />
     </>
   );
 };

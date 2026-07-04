@@ -38,8 +38,9 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import RefundPolicy from './pages/RefundPolicy';
 import Dashboard from './pages/Dashboard';
-import HeroSection from './components/client-dashboard/HeroSection';
-import Bookings from './components/client-dashboard/Booking';
+import Bookings from './pages/user/dashboard/Booking';
+import HeroSection from './pages/user/dashboard/HeroSection';
+import EditProfile from './pages/user/dashboard/Profile';
 
 function App() {
   const uri = useSelector(state=>state.UriReducer.uri)
@@ -93,6 +94,7 @@ function App() {
         <Route path='/user' element={<Dashboard />}>
           <Route path='/user/' element={<HeroSection />} />
           <Route path='/user/bookings' element={<Bookings />} />
+          <Route path='/user/profile' element={<EditProfile />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>

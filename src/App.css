@@ -998,9 +998,6 @@ ul .booking-features::before {
   background-color: #081B0E !important;
   color: #FFFFFF !important;
 }
-.tool-bar {
-    width: 800px !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    /* align-items: center; */
+.text-cv {
+  color: #2F9E5B !important;
 }
