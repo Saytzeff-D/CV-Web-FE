@@ -21,7 +21,6 @@ import CreateAdmin from './pages/admin/CreateAdmin';
 import AllUsers from './pages/admin/AllUsers';
 import PropertyManager from './pages/admin/PropertyManager';
 import AddProperty from './pages/admin/AddProperty';
-import ClientDashboard from './pages/user/dashboard/ClientDashboard';
 import AgentDashboard from './pages/user/dashboard/AgentDashboard';
 import FilterBar from './components/Filterbar';
 import AddBlog from './pages/admin/AddBlog';
@@ -41,6 +40,8 @@ import Dashboard from './pages/Dashboard';
 import Bookings from './pages/user/dashboard/Booking';
 import HeroSection from './pages/user/dashboard/HeroSection';
 import EditProfile from './pages/user/dashboard/Profile';
+import MyFavoritesPage from './pages/user/dashboard/MyFavoritesPage';
+import TransactionHistory from './pages/user/dashboard/TransactionHistory';
 
 function App() {
   const uri = useSelector(state=>state.UriReducer.uri)
@@ -76,8 +77,7 @@ function App() {
         <Route path='/admin/dashboard' element={<AdminDashboard />} />
         <Route path='/admin/property-manager' element={<PropertyManager />} />
         <Route path='/admin/add-property' element={<AddProperty />} />
-        <Route path='/admin/view-agents' element={<AllUsers />} />
-        <Route path='/client/dashboard' element={<ClientDashboard />} />
+        <Route path='/admin/view-agents' element={<AllUsers />} />        
         <Route path='/agent/dashboard' element={<AgentDashboard />} />
         <Route path='/agent/add-property' element={<AddProperty />} />
         <Route path='/admin/add-blog' element={<AddBlog />} />
@@ -94,7 +94,9 @@ function App() {
         <Route path='/user' element={<Dashboard />}>
           <Route path='/user/' element={<HeroSection />} />
           <Route path='/user/bookings' element={<Bookings />} />
+          <Route path='/user/saved-searches' element={<MyFavoritesPage />} />
           <Route path='/user/profile' element={<EditProfile />} />
+          <Route path='/user/transactions' element={<TransactionHistory />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>

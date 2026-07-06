@@ -29,6 +29,15 @@ import {
   Avatar,
   Chip,
 } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,      
+} from "@mui/material";
 import DashboardFooter from "../../../components/DashboardFooter";
 
 const stats = [
@@ -293,158 +302,227 @@ const Bookings = () => {
               <FileDownloadOutlined fontSize="small" /> Export CSV
             </button>
             <button className="btn btn-dark rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-semibold" style={{ fontSize: "14px" }}>
-              <Add fontSize="small" /> Approve Selected
+              <Add fontSize="small" /> Delete Selected
             </button>
           </div>
         </div>
       </div>
 
       {/* 2. TABLE DATA BINDING VIEW CONTAINER */}
-      <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
-        <div className="table-responsive">
-          <table className="table table-borderless align-middle mb-0">
-            <thead>
-              <tr className="bg-light-subtle" style={{ borderBottom: "1px solid #F3F4F6" }}>
-                <th style={{ width: "50px", paddingLeft: "24px" }}>
-                  <Checkbox
-                    size="small"
-                    checked={selectedRows.length === bookingsData.length}
-                    indeterminate={selectedRows.length > 0 && selectedRows.length < bookingsData.length}
-                    onChange={handleSelectAll}
-                    sx={{ color: "#D1D5DB", "&.Mui-checked": { color: "#111827" } }}
-                  />
-                </th>
-                <th className="text-muted fw-semibold py-3 text-uppercase" style={{ fontSize: "12px", letterSpacing: "0.5px" }}>Booking Info</th>
-                <th className="text-muted fw-semibold py-3 text-uppercase" style={{ fontSize: "12px", letterSpacing: "0.5px" }}>Type</th>
-                <th className="text-muted fw-semibold py-3 text-uppercase" style={{ fontSize: "12px", letterSpacing: "0.5px" }}>Client</th>
-                <th className="text-muted fw-semibold py-3 text-uppercase" style={{ fontSize: "12px", letterSpacing: "0.5px" }}>Date & Time</th>
-                <th className="text-muted fw-semibold py-3 text-uppercase" style={{ fontSize: "12px", letterSpacing: "0.5px" }}>Amount</th>
-                <th className="text-muted fw-semibold py-3 text-uppercase" style={{ fontSize: "12px", letterSpacing: "0.5px" }}>Status</th>
-                <th className="text-muted fw-semibold py-3 text-uppercase text-end" style={{ fontSize: "12px", letterSpacing: "0.5px", paddingRight: "24px" }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bookingsData.map((row) => {
-                const isChecked = selectedRows.includes(row.id);
-                const statusTheme = getStatusStyles(row.status);
+      <TableContainer
+    component={Paper}
+    elevation={0}
+    sx={{
+      width: "100%",
+      overflowX: "auto", // Enables horizontal sliding container constraints natively on small screens
+      borderRadius: "16px",
+      border: "1px solid #F3F4F6",
+      boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+    }}
+  >
+    <Table sx={{ minWidth: 800 }} aria-label="bookings data table">
+      {/* 1. TABLE HEADER */}
+      <TableHead sx={{ bgcolor: "#FAFAFA" }}>
+        <TableRow style={{ borderBottom: "1px solid #F3F4F6" }}>
+          <TableCell padding="checkbox" sx={{ pl: 3, width: "50px" }}>
+            <Checkbox
+              size="small"
+              checked={selectedRows.length === bookingsData.length}
+              indeterminate={selectedRows.length > 0 && selectedRows.length < bookingsData.length}
+              onChange={handleSelectAll}
+              sx={{ color: "#D1D5DB", "&.Mui-checked": { color: "#111827" } }}
+            />
+          </TableCell>
+          <TableCell sx={{ fontSize: "12px", fontWeight: 600, color: "#6B7280", letterSpacing: "0.5px" }}>
+            BOOKING INFO
+          </TableCell>
+          <TableCell sx={{ fontSize: "12px", fontWeight: 600, color: "#6B7280", letterSpacing: "0.5px" }}>
+            TYPE
+          </TableCell>
+          <TableCell sx={{ fontSize: "12px", fontWeight: 600, color: "#6B7280", letterSpacing: "0.5px" }}>
+            CLIENT
+          </TableCell>
+          <TableCell sx={{ fontSize: "12px", fontWeight: 600, color: "#6B7280", letterSpacing: "0.5px" }}>
+            DATE & TIME
+          </TableCell>
+          <TableCell sx={{ fontSize: "12px", fontWeight: 600, color: "#6B7280", letterSpacing: "0.5px" }}>
+            AMOUNT
+          </TableCell>
+          <TableCell sx={{ fontSize: "12px", fontWeight: 600, color: "#6B7280", letterSpacing: "0.5px" }}>
+            STATUS
+          </TableCell>
+          <TableCell align="right" sx={{ fontSize: "12px", fontWeight: 600, color: "#6B7280", letterSpacing: "0.5px", pr: 3 }}>
+            ACTIONS
+          </TableCell>
+        </TableRow>
+      </TableHead>
 
-                return (
-                  <tr key={row.id} style={{ borderBottom: "1px solid #F9FAFB" }} className={isChecked ? "bg-light-subtle" : ""}>
-                    {/* Checkbox Frame */}
-                    <td style={{ paddingLeft: "24px" }}>
-                      <Checkbox
-                        size="small"
-                        checked={isChecked}
-                        onChange={() => handleSelectRow(row.id)}
-                        sx={{ color: "#D1D5DB", "&.Mui-checked": { color: "#111827" } }}
-                      />
-                    </td>
+      {/* 2. TABLE DATA ROWS */}
+      <TableBody>
+        {bookingsData.map((row) => {
+          const isChecked = selectedRows.includes(row.id);
+          const statusTheme = getStatusStyles(row.status);
 
-                    {/* Booking Info Column */}
-                    <td className="py-3">
-                      <div className="d-flex align-items-center gap-3">
-                        <div className="rounded-3" style={{ width: 44, height: 44, backgroundColor: "#E5E7EB" }} />
-                        <div>
-                          <span className="fw-bold text-dark d-block" style={{ fontSize: "14px" }}>{row.title}</span>
-                          <span className="text-muted d-flex align-items-center gap-1" style={{ fontSize: "12px" }}>
-                            <LocationOnOutlined sx={{ fontSize: 14 }} /> {row.location}
-                          </span>
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Type Tag Column */}
-                    <td>
-                      <span
-                        className="badge px-2.5 py-1.5 rounded-pill font-weight-bold"
-                        style={{ backgroundColor: row.typeColor, color: row.typeTextColor, fontSize: "11px", fontWeight: "700" }}
-                      >
-                        {row.type}
-                      </span>
-                    </td>
-
-                    {/* Client Identity Meta */}
-                    <td>
-                      <div>
-                        <span className="fw-bold text-dark d-block" style={{ fontSize: "14px" }}>{row.client}</span>
-                        <span className="text-muted" style={{ fontSize: "12px" }}>{row.subtitle}</span>
-                      </div>
-                    </td>
-
-                    {/* Date Scope Value */}
-                    <td className="text-secondary" style={{ fontSize: "14px" }}>
-                      {row.date}
-                    </td>
-
-                    {/* Amount Block */}
-                    <td className="fw-bold text-dark" style={{ fontSize: "14px" }}>
-                      {row.amount}
-                    </td>
-
-                    {/* Status Structural Badging */}
-                    <td>
-                      <div>
-                        <Chip
-                          label={row.status}
-                          size="small"
-                          sx={{
-                            fontSize: "11px",
-                            fontWeight: 600,
-                            height: "22px",
-                            backgroundColor: statusTheme.bg,
-                            color: statusTheme.text,
-                          }}
-                        />
-                        <span className="text-muted d-block mt-0.5" style={{ fontSize: "11px" }}>{row.statusSubtitle}</span>
-                      </div>
-                    </td>
-
-                    {/* Chevron Link Trigger */}
-                    <td className="text-end" style={{ paddingRight: "24px" }}>
-                      <IconButton size="small" sx={{ color: "#9CA3AF" }}>
-                        <ChevronRight fontSize="small" />
-                      </IconButton>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {/* 3. PAGINATION ROW COMPONENT FOOTER */}
-        <div className="d-flex flex-wrap justify-content-between align-items-center px-4 py-3 bg-white" style={{ borderTop: "1px solid #F3F4F6" }}>
-          <div className="text-muted" style={{ fontSize: "14px" }}>
-            Rows per page: <span className="text-dark fw-semibold me-4">10</span> 
-            Showing 1-10 of 148 results
-          </div>
-          <div>
-            {/* Native clean configuration override matching mockup circles */}
-            <Pagination
-              count={3}
-              shape="rounded"
-              size="medium"
+          return (
+            <TableRow
+              key={row.id}
+              hover
+              selected={isChecked}
               sx={{
-                "& .MuiPaginationItem-root": {
-                  fontWeight: 600,
-                  fontSize: "13px",
-                  borderRadius: "8px",
-                  border: "1px solid #E5E7EB",
-                  mx: 0.5,
-                  "&.Mui-selected": {
-                    backgroundColor: "#000000",
-                    color: "#ffffff",
-                    borderColor: "#000000",
-                    "&:hover": {
-                      backgroundColor: "#1F2937",
-                    },
-                  },
+                borderBottom: "1px solid #F9FAFB",
+                "&.Mui-selected": {
+                  backgroundColor: "#F9FAFB",
+                  "&:hover": { backgroundColor: "#F3F4F6" },
                 },
               }}
-            />
-          </div>
-        </div>
-      </div>
+            >
+              {/* Row Checkbox Frame */}
+              <TableCell padding="checkbox" sx={{ pl: 3 }}>
+                <Checkbox
+                  size="small"
+                  checked={isChecked}
+                  onChange={() => handleSelectRow(row.id)}
+                  sx={{ color: "#D1D5DB", "&.Mui-checked": { color: "#111827" } }}
+                />
+              </TableCell>
+
+              {/* Booking Info Block */}
+              <TableCell sx={{ py: 2 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  <Box sx={{ width: 44, height: 44, bgcolor: "#E5E7EB", borderRadius: "8px", flexShrink: 0 }} />
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#111827", fontSize: "14px", lineHeight: 1.2 }}>
+                      {row.title}
+                    </Typography>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "#9CA3AF", mt: 0.5 }}>
+                      <LocationOnOutlined sx={{ fontSize: 14 }} />
+                      <Typography variant="caption" sx={{ fontSize: "12px" }}>{row.location}</Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </TableCell>
+
+              {/* Type Chip Column */}
+              <TableCell>
+                <Box
+                  component="span"
+                  sx={{
+                    px: 1.5,
+                    py: 0.5,
+                    borderRadius: "50px",
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    backgroundColor: row.typeColor,
+                    color: row.typeTextColor,
+                    display: "inline-block",
+                  }}
+                >
+                  {row.type}
+                </Box>
+              </TableCell>
+
+              {/* Client Account Data column */}
+              <TableCell>
+                <Box>
+                  <Typography variant="body2" sx={{ fontWeight: 700, color: "#111827", fontSize: "14px" }}>
+                    {row.client}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "#9CA3AF", display: "block" }}>
+                    {row.subtitle}
+                  </Typography>
+                </Box>
+              </TableCell>
+
+              {/* DateTime field */}
+              <TableCell sx={{ color: "#4B5563", fontSize: "14px" }}>
+                {row.date}
+              </TableCell>
+
+              {/* Financial Amount Value */}
+              <TableCell sx={{ fontWeight: 700, color: "#111827", fontSize: "14px" }}>
+                {row.amount}
+              </TableCell>
+
+              {/* Custom Status Chip Row */}
+              <TableCell>
+                <Box>
+                  <Chip
+                    label={row.status}
+                    size="small"
+                    sx={{
+                      fontSize: "11px",
+                      fontWeight: 600,
+                      height: "22px",
+                      backgroundColor: statusTheme.bg,
+                      color: statusTheme.text,
+                    }}
+                  />
+                  <Typography variant="caption" sx={{ color: "#9CA3AF", display: "block", mt: 0.5, fontSize: "11px" }}>
+                    {row.statusSubtitle}
+                  </Typography>
+                </Box>
+              </TableCell>
+
+              {/* Action Column */}
+              <TableCell align="right" sx={{ pr: 3 }}>
+                <IconButton size="small" sx={{ color: "#9CA3AF" }}>
+                  <ChevronRight fontSize="small" />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
+
+    {/* 3. PAGINATION ROW INTERFACE PANEL */}
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        alignItems: "center",
+        px: 3,
+        py: 2,
+        bgcolor: "#ffffff",
+        borderTop: "1px solid #F3F4F6",
+        gap: 2,
+      }}
+    >
+      <Typography variant="body2" sx={{ color: "#6B7280", fontSize: "14px" }}>
+        Rows per page:{" "}
+        <Box component="span" sx={{ color: "#111827", fontWeight: 600, mr: 4 }}>
+          10
+        </Box>
+        Showing 1-10 of 148 results
+      </Typography>
+      
+      <Box>
+        <Pagination
+          count={3}
+          shape="rounded"
+          size="medium"
+          sx={{
+            "& .MuiPaginationItem-root": {
+              fontWeight: 600,
+              fontSize: "13px",
+              borderRadius: "8px",
+              border: "1px solid #E5E7EB",
+              mx: 0.5,
+              "&.Mui-selected": {
+                backgroundColor: "#000000",
+                color: "#ffffff",
+                borderColor: "#000000",
+                "&:hover": {
+                  backgroundColor: "#1F2937",
+                },
+              },
+            },
+          }}
+        />
+      </Box>
+    </Box>
+  </TableContainer>
     </div>
     <DashboardFooter />
     </div>

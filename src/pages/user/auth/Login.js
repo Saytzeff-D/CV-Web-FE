@@ -36,8 +36,8 @@ const Login = () => {
       .then((res)=>{
         // sessionStorage.getItem('postLoginRedirect') && navigate(-1)
         sessionStorage.setItem('userToken', res.data.token)
-        res.data.role == 'customer' ? navigate('/client/dashboard') : navigate('/agent/dashboard')
-        res.data.role == 'customer' ? sessionStorage.setItem('route', ' /client/dashboard') : sessionStorage.setItem('route', '/agent/dashboard ')
+        res.data.role == 'customer' ? navigate('/user/') : navigate('/agent/dashboard')
+        res.data.role == 'customer' ? sessionStorage.setItem('route', ' /user/') : sessionStorage.setItem('route', '/agent/dashboard ')
         // Handle successful login
       })
       .catch((err)=>{

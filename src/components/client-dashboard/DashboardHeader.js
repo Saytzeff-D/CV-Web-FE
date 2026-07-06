@@ -12,13 +12,12 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const DashboardHeader = () => {
-  // const currentUser = useSelector(
-  //   (state) => state.UserReducer.userInfo
-  // );
+  const currentUser = useSelector(
+    (state) => state.UserReducer.userInfo
+  );
 
   return (
     <Paper
@@ -118,7 +117,7 @@ const DashboardHeader = () => {
           {/* User Data Metadata */}
           <Box sx={{ display: { xs: "none", md: "block" }, textAlign: "right" }}>
             <Typography fontWeight={700} fontSize={15} lineHeight={1.2}>
-              Ajadi Promise
+              {currentUser?.firstname} {currentUser?.lastname}
             </Typography>
             <Typography fontSize={12} color="text.secondary">
               Pro Member
@@ -145,6 +144,7 @@ const DashboardHeader = () => {
             }
           >
             <Avatar
+              src={currentUser.avatar}
               sx={{
                 width: 44,
                 height: 44,

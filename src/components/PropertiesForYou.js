@@ -62,9 +62,10 @@ const PropertiesForYou = () => {
   }
 
    useEffect(()=>{
-    axios.get(`${uri}property/for-you`)
+    axios.get(`${uri}property/recommended`)
       .then(response => {
-        setProperties([...response.data.data.sale, ...response.data.data.rent, ...response.data.data.shortlet]);
+        console.log("Properties For You Response:", response.data);
+        setProperties(response.data.data);
         console.log([response.data.data.sale, response.data.data.rent, response.data.data.shortlet])
         setIsLoading(false);
       })
@@ -93,7 +94,7 @@ const PropertiesForYou = () => {
             </div>
           ))
         ) : (        
-            properties.filter((each, i)=>i < 3).map((property) => (
+            properties.map((property) => (
             <div key={property.id} className="col-12 col-md-6 col-lg-4">
               <div className="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
                 <div className="position-relative">

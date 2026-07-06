@@ -10,24 +10,43 @@ import {
 import HeroImage from "../../../assets/hero-image.png" // your image
 import GridDashboard from "../../../components/client-dashboard/GridDashboard";
 import DashboardFooter from "../../../components/DashboardFooter";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const HeroSection = () => {
+  const uri = useSelector(state=>state.UriReducer.uri)
+  const [recommendedProperties, setRecommendedProperties] = useState([]);
+  const [activeTab, setActiveTab] = useState("transactions");
+  const token = sessionStorage.getItem('userToken')
+  const navigate = useNavigate()
+  const [userData, setUserData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [savedProperties, setSavedProperties] = useState([])
+  const [transactions, setTransactions] = useState([])
+  const [bookings, setBookings] = useState([])
+  const [openDialog, setOpenDialog] = useState(true)
+  const currency = useSelector(state=>state.CurrencyReducer.currency)
+  const rates = useSelector(state=>state.CurrencyReducer.rates);
+  const dispatch = useDispatch()
+  const [metrics, setMetrics] = useState()
   const stats = [
     {
       title: "ACTIVE BOOKINGS",
-      value: "18",
+      value: bookings.length,
       change: "+12%",
       icon: <CalendarTodayOutlined />,
     },
     {
       title: "PENDING PAYMENTS",
-      value: "03",
+      value: transactions.filter(t => t.status === 'pending').length,
       change: "-2.4%",
       icon: <AccessTime />,
     },
     {
       title: "SAVED PROPERTIES",
-      value: "42",
+      value: savedProperties.length,
       change: "+5.2%",
       icon: <FavoriteBorder />,
     },
@@ -38,6 +57,33 @@ const HeroSection = () => {
       icon: <AccountBalanceWalletOutlined />,
     },
   ];
+
+  useEffect(()=>{
+      if(!token){
+          navigate('/login')
+      }else{
+          axios.get(`${uri}auth/me`, {
+              headers: { Authorization: `Bearer ${token}` }
+          })
+          .then((res)=>{
+              setIsLoading(false)
+              setOpenDialog(false)
+              sessionStorage.setItem('avatar', res.data.account.avatar)
+              setBookings(res.data.activeBookings)
+              setTransactions(res.data.transactions)
+              setSavedProperties(res.data.savedProperties)
+              setUserData(res.data.account)
+              dispatch({ type: 'SET_USER_INFO', payload: res.data.account })
+              setMetrics(res.data.metrics)
+              console.log(res.data);
+          })
+          .catch((err)=>{
+              sessionStorage.removeItem('userToken')
+              sessionStorage.removeItem('avatar')
+              navigate('/login')
+          })            
+      }
+  },[uri])
 
   return (
     <>
@@ -78,7 +124,7 @@ const HeroSection = () => {
             </small>
 
             <h1 className="fw-bold mb-3">
-              Welcome back, Alex! 👋
+              Welcome back, {userData?.firstname || 'User'}! 👋
             </h1>
 
             <p
@@ -180,7 +226,7 @@ const HeroSection = () => {
         </button>
 
       </div>
-      <GridDashboard />
+      <GridDashboard userData={userData} bookings={bookings} savedProperties={savedProperties} transactions={transactions} />
       <DashboardFooter />
     </>
   );

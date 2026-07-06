@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import data from '../data.json';
-
-const providers = data.providers;
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 export default function ServiceProvidersSection() {
+  const uri = useSelector(state => state.UriReducer.uri);
+  const [providers, setProviders] = React.useState([]);
+
+  useEffect(() => {
+    axios.get(`${uri}v2/service/top-providers`)
+      .then(response => {
+        console.log("Service Providers Response:", response.data);
+        setProviders(response.data.data);
+      })
+      .catch(error => {
+        console.error("Error fetching service providers:", error);
+      });
+  }, []);
   return (
     <div className="container py-5">
       {/* TOP CARDS */}
@@ -66,8 +79,8 @@ export default function ServiceProvidersSection() {
           <div key={provider.id} className="provider-card">
             <div className="provider-image-wrapper">
                 <img
-                    src={provider.image}
-                    alt={provider.name}
+                    src={provider.avatar}
+                    alt={provider.lastname}
                     className="provider-img"
                 />
 
@@ -76,14 +89,14 @@ export default function ServiceProvidersSection() {
                 </div>
             </div>
 
-            <h6 className="fw-bold mt-3">{provider.name}</h6>
+            <h6 className="fw-bold mt-3">{provider.firstname} {provider.lastname}</h6>
 
             <small className="text-muted d-block">
               {provider.role}
             </small>
 
             <small className="d-block my-2">
-              <i className="fa fa-star-o text-warning"></i> <span className="fw-bold">4.8 ({provider.reviews} reviews)</span>
+              <i className="fa fa-star-o text-warning"></i> <span className="fw-bold">{provider.average_rating} ({provider.reviews} reviews)</span>
             </small>
 
             <button className="btn btn-success rounded-pill w-100">

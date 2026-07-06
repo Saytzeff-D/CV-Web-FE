@@ -19,7 +19,7 @@ const VerifyEmail = () => {
         setSuccess('')
         if (code) {
             setIsLoading(true)
-            axios.post(`${uri}auth/verify-email`, { email, code: parseInt(code) })
+            axios.post(`${uri}auth/verify-email`, { email, code: String(code) })
             .then((res) => {
                 console.log(res.data)
                 navigate('/login')
@@ -77,7 +77,7 @@ const VerifyEmail = () => {
                     Check <b>{email}</b> to verify your account and get started
                 </p>
 
-                {error && (
+                {error !== '' && (
                 <Alert severity="error" className="mb-3">
                     {error}
                 </Alert>

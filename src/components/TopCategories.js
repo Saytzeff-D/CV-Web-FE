@@ -15,13 +15,14 @@ const TopCategories = () => {
 
   useEffect(() => {
     axios
-      .get(`${uri}property/for-you`)
-      .then((response) => {
-        setCategories([
-          ...response.data.data.sale,
-          ...response.data.data.rent,
-          ...response.data.data.shortlet,
-        ]);
+      .get(`${uri}property/top-categories`)
+      .then((response) => {        
+        setCategories(response.data.data);
+        // setCategories([
+        //   ...response.data.data.sale,
+        //   ...response.data.data.rent,
+        //   ...response.data.data.shortlet,
+        // ]);
       })
       .catch((error) => {
         setErrorMessage(

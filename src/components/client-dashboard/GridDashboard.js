@@ -15,29 +15,14 @@ import {
   PersonOutlineOutlined
 } from "@mui/icons-material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, Row } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 const propertyThumb = "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=100&auto=format&fit=crop&q=60";
 const propertyHero1 = "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500&auto=format&fit=crop&q=60";
 const propertyHero2 = "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500&auto=format&fit=crop&q=60";
 
-const GridDashboard = () => {
-  const recentBookings = [
-    { id: 1, title: "Azure Heights Penthouse", date: "May 12 - May 24, 2024", price: "₦850,000", status: "Confirmed", color: "success" },
-    { id: 2, title: "Greenview Modern Studio", date: "Jun 02 - Jun 05, 2024", price: "₦120,000", status: "Pending", color: "warning" },
-    { id: 3, title: "Silicon Plaza Office A4", date: "Jul 10 - Jul 10, 2024", price: "₦45,000", status: "Confirmed", color: "success" },
-  ];
-
-  const savedProperties = [
-    { id: 1, title: "Oceanic Villa", price: "₦4.5M/yr", location: "Lekki Phase 1", image: propertyHero1, status: "Available" },
-    { id: 2, title: "The Grand Residency", price: "₦2.8M/yr", location: "Victoria Island", image: propertyHero2, status: "Available" },
-  ];
-
-  const transactions = [
-    { id: 1, date: "May 10, 2024", type: "Rent Payment", amount: "-₦850,000", status: "Successful", isNegative: true },
-    { id: 2, date: "May 08, 2024", type: "Security Deposit", amount: "-₦200,000", status: "Successful", isNegative: true },
-    { id: 3, date: "May 05, 2024", type: "Wallet Top-up", amount: "+₦1,500,000", status: "Successful", isNegative: false },
-    { id: 4, date: "Apr 28, 2024", type: "Agent Fee", amount: "-₦25,000", status: "Successful", isNegative: true },
-    { id: 5, date: "Apr 25, 2024", type: "Booking Refund", amount: "+₦45,000", status: "Processing", isNegative: false },
-  ];
+const GridDashboard = (props) => {
+  const { userData, bookings, savedProperties, transactions } = props
+  const navigate = useNavigate()  
 
   return (
     <div className="container-fluid px-0 mt-5">
@@ -58,7 +43,7 @@ const GridDashboard = () => {
 
             {/* Bookings Stack */}
             <div className="d-flex flex-column gap-3">
-              {recentBookings.map((booking) => (
+              {bookings.map((booking) => (
                 <div key={booking.id} className="d-flex align-items-center justify-content-between p-2 rounded-3 hover-bg-light">
                   <div className="d-flex align-items-center gap-3">
                     <img 
@@ -102,10 +87,10 @@ const GridDashboard = () => {
             <div style={{ background: "#F3F4F6", height: "90px" }} />
             <div className="px-4 pb-4 position-relative" style={{ marginTop: "-45px" }}>
               <Avatar
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
+                src={userData?.avatar}
                 sx={{ width: 90, height: 90, margin: "0 auto", border: "4px solid white", boxShadow: "0px 4px 12px rgba(0,0,0,0.05)" }}
               />
-              <h5 className="fw-bold mt-3 mb-1">Alex Johnson</h5>
+              <h5 className="fw-bold mt-3 mb-1">{userData?.firstname} {userData?.lastname}</h5>
               <small className="text-muted d-block mb-4">Premium Client since 2022</small>
 
               <div className="row bg-light rounded-4 py-3 px-2 g-0 mb-4">
@@ -119,7 +104,7 @@ const GridDashboard = () => {
                 </div>
               </div>
 
-              <button className="btn btn-dark w-100 rounded-pill py-2.5 fw-semibold d-flex align-items-center justify-content-center gap-2">
+              <button onClick={()=>navigate('/user/profile')} className="btn btn-dark w-100 rounded-pill py-2.5 fw-semibold d-flex align-items-center justify-content-center gap-2">
                 <PersonOutlineOutlined fontSize="small" /> Edit Profile
               </button>
             </div>
