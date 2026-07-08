@@ -40,6 +40,28 @@ export const loginSchema = yup.object().shape({
     password: yup.string().required('Required')
 })
 
+export const updateProfileSchema = yup.object({
+    firstName: yup.string().required("First name is required"),
+    lastName: yup.string().required("Last name is required"),
+    username: yup.string().required("Username is required"),
+    phone: yup.string().required("Phone number is required"),
+    currentPassword: yup.string().when("newPassword", {
+    is: (val) => val && val.length > 0,
+    then: () => yup.string().required("Current password is required to set a new one"),
+    otherwise: () => yup.string().notRequired(),
+    }),
+    newPassword: yup.string().transform((value) => (value === "" ? null : value)).nullable()
+    .min(8, "Password must be at least 8 characters long")
+    .matches(/(?=.*[0-9])/, "Password must contain at least 1 number"),
+    confirmPassword: yup.string().when("newPassword", {
+    is: (val) => val && val.length > 0,
+    then: () => yup.string()
+        .oneOf([yup.ref("newPassword")], "Passwords must match")
+        .required("Please confirm your new password"),
+    otherwise: () => yup.string().notRequired(),
+    }),
+})
+
 export const createAdminSchema = yup.object().shape({
     firstname: yup.string().required('Required'),
     lastname: yup.string().required('Required'),

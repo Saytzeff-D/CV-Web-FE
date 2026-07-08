@@ -45,7 +45,7 @@ const ExperienceMore = () => {
             {/* STORE BUTTONS */}
             <div className="d-flex justify-content-md-center justify-content-lg-start">
                 <div className="d-flex flex-wrap gap-3 mb-5 d-none d-md-flex">
-              <button className="btn btn-light rounded-3 px-3 py-2">
+              <button onClick={()=> window.open('https://apps.apple.com/ua/app/cv-properties/id6759760306')} className="btn btn-light rounded-3 px-3 py-2">
                 <div className="d-flex align-items-center gap-2">
                   <i className="fab fa-apple fs-4"></i>
 
@@ -58,7 +58,7 @@ const ExperienceMore = () => {
                 </div>
               </button>
 
-              <button className="btn btn-light rounded-3 px-3 py-2">
+              <button onClick={()=> window.open('https://play.google.com/store/apps/details?id=com.app.cvproperties')} className="btn btn-light rounded-3 px-3 py-2">
                 <div className="d-flex align-items-center gap-2">
                   <i className="fab fa-google-play fs-4"></i>
 
@@ -74,14 +74,14 @@ const ExperienceMore = () => {
             </div>
 
             <div className="row g-3 mt-3 d-md-none d-block">
-                <div className="col-12 col-sm-auto">
+                <div onClick={()=> window.open('https://apps.apple.com/ua/app/cv-properties/id6759760306')} className="col-12 col-sm-auto">
                     <button className="btn btn-light rounded-3 w-100 px-4 py-3">
                     <i className="fa-brands fa-apple me-2"></i>
                     App Store
                     </button>
                 </div>
 
-                <div className="col-12 col-sm-auto">
+                <div onClick={()=> window.open('https://play.google.com/store/apps/details?id=com.app.cvproperties')} className="col-12 col-sm-auto">
                     <button className="btn btn-light rounded-3 w-100 px-4 py-3">
                     <i className="fa-brands fa-google-play me-2"></i>
                     Google Play

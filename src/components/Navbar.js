@@ -123,7 +123,7 @@ const Navbar = () => {
                         </div>
                         <ul className="dropdown-menu dropdown-menu-end">
                             <li>
-                                <p className="dropdown-item cursor-pointer my-0" onClick={()=> myRoute.includes('client') ? navigate('/client/dashboard') : myRoute.includes('agent') ? navigate('/agent/dashboard') : navigate('/admin/dashboard')} >
+                                <p className="dropdown-item cursor-pointer my-0" onClick={()=> navigate('/user')} >
                                     Dashboard
                                 </p>
                             </li>
