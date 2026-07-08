@@ -43,13 +43,17 @@ const TransactionHistory = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRows, setSelectedRows] = useState([]);
   const [timeFilter, setTimeFilter] = useState("Today");
+  
+    // Pagination Configuration State
+    const [page, setPage] = useState(1);
+    const rowsPerPage = 10;
 
   // Fetch Data Lifecycle
   useEffect(() => {
     if (!token) return;
 
     axios
-      .get(`${uri}transactions`, {
+      .get(`${uri}customer/transactions`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -82,6 +86,17 @@ const TransactionHistory = () => {
       setSelectedRows([...selectedRows, id]);
     }
   };
+
+  // 5. CLIENT-SIDE FILTER TIMELINE EVALUATION
+  const filteredTransactions = transactions.filter((item) => {
+    if (timeFilter === "Today") return true; // Adjust matching parameters if your API passes detailed timestamp fields
+    return true; 
+  });
+
+  // 6. MATHEMATICAL PAGINATION CONSTANTS
+  const totalPages = Math.ceil(filteredTransactions.length / rowsPerPage);
+  const startIndex = (page - 1) * rowsPerPage;
+  const paginatedTransactions = filteredTransactions.slice(startIndex, startIndex + rowsPerPage);
 
   // Helper Badge Color Class Assigners
   const getTypeBadgeStyles = (type) => {
@@ -188,9 +203,9 @@ const TransactionHistory = () => {
 
           {/* Action Click Elements */}
           <div className="d-flex align-items-center gap-2 mt-2 mt-md-0">
-            <button className="btn btn-outline-dark rounded-pill px-3.5 py-2 d-flex align-items-center gap-2 fw-semibold border-light-subtle" style={{ fontSize: "13px" }}>
+            {/* <button className="btn btn-outline-dark rounded-pill px-3.5 py-2 d-flex align-items-center gap-2 fw-semibold border-light-subtle" style={{ fontSize: "13px" }}>
               <FileDownloadOutlined fontSize="small" /> Export CSV
-            </button>
+            </button> */}
             <button className="btn btn-dark rounded-pill px-3.5 py-2 d-flex align-items-center gap-2 fw-semibold" style={{ fontSize: "13px" }}>
               <DeleteOutline fontSize="small" /> Delete Selected
             </button>
@@ -303,32 +318,39 @@ const TransactionHistory = () => {
         </Table>
 
         {/* 5. DATA NAVIGATION PAGINATION SLIDER FOOTER */}
-        <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", px: 3, py: 2, bgcolor: "#fff", borderTop: "1px solid #F3F4F6", gap: 2 }}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", px: 3, py: 2, bgcolor: "#ffffff", borderTop: "1px solid #ECECEC", gap: 2 }}>
           <Typography variant="body2" sx={{ color: "#6B7280", fontSize: "14px" }}>
-            Rows per page: <Box component="span" sx={{ color: "#111827", fontWeight: 600, mr: 4 }}>10</Box>
-            Showing 1-10 of 148 results
+            Rows per page: <Box component="span" sx={{ color: "#111827", fontWeight: 600, mr: 4 }}>{rowsPerPage}</Box>
+            Showing {filteredTransactions.length === 0 ? 0 : startIndex + 1}-{Math.min(startIndex + rowsPerPage, filteredTransactions.length)} of {filteredTransactions.length} results
           </Typography>
-          <Pagination
-            count={3}
-            shape="rounded"
-            size="medium"
-            sx={{
-              "& .MuiPaginationItem-root": {
-                fontWeight: 600,
-                fontSize: "13px",
-                borderRadius: "8px",
-                border: "1px solid #E5E7EB",
-                mx: 0.5,
-                background: "#fff",
-                "&.Mui-selected": {
-                  backgroundColor: "#111827",
-                  color: "#fff",
-                  borderColor: "#111827",
-                  "&:hover": { backgroundColor: "#1F2937" },
-                },
-              },
-            }}
-          />
+          
+          {totalPages > 1 && (
+            <Box>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={(e, value) => setPage(value)}
+                shape="rounded"
+                size="medium"
+                sx={{
+                  "& .MuiPaginationItem-root": {
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    borderRadius: "8px",
+                    border: "1px solid #E5E7EB",
+                    mx: 0.5,
+                    background: "#fff",
+                    "&.Mui-selected": {
+                      backgroundColor: "#000000",
+                      color: "#ffffff",
+                      borderColor: "#000000",
+                      "&:hover": { backgroundColor: "#1F2937" },
+                    },
+                  },
+                }}
+              />
+            </Box>
+          )}
         </Box>
       </TableContainer>
     </div>

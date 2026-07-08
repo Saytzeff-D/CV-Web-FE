@@ -18,14 +18,38 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import SidenavList from '../components/client-dashboard/SidenavList';
 import DashboardHeader from '../components/client-dashboard/DashboardHeader';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 const drawerWidth = 240;
 
 function Dashboard(props) {
+  const uri = useSelector(state=>state.UriReducer.uri)
+  const token = sessionStorage.getItem('userToken')
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  React.useEffect(()=>{
+    if(!token){
+        navigate('/login')
+    }else{
+        axios.get(`${uri}auth/me`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res)=>{                        
+            dispatch({ type: 'SET_USER_INFO', payload: res.data.account })            
+        })
+        .catch((err)=>{
+            sessionStorage.removeItem('userToken')
+            sessionStorage.removeItem('avatar')
+            navigate('/login')
+        })            
+    }
+},[uri])
 
   const handleDrawerClose = () => {
     setIsClosing(true);
