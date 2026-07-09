@@ -3,7 +3,8 @@ import { Box, Typography, Button, Stack, Chip, Menu, MenuItem, Fade, ListItemIco
 import { 
   SearchOutlined, LocationOnOutlined, KeyboardArrowDownOutlined, MenuOutlined, 
   HomeOutlined, KeyOutlined, ApartmentOutlined, CorporateFareOutlined, 
-  HotelOutlined, RoomServiceOutlined, InfoOutlined, BookOutlined, AlternateEmailOutlined
+  HotelOutlined, RoomServiceOutlined, InfoOutlined, BookOutlined, AlternateEmailOutlined,
+  LaunchOutlined
 } from "@mui/icons-material";
 import Logo from '../assets/icon.png'
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +24,44 @@ const Header = () => {
 
   return (
     <Box className="font-poppins" sx={{ width: "100%", bgcolor: "#F9FAFB", overflowX: "hidden" }}>
-      
+      <Box 
+        sx={{ 
+          width: "100%", 
+          bgcolor: "#111827", 
+          py: 1, 
+          px: { xs: 2, sm: 4, md: 8 }, 
+          display: "flex", 
+          justifyContent: "flex-end", 
+          alignItems: "center",
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          position: "relative",
+          zIndex: 15
+        }}
+      >
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography sx={{ color: "rgba(255,255,255,0.65)", fontSize: "11px", fontWeight: 500, letterSpacing: "0.3px" }}>
+            Are you a verified Property Owner or Agent?
+          </Typography>
+          <Box 
+            component="a" 
+            href={'https://agent.cvproperties.co'}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ 
+              color: "#22C55E", 
+              fontSize: "11px", 
+              fontWeight: 700, 
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              "&:hover": { textDecoration: "underline", color: "#4ADE80" }
+            }}
+          >
+            Agent Portal <LaunchOutlined sx={{ fontSize: 10 }} />
+          </Box>
+        </Stack>
+      </Box>
       {/* GRAPHIC BACKDROP OVERLAY CARD BOX CONTAINER */}
       <Box 
         sx={{ 
