@@ -52,7 +52,7 @@ const SidenavList = () => {
         <div>
           <img src={CompanyLogo} alt="Company Logo" width="50px" height="50px" />
         </div>
-        <div>
+        <div onClick={() => navigate('/')} className="d-flex flex-column align-items-start ms-2" style={{ cursor: "pointer" }}>
           <p className="text-cv fw-bold fs-5 mt-2">
             CV Properties
           </p>

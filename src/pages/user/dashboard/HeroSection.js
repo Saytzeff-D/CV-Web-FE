@@ -51,7 +51,7 @@ const HeroSection = () => {
       icon: <FavoriteBorder />,
     },
     {
-      title: "WALLET BALANCE",
+      title: "TOTAL PAID",
       value: "₦4.2M",
       change: "+8.1%",
       icon: <AccountBalanceWalletOutlined />,
@@ -134,9 +134,7 @@ const HeroSection = () => {
                 opacity: .9,
               }}
             >
-              You have 3 property verifications pending and 18 active bookings
-              for this week. Your listings are performing 12% better than last
-              month.
+              You have 2 new notifications and {savedProperties.length} saved properties. Check them out and manage your bookings easily from your dashboard.
             </p>
 
           </div>
@@ -215,12 +213,12 @@ const HeroSection = () => {
 
         </button>
 
-        <button className="btn btn-outline-secondary rounded-pill px-4 py-3">
+        <button onClick={()=> navigate('/')} className="btn btn-outline-secondary rounded-pill px-4 py-3">
 
           <ChatBubbleOutline sx={{ fontSize: 18 }} />
 
           <span className="ms-2 fw-semibold">
-            Contact Support
+            Browse Properties
           </span>
 
         </button>

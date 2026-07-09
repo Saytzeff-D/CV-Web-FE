@@ -16,9 +16,6 @@ import {
 } from "@mui/icons-material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, Row } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-const propertyThumb = "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=100&auto=format&fit=crop&q=60";
-const propertyHero1 = "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500&auto=format&fit=crop&q=60";
-const propertyHero2 = "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500&auto=format&fit=crop&q=60";
 
 const GridDashboard = (props) => {
   const { userData, bookings, savedProperties, transactions } = props
@@ -43,24 +40,24 @@ const GridDashboard = (props) => {
 
             {/* Bookings Stack */}
             <div className="d-flex flex-column gap-3">
-              {bookings.map((booking) => (
-                <div key={booking.id} className="d-flex align-items-center justify-content-between p-2 rounded-3 hover-bg-light">
+              {bookings.map((booking, i) => (
+                <div key={i} className="d-flex align-items-center justify-content-between p-2 rounded-3 hover-bg-light">
                   <div className="d-flex align-items-center gap-3">
                     <img 
-                      src={propertyThumb} 
-                      alt={booking.title} 
+                      src={booking.main_photo} 
+                      alt={booking.name} 
                       className="rounded-3 object-fit-cover" 
                       style={{ width: 56, height: 56 }}
                     />
                     <div>
-                      <h6 className="fw-bold mb-1" style={{ fontSize: "15px" }}>{booking.title}</h6>
+                      <h6 className="fw-bold mb-1" style={{ fontSize: "15px" }}>{booking.name}</h6>
                       <small className="text-muted d-block" style={{ fontSize: "12px" }}>
-                        📅 {booking.date}
+                        📅 {booking.start_date}
                       </small>
                     </div>
                   </div>
                   <div className="text-end">
-                    <span className="fw-bold d-block" style={{ fontSize: "15px" }}>{booking.price}</span>
+                    <span className="fw-bold d-block" style={{ fontSize: "15px" }}>{Number(booking.total_price).toLocaleString()}</span>
                     <Chip 
                       label={booking.status} 
                       size="small" 
@@ -70,8 +67,8 @@ const GridDashboard = (props) => {
                         mt: 0.5, 
                         fontSize: "11px", 
                         fontWeight: 600,
-                        backgroundColor: booking.color === "success" ? "#E8F5E9" : "#FFF3E0",
-                        color: booking.color === "success" ? "#2E7D32" : "#E65100"
+                        backgroundColor: booking.status === "active" ? "#E8F5E9" : "#FFF3E0",
+                        color: booking.status === "active" ? "#2E7D32" : "#E65100"
                       }} 
                     />
                   </div>
@@ -115,24 +112,24 @@ const GridDashboard = (props) => {
       {/* ROW 2: Saved Properties & Need Help Support Module */}
       <div className="row g-4 mt-4">
         {/* Left Sub-Header Section */}
-        <div className="col-10">
+        <div className="col-6">
           <h5 className="fw-bold mb-1">Saved Properties</h5>
         </div>
-        <div className="col-2 text-end">
+        <div className="col-6 text-end">
           <button className="btn btn-link text-muted fw-semibold text-decoration-none btn-sm">
             Manage Favorites
           </button>
         </div>
 
         {/* Properties Cards Stack */}
-        {savedProperties.map((property) => (
-          <div className="col-xl-4 col-md-6" key={property.id}>
+        {savedProperties.map((property, i) => (
+          <div className="col-xl-4 col-md-6" key={i}>
             <div className="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
               {/* Media Container Box */}
               <Box className="position-relative" style={{ height: "200px" }}>
                 <img 
-                  src={property.image} 
-                  alt={property.title} 
+                  src={property.main_photo} 
+                  alt={property.name} 
                   className="w-100 h-100 object-fit-cover"
                 />
                 {/* Scrim Mask Layer */}
@@ -146,13 +143,13 @@ const GridDashboard = (props) => {
                   className="position-absolute top-3 start-3 badge rounded-pill fw-bold px-3 py-2"
                   style={{ backgroundColor: "rgba(0,180,216,0.85)", backdropFilter: "blur(4px)", fontSize: "11px", left: "15px", top: "15px" }}
                 >
-                  {property.status}
+                  {property.type}
                 </span>
 
                 {/* Price and Content Layer over Media bounding frame */}
                 <div className="position-absolute bottom-0 start-0 p-3 text-white">
-                  <h4 className="fw-bold mb-0">{property.price}</h4>
-                  <small style={{ opacity: 0.85 }}>{property.title}</small>
+                  <h4 className="fw-bold mb-0">{Number(property.total_price).toLocaleString()}</h4>
+                  <small style={{ opacity: 0.85 }}>{property.name}</small>
                 </div>
               </Box>
 
@@ -160,7 +157,7 @@ const GridDashboard = (props) => {
               <div className="card-body px-3 py-3 d-flex align-items-center justify-content-between">
                 <div className="d-flex align-items-center text-muted gap-1">
                   <LocationOnOutlined fontSize="small" />
-                  <span style={{ fontSize: "13px", fontWeight: 500 }}>{property.location}</span>
+                  <span style={{ fontSize: "13px", fontWeight: 500 }}>{property.address}</span>
                 </div>
                 <IconButton size="small" sx={{ color: "#EF4444" }}>
                   <Favorite fontSize="small" />
@@ -186,7 +183,8 @@ const GridDashboard = (props) => {
             <p className="text-muted px-3 mb-4" style={{ fontSize: "13px", lineHeight: "1.5" }}>
               Our 24/7 support team is here for your real estate concerns.
             </p>
-            <button 
+            <button
+              onClick={()=> navigate('/contact')}
               className="btn w-100 rounded-pill py-2.5 fw-semibold d-flex align-items-center justify-content-center gap-2"
               style={{ backgroundColor: "rgba(255,255,255,0.08)", color: "#fff", border: "1px solid rgba(255,255,255,0.1)" }}
             >
@@ -223,21 +221,20 @@ const GridDashboard = (props) => {
                 <tbody>
                   {transactions.map((tx) => (
                     <tr key={tx.id}>
-                      <td className="py-3 text-secondary" style={{ fontSize: "14px" }}>{tx.date}</td>
+                      <td className="py-3 text-secondary" style={{ fontSize: "14px" }}>{tx.created_at}</td>
                       <td className="py-3 fw-bold text-dark" style={{ fontSize: "14px" }}>{tx.type}</td>
                       <td 
                         className="py-3 fw-bold" 
                         style={{ 
-                          fontSize: "14px", 
-                          color: tx.isNegative ? "#000000" : "#2E7D32" 
+                          fontSize: "14px"                          
                         }}
                       >
-                        {tx.amount}
+                        {Number(tx.amount).toLocaleString("en-NG", { style: "currency", currency: "NGN" })}
                       </td>
                       <td className="py-3">
-                        {tx.status === "Successful" ? (
+                        {tx.status === "failed" ? (
                           <Chip 
-                            label="Successful" 
+                            label="Failed" 
                             size="small"
                             sx={{ 
                               fontSize: "12px", 
@@ -246,10 +243,28 @@ const GridDashboard = (props) => {
                               color: "#4A4A4A" 
                             }} 
                           />
+                        ) : tx.status === "pending" ? (
+                          <Chip 
+                            label="Pending" 
+                            size="small"
+                            sx={{ 
+                              fontSize: "12px", 
+                              fontWeight: 500,
+                              backgroundColor: "#FFF8E1", 
+                              color: "#FF8F00" 
+                            }} 
+                          />
                         ) : (
-                          <span className="text-muted fw-semibold" style={{ fontSize: "13px" }}>
-                            Processing
-                          </span>
+                          <Chip 
+                            label="Successful" 
+                            size="small"
+                            sx={{ 
+                              fontSize: "12px", 
+                              fontWeight: 500,
+                              backgroundColor: "#E8F5E9", 
+                              color: "#2E7D32" 
+                            }} 
+                          />
                         )}
                       </td>
                     </tr>
