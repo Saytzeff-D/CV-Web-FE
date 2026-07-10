@@ -79,7 +79,7 @@ const PropertyFiltersSidebar = () => {
     */
 
     // C. Route the user to your dedicated properties listing/results page
-    navigate("/buy"); // Update this string to match your layout router path (e.g., /properties or /buy)
+    navigate("/property/results"); // Update this string to match your layout router path (e.g., /properties or /buy)
   };
 
   const handleResetFilters = () => {

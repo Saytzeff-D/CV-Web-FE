@@ -42,6 +42,7 @@ import HeroSection from './pages/user/dashboard/HeroSection';
 import EditProfile from './pages/user/dashboard/Profile';
 import MyFavoritesPage from './pages/user/dashboard/MyFavoritesPage';
 import TransactionHistory from './pages/user/dashboard/TransactionHistory';
+import All from './pages/user/main/All';
 
 function App() {
   const uri = useSelector(state=>state.UriReducer.uri)
@@ -98,6 +99,7 @@ function App() {
           <Route path='/user/profile' element={<EditProfile />} />
           <Route path='/user/transactions' element={<TransactionHistory />} />
         </Route>
+        <Route path='/property/results' element={<All />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
       </BrowserRouter>
