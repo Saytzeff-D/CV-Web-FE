@@ -35,7 +35,7 @@ export default function ServiceProvidersSection() {
                   Start your journey with No.1 agency.
                 </p>
 
-                <button className="btn btn-light rounded-pill px-4 mt-3">
+                <button onClick={()=> window.open('https://agent.cvproperties.co')} className="btn btn-light rounded-pill px-4 mt-3">
                   Get Started Now
                 </button>
               </div>

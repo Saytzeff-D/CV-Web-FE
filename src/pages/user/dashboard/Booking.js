@@ -44,12 +44,7 @@ const Bookings = () => {
 
   // Core Data & State Management
   const [bookings, setBookings] = useState([]);
-  const [metrics, setMetrics] = useState({
-    totalBookings: 0,
-    upcomingCheckins: 0,
-    pendingRequests: 0,
-    completedThisMonth: 0,
-  });
+  const [metrics, setMetrics] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRows, setSelectedRows] = useState([]);
   const [filterTime, setFilterTime] = useState("Today");
@@ -75,6 +70,7 @@ const Bookings = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
+        console.log(res.data)
         // Fallback protections to secure execution if data layout properties vary
         setBookings(res.data.bookings);        
         if (res.data.metrics) {
@@ -109,37 +105,37 @@ const Bookings = () => {
   const stats = [
     {
       title: "TOTAL BOOKINGS",
-      value: metrics.totalBookings || bookings.length,
+      value: metrics?.total_bookings?.count,
       icon: <CalendarMonthOutlined />,
       iconColor: "#2563EB",
-      trend: "+12%",
+      trend: metrics?.total_bookings?.change,
       trendColor: "#16A34A",
       trendIcon: <TrendingUp sx={{ fontSize: 14 }} />,
     },
     {
       title: "UPCOMING CHECK-INS",
-      value: metrics.upcomingCheckins || "0",
+      value: metrics?.upcoming_checkins?.count,
       icon: <AccessTimeOutlined />,
       iconColor: "#F97316",
-      trend: "Next 7 days",
+      trend: metrics?.upcoming_checkins?.change,
       trendColor: "#6B7280",
       trendIcon: null,
     },
     {
       title: "PENDING REQUESTS",
-      value: metrics.pendingRequests || "0",
+      value: metrics?.pending_requests?.count,
       icon: <ChatBubbleOutlineRounded />,
       iconColor: "#A855F7",
-      trend: "-2.4%",
+      trend: metrics?.pending_requests?.change,
       trendColor: "#6B7280",
       trendIcon: <TrendingDown sx={{ fontSize: 14 }} />,
     },
     {
       title: "COMPLETED THIS MONTH",
-      value: metrics.completedThisMonth || "0",
+      value: metrics?.completed_this_month?.count,
       icon: <CheckCircleOutlineRounded />,
       iconColor: "#16A34A",
-      trend: "+5.2%",
+      trend: metrics?.completed_this_month?.change,
       trendColor: "#16A34A",
       trendIcon: <TrendingUp sx={{ fontSize: 14 }} />,
     },
@@ -335,7 +331,7 @@ const Bookings = () => {
                     <TableCell>
                       <Box>
                         <Typography variant="body2" sx={{ fontWeight: 700, color: "#111827", fontSize: "14px" }}>
-                          {row.client}
+                          {/* {row.client} */}
                         </Typography>
                         <Typography variant="caption" sx={{ color: "#9CA3AF", display: "block" }}>
                           {row.subtitle}

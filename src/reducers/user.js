@@ -13,6 +13,11 @@ const UserReducer = (state=initState, action)=>{
                 ...state,
                 userInfo: action.payload
             }
+        case 'SET_SAVED_SEARCHES':
+            return {
+                ...state,
+                savedSearches: action.payload
+            }
         default:
             return state
     }

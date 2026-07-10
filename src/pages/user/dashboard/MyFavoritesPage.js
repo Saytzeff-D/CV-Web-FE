@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { IconButton, Box, Typography, Card, CardContent, Divider, Pagination, CircularProgress } from "@mui/material";
-import { Favorite, BedOutlined, BathtubOutlined, AspectRatioOutlined, VisibilityOutlined } from "@mui/icons-material";
+import { Favorite, BedOutlined, BathtubOutlined, AspectRatioOutlined, VisibilityOutlined, LocationOnOutlined } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
@@ -43,7 +43,7 @@ const MyFavoritesPage = () => {
   // 2. FILTER MECHANIC: Filter properties list based on active structural tags
   const filteredProperties = properties.filter((item) => {
     if (activeTab === "All") return true;
-    return item.tag?.toLowerCase() === activeTab.toLowerCase();
+    return item.category?.toLowerCase() === activeTab.toLowerCase();
   });
 
   // 3. PAGINATION CALCULATION MECHANICS: Slice filtered properties array index positions
@@ -113,12 +113,12 @@ const MyFavoritesPage = () => {
                 >
                   {/* Property Image Block */}
                   <Box className="position-relative" sx={{ width: { xs: "100%", sm: "240px" }, height: "200px", flexShrink: 0 }}>
-                    <img src={item.image} alt={item.title} className="w-100 h-100 object-fit-cover" />
+                    <img src={item.main_photo} alt={item.type} className="w-100 h-100 object-fit-cover" />
                     <span 
-                      className="position-absolute badge rounded-pill fw-semibold px-3 py-1.5"
+                      className="text-capitalize position-absolute badge rounded-pill fw-semibold px-3 py-1.5"
                       style={{ backgroundColor: "rgba(255, 255, 255, 0.9)", color: "#111827", fontSize: "11px", left: "15px", top: "15px", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}
                     >
-                      {item.tag}
+                      {item.category}
                     </span>
                   </Box>
 
@@ -127,7 +127,7 @@ const MyFavoritesPage = () => {
                     <div>
                       <div className="d-flex justify-content-between align-items-center mb-2">
                         <div className="d-flex gap-2 align-items-center">
-                          <span className="badge bg-light text-secondary border px-2 py-1" style={{ fontSize: "10px", fontWeight: "600" }}>{item.type}</span>
+                          <span className="text-capitalize badge bg-light text-secondary border px-2 py-1" style={{ fontSize: "10px", fontWeight: "600" }}>{item.type.replaceAll('_', ' ')}</span>
                           <span style={{ fontSize: "12px", fontWeight: 600, color: "#FBBF24" }}>★ {item.rating}</span>
                         </div>
                         <IconButton size="small" sx={{ color: "#EF4444", backgroundColor: "#FEF2F2", "&:hover": { backgroundColor: "#FEE2E2" } }}>
@@ -136,15 +136,16 @@ const MyFavoritesPage = () => {
                       </div>
 
                       <Typography variant="h6" sx={{ fontWeight: 700, fontSize: "16px", color: "#111827", mb: 0.5 }}>
-                        {item.title}
+                        {item.name.split(" ").slice(0, 3).join(" ")}
                       </Typography>
                       <Typography variant="body2" color="text.secondary" sx={{ fontSize: "12px", mb: 3 }}>
-                        📍 {item.location}
+                        <LocationOnOutlined sx={{ fontSize: 14, verticalAlign: "middle", mr: 0.5 }} />
+                        {item.address.split(",").slice(0, 2).join(",")}
                       </Typography>
 
                       <div className="d-flex gap-4 text-muted mb-3 flex-wrap" style={{ fontSize: "13px" }}>
-                        <div className="d-flex align-items-center gap-1"><BedOutlined fontSize="small" /> {item.beds} Beds</div>
-                        <div className="d-flex align-items-center gap-1"><BathtubOutlined fontSize="small" /> {item.baths} Baths</div>
+                        <div className="d-flex align-items-center gap-1"><BedOutlined fontSize="small" /> {item.bedrooms} Beds</div>
+                        <div className="d-flex align-items-center gap-1"><BathtubOutlined fontSize="small" /> {item.bathrooms} Baths</div>
                         <div className="d-flex align-items-center gap-1"><AspectRatioOutlined fontSize="small" /> {item.size}</div>
                       </div>
                     </div>
@@ -155,7 +156,7 @@ const MyFavoritesPage = () => {
                     <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
                       <div>
                         <small className="text-uppercase text-muted d-block" style={{ fontSize: "10px", fontWeight: 600 }}>Price Range</small>
-                        <span className="fw-bold text-success" style={{ fontSize: "16px" }}>{item.price}</span>
+                        <span className="fw-bold text-success" style={{ fontSize: "16px" }}>{parseInt(item.total_price).toLocaleString('en-NG', { style: 'currency', currency: 'NGN' })}</span>
                       </div>
 
                       <div className="d-flex align-items-center gap-4">
@@ -195,7 +196,7 @@ const MyFavoritesPage = () => {
             >
               <h5 className="fw-bold mb-2 style-title" style={{ maxWidth: "200px", lineHeight: "1.4" }}>Want to list your own property?</h5>
               <p className="mb-4" style={{ fontSize: "12px", opacity: 0.7, maxWidth: "240px" }}>Earn up to ₦2.5M monthly by listing your property with our premium tools.</p>
-              <button className="btn w-100 rounded-pill py-2.5 fw-bold text-white shadow-sm" style={{ backgroundColor: "#22C55E", border: 0, fontSize: "14px" }}>
+              <button onClick={()=> window.open('https://agent.cvproperties.co')} className="btn w-100 rounded-pill py-2.5 fw-bold text-white shadow-sm" style={{ backgroundColor: "#22C55E", border: 0, fontSize: "14px" }}>
                 Get Started Now
               </button>
             </div>

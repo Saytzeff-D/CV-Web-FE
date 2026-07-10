@@ -56,10 +56,10 @@ const Blog = () => {
                 <img src={blog.main_photo} className="card-img-top rounded-3" alt={blog.title} height={'250px'} />
                 <div className="card-body">
                   <p className="text-success small mb-1 fw-semibold">
-                    {blog.title.slice(0,20)} • <span className="text-muted">{new Date(blog.created_at).toLocaleDateString()}</span>
+                    {blog.title?.slice(0,20)} • <span className="text-muted">{new Date(blog.created_at).toLocaleDateString()}</span>
                   </p>
-                  <h6 className="fw-bold mb-2">{blog.subtitle.slice(0,20)}</h6>
-                  <p className="text-muted small mb-0" dangerouslySetInnerHTML={{__html: blog.content.substring(0, 150)}}></p>
+                  <h6 className="fw-bold mb-2">{blog.subtitle?.slice(0,20)}</h6>
+                  <p className="text-muted small mb-0" dangerouslySetInnerHTML={{__html: blog.content?.substring(0, 150)}}></p>
                 </div>
               </div>
             </div>

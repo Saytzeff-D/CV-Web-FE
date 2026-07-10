@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 import Newsletter from "../../../components/Newsletter";
 import Header from "../../../components/Header";
@@ -18,8 +17,7 @@ const Home = () => {
         document.title = "CV Properties - Home";
       }, []);
     return (
-        <div>
-            {/* <Navbar />  */}
+        <div>    
             <Header />           
             <TopCategories />
             <PropertiesForYou />                    

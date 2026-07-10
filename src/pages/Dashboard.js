@@ -41,7 +41,8 @@ function Dashboard(props) {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then((res)=>{                        
-            dispatch({ type: 'SET_USER_INFO', payload: res.data.account })            
+            dispatch({ type: 'SET_USER_INFO', payload: res.data.account })       
+            dispatch({ type: 'SET_SAVED_SEARCHES', payload: res.data.savedProperties.length })
         })
         .catch((err)=>{
             sessionStorage.removeItem('userToken')

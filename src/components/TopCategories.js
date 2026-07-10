@@ -2,27 +2,26 @@ import React, { useState, useEffect, useRef } from "react";
 import { Box, Skeleton, Slider, Typography } from "@mui/material";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import PropertyFiltersSidebar from "./PropertyFiltersSidebar";
+import { useNavigate } from "react-router-dom";
 
 const TopCategories = () => {
   const uri = useSelector((state) => state.UriReducer.uri);
-
+  const savedSearches = useSelector(
+    (state) => state.UserReducer.savedSearches
+  );
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [priceRange, setPriceRange] = useState([500000, 2000000]);
-
+  const navigate = useNavigate()
   const scrollRef = useRef(null);
 
   useEffect(() => {
     axios
       .get(`${uri}property/top-categories`)
       .then((response) => {        
-        setCategories(response.data.data);
-        // setCategories([
-        //   ...response.data.data.sale,
-        //   ...response.data.data.rent,
-        //   ...response.data.data.shortlet,
-        // ]);
+        setCategories(response.data.data);        
       })
       .catch((error) => {
         setErrorMessage(
@@ -52,75 +51,7 @@ const TopCategories = () => {
     <div className="container py-5">
       <div className="row">
         {/* FILTERS */}
-        <div className="col-lg-3 mb-4">
-          <div className="filter-card">
-
-            <div className="d-flex justify-content-between mb-4">
-              <h6 className="fw-bold">Filters</h6>
-
-              <button className="btn btn-sm border-0">
-                <small className="fw-bold text-success">Reset</small>
-              </button>
-            </div>
-
-            <Box>
-              <Typography variant="subtitle2" className="fw-bold mb-2">
-                Price Range (NGN)
-              </Typography>
-
-              <div className="d-flex justify-content-between mb-2">
-                <span>₦{priceRange[0].toLocaleString()}</span>
-                <span>₦{priceRange[1].toLocaleString()}</span>
-              </div>
-
-              <Slider
-                value={priceRange}
-                onChange={(e, val) => priceFilter(val)}
-                min={200000}
-                max={5000000}
-                step={50000}
-                sx={{ color: "green" }}
-              />
-            </Box>
-
-            <h6 className="fw-bold mt-4">Property Type</h6>
-
-            <div className="d-flex flex-wrap gap-2 mt-3">
-              {[
-                "Land",
-                "Apartments",
-                "Shortlets",
-                "Event Centers",
-                "Hotels",
-                "Hostels",
-              ].map((item) => (
-                <button
-                  key={item}
-                  className="btn btn-outline-secondary rounded-pill btn-sm"
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-4">
-              <div className="d-flex justify-content-between">
-                <span>Instant Book</span>
-
-                <div className="form-check form-switch">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button className="btn btn-dark rounded-pill w-100 mt-4">
-              Show 142 Results
-            </button>
-          </div>
-        </div>
+        <PropertyFiltersSidebar />
 
         {/* PROPERTIES */}
         <div className="col-lg-9">
@@ -147,9 +78,12 @@ const TopCategories = () => {
               ))}
             </div>
 
-            <button className="btn btn-sm border-0 text-success fw-bold">
-              <i className="fa fa-star-o"></i> My Saved Searches (4)
-            </button>
+            {
+              savedSearches !== undefined &&
+              <button onClick={()=> navigate('/user/saved-searches')} className="btn btn-sm border-0 text-success fw-bold">
+                <i className="fa fa-star-o"></i> My Saved Searches ({savedSearches})
+              </button>
+            }
 
           </div>
 
@@ -222,14 +156,14 @@ const TopCategories = () => {
 
                       <div className="position-absolute top-0 start-0 d-flex gap-2 m-3">
 
-                        <span className="badge bg-success rounded-pill px-3 py-2">
+                        <span className="badge bg-success rounded-pill px-3 py-2 text-capitalize">
                           <i className="fa fa-bolt me-1"></i>
-                          Instant Book
+                          {property.category}
                         </span>
 
-                        <span className="badge bg-secondary rounded-pill px-3 py-2">
+                        <span className="badge bg-secondary rounded-pill px-3 py-2 text-capitalize">
                           <i className="fa fa-play-circle me-1"></i>
-                          Video Tour
+                          {property.type.trim()}
                         </span>
 
                       </div>
@@ -272,7 +206,7 @@ const TopCategories = () => {
                           </h6>
 
                           <small className="text-uppercase text-muted">
-                            Per Night
+                            Per {property.type == 'hotel' ? 'Night' : property.type == 'shortlet' ? 'Day' : 'Year '}
                           </small>
                         </div>
 
@@ -282,17 +216,19 @@ const TopCategories = () => {
 
                         <small>
                           <i className="fa fa-bed me-1"></i>
-                          4 Beds
+                          {property.bedrooms} Beds
                         </small>
 
                         <small>
                           <i className="fa fa-bath me-1"></i>
-                          4.5 Baths
+                          {property.bathrooms} Baths
                         </small>
 
                         <small>
                           <i className="fa fa-expand me-1"></i>
-                          3200 sqft
+                          {
+                            property.type == 'land' ? `${property.land_size} sq.m` : `${property.toilets} Toilets`
+                          }
                         </small>
 
                       </div>

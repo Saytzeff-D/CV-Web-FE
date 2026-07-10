@@ -12,6 +12,7 @@ import HomeImage from "../assets/home-image.png"
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const avatar = sessionStorage.getItem('avatar') 
   const dispatch = useDispatch()
   const [menuAnchor, setMenuAnchor] = useState(null);
   const isMenuOpen = Boolean(menuAnchor);
@@ -20,6 +21,13 @@ const Header = () => {
 
   const handleCurrency = (value) => {        
     dispatch({type: 'SET_CURRENCY', payload: value});
+  }
+
+  const logout = ()=>{
+    sessionStorage.getItem('route') == '/admin/dashboard' ? navigate('/admin/login') : navigate('/login')
+    sessionStorage.removeItem('userToken')
+    sessionStorage.removeItem('route')
+    sessionStorage.removeItem('avatar')
   }
 
   return (
@@ -152,23 +160,86 @@ const Header = () => {
               <MenuItem value="USD">USD</MenuItem>
               <MenuItem value="GBP">GBP</MenuItem>
             </Select>
-            <Button variant="text" sx={{ color: "#fff", textTransform: "none", fontWeight: 600, display: { xs: "none", md: "inline-block" } }} onClick={() => navigate("/create-account")}>Sign Up</Button>
-            <Button variant="contained" sx={{ bgcolor: "#22C55E", color: "#fff", borderRadius: "50px", textTransform: "none", fontWeight: 600, px: 3, "&:hover": { bgcolor: "#16A34A" } }} onClick={() => navigate("/login")}>Login</Button>
-            <Button onClick={(e) => setMenuAnchor(e.currentTarget)} sx={{ minWidth: "auto", p: 1.2, borderRadius: "50%", color: "#fff", bgcolor: "rgba(255,255,255,0.12)", backdropFilter: "blur(8px)" }}><MenuOutlined fontSize="small" /></Button>
+            {
+                avatar !== null && avatar !== undefined
+                ?
+                <div className="dropdown" role="search">
+                    <div className="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style={{cursor: 'pointer'}}>
+                        <img src={avatar} alt="User Avatar" className="rounded-circle" style={{ width: "40px", height: "40px", objectFit: "cover" }} />
+                    </div>
+                    <ul className="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <p className="dropdown-item cursor-pointer my-0" onClick={()=> navigate('/user')} >
+                                Dashboard
+                            </p>
+                        </li>
+                        <li><p className="dropdown-item cursor-pointer" onClick={logout} >Logout</p></li>
+                    </ul>
+                </div>
+                :
+                <>
+                <Button variant="text" sx={{ color: "#fff", textTransform: "none", fontWeight: 600, display: { xs: "none", md: "inline-block" } }} onClick={() => navigate("/create-account")}>
+                Sign Up
+              </Button>
+              <Button variant="contained" sx={{ bgcolor: "#22C55E", color: "#fff", borderRadius: "50px", textTransform: "none", fontWeight: 600, px: 3, "&:hover": { bgcolor: "#16A34A" } }} onClick={() => navigate("/login")}>
+                Login
+              </Button>
+              </>
+            }            
+            <Button onClick={(e) => setMenuAnchor(e.currentTarget)} sx={{ minWidth: "auto", p: 1.2, borderRadius: "50%", color: "#fff", bgcolor: "rgba(255,255,255,0.12)", backdropFilter: "blur(8px)" }}><MenuOutlined fontSize="small" />
+            </Button>
             
             <Menu anchorEl={menuAnchor} open={isMenuOpen} onClose={() => setMenuAnchor(null)} TransitionComponent={Fade} anchorOrigin={{ vertical: "bottom", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} slotProps={{ paper: { sx: { mt: 1.5, borderRadius: "16px", width: "240px", p: 1 } } }}>
               <Typography variant="caption" sx={{ px: 2, py: 1, display: "block", color: "#9CA3AF", fontWeight: 700 }}>MARKETPLACE</Typography>
-              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}><ListItemIcon><HomeOutlined fontSize="small" /></ListItemIcon> Buy Properties</MenuItem>
-              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}><ListItemIcon><KeyOutlined fontSize="small" /></ListItemIcon> Rent Listings</MenuItem>
-              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}><ListItemIcon><ApartmentOutlined fontSize="small" /></ListItemIcon> Shortlet Studios</MenuItem>
-              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}><ListItemIcon><CorporateFareOutlined fontSize="small" /></ListItemIcon> Hostels</MenuItem>
-              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}><ListItemIcon><HotelOutlined fontSize="small" /></ListItemIcon> Hotels & Resorts</MenuItem>
-              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}><ListItemIcon><RoomServiceOutlined fontSize="small" /></ListItemIcon> Premium Services</MenuItem>
+              <MenuItem onClick={() => navigate('/buy/all')} sx={{ py: 1, borderRadius: "8px" }}>
+                <ListItemIcon>
+                  <HomeOutlined fontSize="small" />
+                </ListItemIcon> Buy Properties
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/rent/all')} sx={{ py: 1, borderRadius: "8px" }}>
+                <ListItemIcon>
+                  <KeyOutlined fontSize="small" />
+                </ListItemIcon> Rent Listings
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/shortlet/all')} sx={{ py: 1, borderRadius: "8px" }}>
+                <ListItemIcon>
+                  <ApartmentOutlined fontSize="small" />
+                </ListItemIcon> Shortlets
+              </MenuItem>
+              {/* <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}>
+                <ListItemIcon>
+                  <CorporateFareOutlined fontSize="small" />
+                </ListItemIcon> Hostels
+              </MenuItem>
+              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}>
+                <ListItemIcon>
+                  <HotelOutlined fontSize="small" />
+                </ListItemIcon> Hotels & Resorts
+              </MenuItem>
+              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}>
+                <ListItemIcon>
+                  <RoomServiceOutlined fontSize="small" />
+                </ListItemIcon> Premium Services
+              </MenuItem> */}
               <Divider sx={{ my: 1 }} />
-              <Typography variant="caption" sx={{ px: 2, py: 1, display: "block", color: "#9CA3AF", fontWeight: 700 }}>COMPANY</Typography>
-              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}><ListItemIcon><InfoOutlined fontSize="small" /></ListItemIcon> About Us</MenuItem>
-              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}><ListItemIcon><BookOutlined fontSize="small" /></ListItemIcon> Blog Insights</MenuItem>
-              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}><ListItemIcon><AlternateEmailOutlined fontSize="small" /></ListItemIcon> Contact Support</MenuItem>
+              <Typography variant="caption" sx={{ px: 2, py: 1, display: "block", color: "#9CA3AF", fontWeight: 700 }}>
+                COMPANY
+              </Typography>
+              <MenuItem onClick={() => navigate('/about')} sx={{ py: 1, borderRadius: "8px" }}>
+                <ListItemIcon>
+                  <InfoOutlined fontSize="small" />
+                </ListItemIcon> About Us
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/blog')} sx={{ py: 1, borderRadius: "8px" }}>
+                <ListItemIcon>
+                  <BookOutlined fontSize="small" />
+                </ListItemIcon> Blog Insights
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/contact')} sx={{ py: 1, borderRadius: "8px" }}>
+                <ListItemIcon>
+                  <AlternateEmailOutlined fontSize="small" />
+                </ListItemIcon> Contact Support
+              </MenuItem>
             </Menu>
           </Stack>
         </Box>
@@ -191,8 +262,12 @@ const Header = () => {
           </Typography>
 
           <Stack direction="row" spacing={2} justifyContent="flex-start">
-            <Button variant="contained" sx={{ bgcolor: "#22C55E", color: "#fff", borderRadius: "12px", px: 4, py: 1.6, fontWeight: 700, textTransform: "none", "&:hover": { bgcolor: "#16A34A" } }}>About Us</Button>
-            <Button onClick={()=> window.open('https://agent.cvproperties.co')} variant="outlined" sx={{ color: "#fff", borderColor: "rgba(255,255,255,0.6)", borderRadius: "12px", px: 4, py: 1.6, fontWeight: 700, textTransform: "none", backdropFilter: "blur(4px)" }}>List a Property</Button>
+            <Button onClick={()=> navigate('/about')} variant="contained" sx={{ bgcolor: "#22C55E", color: "#fff", borderRadius: "12px", px: 4, py: 1.6, fontWeight: 700, textTransform: "none", "&:hover": { bgcolor: "#16A34A" } }}>
+              About Us
+            </Button>
+            <Button onClick={()=> window.open('https://agent.cvproperties.co')} variant="outlined" sx={{ color: "#fff", borderColor: "rgba(255,255,255,0.6)", borderRadius: "12px", px: 4, py: 1.6, fontWeight: 700, textTransform: "none", backdropFilter: "blur(4px)" }}>
+              List a Property
+            </Button>
           </Stack>
         </Box>
       </Box>

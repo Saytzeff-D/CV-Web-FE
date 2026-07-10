@@ -35,12 +35,7 @@ const TransactionHistoryPage = () => {
 
   // State Management
   const [transactions, setTransactions] = useState([]);
-  const [metrics, setMetrics] = useState({
-    totalTransactions: null,
-    netInflow: null,
-    pendingWithdrawals: null,
-    feesCollected: null,
-  });
+  const [metrics, setMetrics] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [selectedRows, setSelectedRows] = useState([]);
   const [timeFilter, setTimeFilter] = useState("Today");
@@ -112,9 +107,9 @@ const TransactionHistoryPage = () => {
     }
   };
 
-  const formatCurrency = (amount, currencyCode = "NGN") => {
+  const formatCurrency = (amount, currencyCode = "NGN") => {    
     const symbol = currencyCode === "USD" ? "$" : "₦";
-    return `${symbol}${Number(amount || 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+    return `${symbol}${(amount)}`
   };
 
   // 4. PAGINATION ARRAYS MATHEMATICS
@@ -132,10 +127,10 @@ const TransactionHistoryPage = () => {
 
   // Dashboard Overview Upper metrics data configuration matching card designs
   const cardsOverviewData = [
-    { title: "TOTAL TRANSACTIONS", value: metrics.totalTransactions ? formatCurrency(metrics.totalTransactions) : "₦4,250,000", change: "+12.5%", icon: <CreditCardOutlined sx={{ color: "#2563EB" }} />, bg: "#EFF6FF" },
-    { title: "NET INFLOW", value: metrics.netInflow ? formatCurrency(metrics.netInflow) : "₦3,120,000", change: "+8.2%", icon: <CallMadeOutlined sx={{ color: "#16A34A" }} />, bg: "#F0FDF4" },
-    { title: "PENDING WITHDRAWALS", value: metrics.pendingWithdrawals ? formatCurrency(metrics.pendingWithdrawals) : "₦185,000", change: "-2.4%", icon: <AccessTimeOutlined sx={{ color: "#EA580C" }} />, bg: "#FFF7ED" },
-    { title: "FEES COLLECTED", value: metrics.feesCollected ? formatCurrency(metrics.feesCollected) : "₦95,400", change: "+5.2%", icon: <BookmarkBorderOutlined sx={{ color: "#A855F7" }} />, bg: "#F3E8FF" },
+    { title: metrics?.total_transactions?.label, value: formatCurrency(metrics.total_transactions.amount.replace(/N/g, "")), change: (metrics?.total_transactions?.change).toFixed(2) + "%", icon: <CreditCardOutlined sx={{ color: "#2563EB" }} />, bg: "#EFF6FF" },
+    { title: metrics?.successful_transactions?.label, value: formatCurrency(metrics.successful_transactions.amount.replace(/N/g, "")), change: (metrics?.successful_transactions?.change).toFixed(2) + "%", icon: <CallMadeOutlined sx={{ color: "#16A34A" }} />, bg: "#F0FDF4" },
+    { title: metrics?.pending_transactions?.label, value: formatCurrency(metrics.pending_transactions.amount.replace(/N/g, "")), change: (metrics?.pending_transactions?.change).toFixed(2) + "%", icon: <AccessTimeOutlined sx={{ color: "#EA580C" }} />, bg: "#FFF7ED" },
+    { title: metrics?.failed_transactions?.label, value: formatCurrency(metrics.failed_transactions.amount.replace(/N/g, "")), change: (metrics?.failed_transactions?.change).toFixed(2) + "%", icon: <BookmarkBorderOutlined sx={{ color: "#A855F7" }} />, bg: "#F3E8FF" },
   ];
 
   return (
@@ -206,9 +201,9 @@ const TransactionHistoryPage = () => {
 
           {/* Action Trigger Elements Group Button Block */}
           <div className="d-flex align-items-center gap-2">
-            <button className="btn btn-outline-dark rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-semibold border-light-subtle" style={{ fontSize: "13px" }}>
+            {/* <button className="btn btn-outline-dark rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-semibold border-light-subtle" style={{ fontSize: "13px" }}>
               <FileDownloadOutlined fontSize="small" /> Export CSV
-            </button>
+            </button> */}
             <button className="btn btn-dark rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-semibold" style={{ fontSize: "13px" }}>
               <DeleteOutline fontSize="small" /> Delete Selected
             </button>
@@ -241,12 +236,11 @@ const TransactionHistoryPage = () => {
               </TableCell>
               <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", letterSpacing: "0.5px" }}>DATE & TIME</TableCell>
               <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", letterSpacing: "0.5px" }}>TYPE</TableCell>
-              <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", letterSpacing: "0.5px" }}>REFERENCE / TXN ID</TableCell>
+              <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", letterSpacing: "0.5px" }}>TXN ID</TableCell>
               <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", letterSpacing: "0.5px" }}>RELATED ITEM</TableCell>
-              <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", letterSpacing: "0.5px" }}>AMOUNT</TableCell>
-              <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", letterSpacing: "0.5px" }}>BALANCE</TableCell>
+              <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", letterSpacing: "0.5px" }}>AMOUNT</TableCell>              
               <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", letterSpacing: "0.5px" }}>STATUS</TableCell>
-              <TableCell align="right" sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", letterSpacing: "0.5px", pr: 3 }}>ACTIONS</TableCell>
+              {/* <TableCell align="right" sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", letterSpacing: "0.5px", pr: 3 }}>ACTIONS</TableCell> */}
             </TableRow>
           </TableHead>
 
@@ -293,24 +287,18 @@ const TransactionHistoryPage = () => {
 
                     {/* Code reference Meta elements */}
                     <TableCell>
-                      <Typography variant="body2" sx={{ fontWeight: 600, color: "#111827", fontSize: "13.5px" }}>{tx.reference || "—"}</Typography>
-                      <Typography variant="caption" sx={{ color: "#9CA3AF" }}>{tx.property_id ? `Property ID: ${tx.property_id}` : "Direct Wallet Transfer"}</Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600, color: "#111827", fontSize: "13.5px" }}>{tx.reference || "—"}</Typography>                      
                     </TableCell>
 
                     {/* Related Asset Title Context matching 'name' row key */}
                     <TableCell sx={{ color: "#4B5563", fontSize: "13.5px", fontWeight: 500, maxWidth: "220px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {tx.name || "System Ledger Inflow"}
+                      {tx.related_item}
                     </TableCell>
 
                     {/* Dynamic Financial amount value notation column mapping */}
                     <TableCell sx={{ fontWeight: 700, fontSize: "14px", color: amountColor }}>
-                      {prefixSign}{formatCurrency(tx.amount, tx.currency)}
-                    </TableCell>
-
-                    {/* Dynamic fallback placeholder for balance properties to be synchronized later */}
-                    <TableCell sx={{ color: "#111827", fontWeight: 600, fontSize: "13.5px" }}>
-                      {tx.balance ? formatCurrency(tx.balance, tx.currency) : "Pending sync"}
-                    </TableCell>
+                        {formatCurrency(tx.amount, tx.currency)}
+                    </TableCell>                    
 
                     {/* Processing State Badge column alignment mapping */}
                     <TableCell>
@@ -318,12 +306,12 @@ const TransactionHistoryPage = () => {
                     </TableCell>
 
                     {/* Table contextual Action Row layout nodes */}
-                    <TableCell align="right" sx={{ pr: 3 }}>
+                    {/* <TableCell align="right" sx={{ pr: 3 }}>
                       <div className="d-flex align-items-center justify-content-end gap-1">
                         <IconButton size="small" sx={{ color: "#9CA3AF" }}><ChevronRight fontSize="small" /></IconButton>
                         <IconButton size="small" sx={{ color: "#9CA3AF" }}><ArrowDownward fontSize="small" /></IconButton>
                       </div>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 );
               })
