@@ -63,10 +63,8 @@ const PropertiesForYou = () => {
 
    useEffect(()=>{
     axios.get(`${uri}property/recommended`)
-      .then(response => {
-        console.log("Properties For You Response:", response.data);
-        setProperties(response.data.data);
-        console.log([response.data.data.sale, response.data.data.rent, response.data.data.shortlet])
+      .then(response => {        
+        setProperties(response.data.data);        
         setIsLoading(false);
       })
       .catch(error => {
@@ -117,7 +115,7 @@ const PropertiesForYou = () => {
               <div className="card-body">
                 <h4 className="fw-bold">{parseInt(property.total_price).toLocaleString('en-NG', { style: 'currency', currency: 'NGN' })}</h4>
 
-                <h5 className="mt-3">{property.name}</h5>
+                <h5 className="mt-3">{property.name.split(" ").slice(0, 3).join(" ")}</h5>
 
                 <p className="text-muted small">
                   <i className="fa fa-map-marker-alt me-2"></i>
@@ -137,10 +135,19 @@ const PropertiesForYou = () => {
                     {property.bathrooms} Baths
                   </span>
 
-                  <span>
+                  {
+                    property.type == 'land' ? (
+                      <span>
                     <i className="fa fa-expand me-1"></i>
-                    {property.land_size} sqft
-                  </span>
+                      {property.land_size} sqft
+                    </span>
+                      ) : (
+                        <span>
+                      <i className="fa fa-toilet me-1"></i>
+                      {property.toilets} Toilets
+                    </span>
+                    )
+                  }
                 </div>
               </div>
             </div>

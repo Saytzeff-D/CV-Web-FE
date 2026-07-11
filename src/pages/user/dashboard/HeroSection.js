@@ -52,7 +52,7 @@ const HeroSection = () => {
     },
     {
       title: "TOTAL PAID",
-      value: "₦4.2M",
+      value: "₦0",
       change: "+8.1%",
       icon: <AccountBalanceWalletOutlined />,
     },

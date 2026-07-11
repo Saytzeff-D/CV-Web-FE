@@ -282,11 +282,11 @@ const Bookings = () => {
               </TableCell>
               <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>BOOKING INFO</TableCell>
               <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>TYPE</TableCell>
-              <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>CLIENT</TableCell>
+              <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>AGENT</TableCell>
               <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>DATE & TIME</TableCell>
               <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>AMOUNT</TableCell>
               <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>STATUS</TableCell>
-              <TableCell align="right" sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280", pr: 3 }}>ACTIONS</TableCell>
+              {/* <TableCell align="right" sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280", pr: 3 }}>ACTIONS</TableCell> */}
             </TableRow>
           </TableHead>
 
@@ -309,7 +309,7 @@ const Bookings = () => {
 
                     <TableCell sx={{ py: 2 }}>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        <Box sx={{ width: 44, height: 44, bgcolor: "#E5E7EB", borderRadius: "8px", flexShrink: 0, backgroundImage: `url(${row.image})`, backgroundSize: 'cover' }} />
+                        <Box sx={{ width: 44, height: 44, bgcolor: "#E5E7EB", borderRadius: "8px", flexShrink: 0, backgroundImage: `url(${row.property?.image})`, backgroundSize: 'cover' }} />
                         <Box>
                           <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#111827", fontSize: "14px", lineHeight: 1.2 }}>
                             {row.title}
@@ -331,31 +331,28 @@ const Bookings = () => {
                     <TableCell>
                       <Box>
                         <Typography variant="body2" sx={{ fontWeight: 700, color: "#111827", fontSize: "14px" }}>
-                          {/* {row.client} */}
+                          {row.agent.name}
                         </Typography>
                         <Typography variant="caption" sx={{ color: "#9CA3AF", display: "block" }}>
-                          {row.subtitle}
+                          {row.agent.email}
                         </Typography>
                       </Box>
                     </TableCell>
 
-                    <TableCell sx={{ color: "#4B5563", fontSize: "14px" }}>{row.date}</TableCell>
+                    <TableCell sx={{ color: "#4B5563", fontSize: "14px" }}>{row.date_time}</TableCell>
                     <TableCell sx={{ fontWeight: 700, color: "#111827", fontSize: "14px" }}>{row.amount}</TableCell>
 
                     <TableCell>
                       <Box>
-                        <Chip label={row.status} size="small" sx={{ fontSize: "11px", fontWeight: 600, height: "22px", backgroundColor: statusTheme.bg, color: statusTheme.text }} />
-                        <Typography variant="caption" sx={{ color: "#9CA3AF", display: "block", mt: 0.5, fontSize: "11px" }}>
-                          {row.statusSubtitle}
-                        </Typography>
+                        <Chip label={row.status} size="small" sx={{ fontSize: "11px", fontWeight: 600, height: "22px", backgroundColor: statusTheme.bg, color: statusTheme.text }} />                        
                       </Box>
                     </TableCell>
 
-                    <TableCell align="right" sx={{ pr: 3 }}>
+                    {/* <TableCell align="right" sx={{ pr: 3 }}>
                       <IconButton size="small" sx={{ color: "#9CA3AF" }}>
                         <ChevronRight fontSize="small" />
                       </IconButton>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 );
               })

@@ -33,47 +33,55 @@ const GridDashboard = (props) => {
                 <h5 className="fw-bold mb-1">Recent Bookings</h5>
                 <small className="text-muted">Manage your active and upcoming property visits</small>
               </div>
-              <button className="btn btn-link text-dark fw-bold text-decoration-none d-flex align-items-center gap-1 btn-sm">
+              <button onClick={() => navigate("/user/bookings")} className="btn btn-link text-dark fw-bold text-decoration-none d-flex align-items-center gap-1 btn-sm">
                 View All <ChevronRight fontSize="small" />
               </button>
             </div>
 
             {/* Bookings Stack */}
             <div className="d-flex flex-column gap-3">
-              {bookings.map((booking, i) => (
-                <div key={i} className="d-flex align-items-center justify-content-between p-2 rounded-3 hover-bg-light">
-                  <div className="d-flex align-items-center gap-3">
-                    <img 
-                      src={booking.main_photo} 
-                      alt={booking.name} 
-                      className="rounded-3 object-fit-cover" 
-                      style={{ width: 56, height: 56 }}
-                    />
-                    <div>
-                      <h6 className="fw-bold mb-1" style={{ fontSize: "15px" }}>{booking.name}</h6>
-                      <small className="text-muted d-block" style={{ fontSize: "12px" }}>
-                        📅 {booking.start_date}
-                      </small>
+              {
+                bookings.length == 0 ? (
+                  <div className="card border-0 shadow-sm rounded-4 p-4 text-center">
+                    <p className="text-muted">You have no recent bookings.</p>
+                  </div>
+                ) : (
+                  bookings.map((booking, i) => (
+                    <div key={i} className="d-flex align-items-center justify-content-between p-2 rounded-3 hover-bg-light">
+                      <div className="d-flex align-items-center gap-3">
+                        <img 
+                          src={booking.main_photo} 
+                          alt={booking.name} 
+                          className="rounded-3 object-fit-cover" 
+                          style={{ width: 56, height: 56 }}
+                        />
+                        <div>
+                          <h6 className="fw-bold mb-1" style={{ fontSize: "15px" }}>{booking.name}</h6>
+                          <small className="text-muted d-block" style={{ fontSize: "12px" }}>
+                            📅 {booking.start_date}
+                          </small>
+                        </div>
+                      </div>
+                      <div className="text-end">
+                        <span className="fw-bold d-block" style={{ fontSize: "15px" }}>{Number(booking.total_price).toLocaleString()}</span>
+                        <Chip 
+                          label={booking.status} 
+                          size="small" 
+                          color={booking.color}
+                          variant="soft"
+                          sx={{ 
+                            mt: 0.5, 
+                            fontSize: "11px", 
+                            fontWeight: 600,
+                            backgroundColor: booking.status === "active" ? "#E8F5E9" : "#FFF3E0",
+                            color: booking.status === "active" ? "#2E7D32" : "#E65100"
+                          }} 
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-end">
-                    <span className="fw-bold d-block" style={{ fontSize: "15px" }}>{Number(booking.total_price).toLocaleString()}</span>
-                    <Chip 
-                      label={booking.status} 
-                      size="small" 
-                      color={booking.color}
-                      variant="soft"
-                      sx={{ 
-                        mt: 0.5, 
-                        fontSize: "11px", 
-                        fontWeight: 600,
-                        backgroundColor: booking.status === "active" ? "#E8F5E9" : "#FFF3E0",
-                        color: booking.status === "active" ? "#2E7D32" : "#E65100"
-                      }} 
-                    />
-                  </div>
-                </div>
-              ))}
+                  ))
+                )
+              }
             </div>
           </div>
         </div>
@@ -116,56 +124,66 @@ const GridDashboard = (props) => {
           <h5 className="fw-bold mb-1">Saved Properties</h5>
         </div>
         <div className="col-6 text-end">
-          <button className="btn btn-link text-muted fw-semibold text-decoration-none btn-sm">
+          <button onClick={()=>navigate('/user/saved-searches')} className="btn btn-link text-muted fw-semibold text-decoration-none btn-sm">
             Manage Favorites
           </button>
         </div>
 
         {/* Properties Cards Stack */}
-        {savedProperties.map((property, i) => (
-          <div className="col-xl-4 col-md-6" key={i}>
-            <div className="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
-              {/* Media Container Box */}
-              <Box className="position-relative" style={{ height: "200px" }}>
-                <img 
-                  src={property.main_photo} 
-                  alt={property.name} 
-                  className="w-100 h-100 object-fit-cover"
-                />
-                {/* Scrim Mask Layer */}
-                <Box 
-                  className="position-absolute top-0 start-0 w-100 h-100"
-                  sx={{ background: "linear-gradient(180deg, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.75) 100%)" }}
-                />
-                
-                {/* Available Status Chip */}
-                <span 
-                  className="position-absolute top-3 start-3 badge rounded-pill fw-bold px-3 py-2"
-                  style={{ backgroundColor: "rgba(0,180,216,0.85)", backdropFilter: "blur(4px)", fontSize: "11px", left: "15px", top: "15px" }}
-                >
-                  {property.type}
-                </span>
-
-                {/* Price and Content Layer over Media bounding frame */}
-                <div className="position-absolute bottom-0 start-0 p-3 text-white">
-                  <h4 className="fw-bold mb-0">{Number(property.total_price).toLocaleString()}</h4>
-                  <small style={{ opacity: 0.85 }}>{property.name}</small>
-                </div>
-              </Box>
-
-              {/* Lower Details Row */}
-              <div className="card-body px-3 py-3 d-flex align-items-center justify-content-between">
-                <div className="d-flex align-items-center text-muted gap-1">
-                  <LocationOnOutlined fontSize="small" />
-                  <span style={{ fontSize: "13px", fontWeight: 500 }}>{property.address}</span>
-                </div>
-                <IconButton size="small" sx={{ color: "#EF4444" }}>
-                  <Favorite fontSize="small" />
-                </IconButton>
+        {
+          savedProperties.length == 0 ? (
+            <div className="col-12">
+              <div className="card border-0 shadow-sm rounded-4 p-4 text-center">
+                <p className="text-muted">You haven't saved any properties yet.</p>
               </div>
             </div>
-          </div>
-        ))}
+          ) : (
+            savedProperties.filter((p, i) => i < 2).map((property, i) => (
+              <div className="col-xl-4 col-md-6" key={i}>
+                <div className="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+                  {/* Media Container Box */}
+                  <Box className="position-relative" style={{ height: "200px" }}>
+                    <img 
+                      src={property.main_photo} 
+                      alt={property.name} 
+                      className="w-100 h-100 object-fit-cover"
+                    />
+                    {/* Scrim Mask Layer */}
+                    <Box 
+                      className="position-absolute top-0 start-0 w-100 h-100"
+                      sx={{ background: "linear-gradient(180deg, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.75) 100%)" }}
+                    />
+                    
+                    {/* Available Status Chip */}
+                    <span 
+                      className="text-capitalize position-absolute top-3 start-3 badge rounded-pill fw-bold px-3 py-2"
+                      style={{ backgroundColor: "rgba(0,180,216,0.85)", backdropFilter: "blur(4px)", fontSize: "11px", left: "15px", top: "15px" }}
+                    >
+                      {property.type}
+                    </span>
+
+                    {/* Price and Content Layer over Media bounding frame */}
+                    <div className="position-absolute bottom-0 start-0 p-3 text-white">
+                      <h4 className="fw-bold mb-0">{Number(property.total_price).toLocaleString()}</h4>
+                      <small style={{ opacity: 0.85 }}>{property.name}</small>
+                    </div>
+                  </Box>
+
+                  {/* Lower Details Row */}
+                  <div className="card-body px-3 py-3 d-flex align-items-center justify-content-between">
+                    <div className="d-flex align-items-center text-muted gap-1">
+                      <LocationOnOutlined fontSize="small" />
+                      <span style={{ fontSize: "13px", fontWeight: 500 }}>{property.address}</span>
+                    </div>
+                    <IconButton size="small" sx={{ color: "#EF4444" }}>
+                      <Favorite fontSize="small" />
+                    </IconButton>
+                  </div>
+                </div>
+              </div>
+            ))
+          )
+        }
 
         {/* Right CTA Container: Need Help Block */}
         <div className="col-xl-4 col-md-12">
@@ -202,7 +220,7 @@ const GridDashboard = (props) => {
             {/* Header row inside card */}
             <div className="d-flex justify-content-between align-items-center mb-4">
               <h5 className="fw-bold mb-0">Transaction History</h5>
-              <button className="btn btn-link text-dark fw-bold text-decoration-none d-flex align-items-center gap-1 btn-sm">
+              <button onClick={()=>navigate('/user/transactions')} className="btn btn-link text-dark fw-bold text-decoration-none d-flex align-items-center gap-1 btn-sm">
                 View All <ChevronRight fontSize="small" />
               </button>
             </div>
@@ -219,56 +237,66 @@ const GridDashboard = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {transactions.map((tx) => (
-                    <tr key={tx.id}>
-                      <td className="py-3 text-secondary" style={{ fontSize: "14px" }}>{tx.created_at}</td>
-                      <td className="py-3 fw-bold text-dark" style={{ fontSize: "14px" }}>{tx.type}</td>
-                      <td 
-                        className="py-3 fw-bold" 
-                        style={{ 
-                          fontSize: "14px"                          
-                        }}
-                      >
-                        {Number(tx.amount).toLocaleString("en-NG", { style: "currency", currency: "NGN" })}
-                      </td>
-                      <td className="py-3">
-                        {tx.status === "failed" ? (
-                          <Chip 
-                            label="Failed" 
-                            size="small"
-                            sx={{ 
-                              fontSize: "12px", 
-                              fontWeight: 500,
-                              backgroundColor: "#EAEAEA", 
-                              color: "#4A4A4A" 
-                            }} 
-                          />
-                        ) : tx.status === "pending" ? (
-                          <Chip 
-                            label="Pending" 
-                            size="small"
-                            sx={{ 
-                              fontSize: "12px", 
-                              fontWeight: 500,
-                              backgroundColor: "#FFF8E1", 
-                              color: "#FF8F00" 
-                            }} 
-                          />
-                        ) : (
-                          <Chip 
-                            label="Successful" 
-                            size="small"
-                            sx={{ 
-                              fontSize: "12px", 
-                              fontWeight: 500,
-                              backgroundColor: "#E8F5E9", 
-                              color: "#2E7D32" 
-                            }} 
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                  {
+                    transactions.length == 0 ? (
+                      <tr>
+                        <td colSpan={4} className="text-center py-4 text-muted" style={{ fontSize: "13px" }}>
+                          No transaction history available.
+                        </td>
+                      </tr>
+                    ) : (
+                      transactions.map((tx) => (
+                        <tr key={tx.id}>
+                          <td className="py-3 text-secondary" style={{ fontSize: "14px" }}>{tx.created_at}</td>
+                          <td className="py-3 fw-bold text-dark text-capitalize" style={{ fontSize: "14px" }}>{tx.type}</td>
+                          <td 
+                            className="py-3 fw-bold" 
+                            style={{ 
+                              fontSize: "14px"                          
+                            }}
+                          >
+                            {Number(tx.amount).toLocaleString("en-NG", { style: "currency", currency: "NGN" })}
+                          </td>
+                          <td className="py-3">
+                            {tx.status === "failed" ? (
+                              <Chip 
+                                label="Failed" 
+                                size="small"
+                                sx={{ 
+                                  fontSize: "12px", 
+                                  fontWeight: 500,
+                                  backgroundColor: "#EAEAEA", 
+                                  color: "#4A4A4A" 
+                                }} 
+                              />
+                            ) : tx.status === "pending" ? (
+                              <Chip 
+                                label="Pending" 
+                                size="small"
+                                sx={{ 
+                                  fontSize: "12px", 
+                                  fontWeight: 500,
+                                  backgroundColor: "#FFF8E1", 
+                                  color: "#FF8F00" 
+                                }} 
+                              />
+                            ) : (
+                              <Chip 
+                                label="Successful" 
+                                size="small"
+                                sx={{ 
+                                  fontSize: "12px", 
+                                  fontWeight: 500,
+                                  backgroundColor: "#E8F5E9", 
+                                  color: "#2E7D32" 
+                                }} 
+                              />
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    )
+                  }
                 </tbody>
               </table>
             </div>
