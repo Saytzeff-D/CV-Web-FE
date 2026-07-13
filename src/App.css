@@ -1004,3 +1004,8 @@ ul .booking-features::before {
 .text-cv {
   color: #2F9E5B !important;
 }
+.wrapper-box {
+  width: 100% !important;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}

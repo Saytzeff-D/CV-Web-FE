@@ -178,7 +178,7 @@ const Bookings = () => {
   }
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 wrapper-box">
       <Typography variant="h4" fontWeight={700}>
         Bookings
       </Typography>
@@ -309,10 +309,10 @@ const Bookings = () => {
 
                     <TableCell sx={{ py: 2 }}>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        <Box sx={{ width: 44, height: 44, bgcolor: "#E5E7EB", borderRadius: "8px", flexShrink: 0, backgroundImage: `url(${row.property?.image})`, backgroundSize: 'cover' }} />
+                        <Box sx={{ width: 44, height: 44, bgcolor: "#E5E7EB", borderRadius: "8px", flexShrink: 0, backgroundImage: `url(${row.image})`, backgroundSize: 'cover' }} />
                         <Box>
                           <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#111827", fontSize: "14px", lineHeight: 1.2 }}>
-                            {row.title}
+                            {row.display_name}
                           </Typography>
                           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "#9CA3AF", mt: 0.5 }}>
                             <LocationOnOutlined sx={{ fontSize: 14 }} />

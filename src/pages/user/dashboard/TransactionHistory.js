@@ -127,7 +127,7 @@ const TransactionHistoryPage = () => {
 
   // Dashboard Overview Upper metrics data configuration matching card designs
   const cardsOverviewData = [
-    { title: metrics?.total_transactions?.label, value: formatCurrency(metrics.total_transactions.amount.replace(/N/g, "")), change: (metrics?.total_transactions?.change).toFixed(2) + "%", icon: <CreditCardOutlined sx={{ color: "#2563EB" }} />, bg: "#EFF6FF" },
+    { title: metrics?.total_transactions?.label, value: metrics.total_transactions.amount.replace(/N/g, ""), change: (metrics?.total_transactions?.change).toFixed(2) + "%", icon: <CreditCardOutlined sx={{ color: "#2563EB" }} />, bg: "#EFF6FF" },
     { title: metrics?.successful_transactions?.label, value: formatCurrency(metrics.successful_transactions.amount.replace(/N/g, "")), change: (metrics?.successful_transactions?.change).toFixed(2) + "%", icon: <CallMadeOutlined sx={{ color: "#16A34A" }} />, bg: "#F0FDF4" },
     { title: metrics?.pending_transactions?.label, value: formatCurrency(metrics.pending_transactions.amount.replace(/N/g, "")), change: (metrics?.pending_transactions?.change).toFixed(2) + "%", icon: <AccessTimeOutlined sx={{ color: "#EA580C" }} />, bg: "#FFF7ED" },
     { title: metrics?.failed_transactions?.label, value: formatCurrency(metrics.failed_transactions.amount.replace(/N/g, "")), change: (metrics?.failed_transactions?.change).toFixed(2) + "%", icon: <BookmarkBorderOutlined sx={{ color: "#A855F7" }} />, bg: "#F3E8FF" },

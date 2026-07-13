@@ -34,9 +34,21 @@ const TopCategories = () => {
       });
   }, []);
 
+  const detailsUrl = (property) => {
+    if (property.type === "land") {
+      return `/land/${property.category}/${encode(property.id)}`;
+    } else {
+      return `/apartment/${property.category}/${encode(property.id)}`;
+    }
+  };
+
   const priceFilter = (val) => {
     setPriceRange(val);
   };
+
+  const encode = (str) => {
+    return btoa(str.toString());
+  }
 
   const scroll = (direction) => {
     if (!scrollRef.current) return;
@@ -260,7 +272,7 @@ const TopCategories = () => {
 
                         </div>
 
-                        <button className="btn text-success border-0 fw-bold">
+                        <button onClick={() => navigate(detailsUrl(property))} className="btn text-success border-0 fw-bold">
                           View Details ↗
                         </button>
 

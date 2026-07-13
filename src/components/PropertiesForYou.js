@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import RoommateSection from "./RoomateSection";
 
 const PropertiesForYou = () => {
    const [properties, setProperties] = useState([{ sale: [], rent: [], shortlet: [] }]);
@@ -28,6 +29,14 @@ const PropertiesForYou = () => {
       });
     }
    }
+
+  const detailsUrl = (property) => {
+    if (property.type === "land") {
+      return `/land/${property.category}/${encode(property.id)}`;
+    } else {
+      return `/apartment/${property.category}/${encode(property.id)}`;
+    }
+  };
 
    const fetchSavedProperties = () => {
       if (!sessionStorage.getItem('userToken')) return;
@@ -93,7 +102,7 @@ const PropertiesForYou = () => {
           ))
         ) : (        
             properties.map((property) => (
-            <div key={property.id} className="col-12 col-md-6 col-lg-4">
+            <div onClick={()=> navigate(detailsUrl(property))} key={property.id} className="col-12 col-md-6 col-lg-4">
               <div className="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
                 <div className="position-relative">
                   <img
@@ -205,55 +214,7 @@ const PropertiesForYou = () => {
       </div>
 
       {/* Roommate Section */}
-      <div className="roommate-card mt-5">
-        <div className="row align-items-center">
-          <div className="col-lg-8 text-center text-lg-start">
-            <span className="badge bg-success-subtle text-success mb-3">
-              NEW FEATURE
-            </span>
-
-            <h3 className="fw-bold">Need a roommate?</h3>
-
-            <p className="text-muted">
-              Find trusted roommates in your area — match by budget,
-              location and lifestyle.
-            </p>
-
-            <div className="d-flex gap-3 flex-column flex-sm-row justify-content-center justify-content-lg-start">
-              <button className="btn btn-success rounded-pill px-4">
-                Find a Roommate
-              </button>
-
-              <button className="btn btn-link text-dark text-decoration-none">
-                Advertise your room
-              </button>
-            </div>
-
-            <small className="text-muted d-block mt-3">
-              Safety tip: Verify ID before meeting
-            </small>
-          </div>
-
-          <div className="col-lg-4 text-center mt-4 mt-lg-0">
-            <div className="avatar-stack">
-              <img
-                src="https://i.pravatar.cc/40?img=1"
-                className="avatar-img"
-              />
-
-              <img
-                src="https://i.pravatar.cc/40?img=2"
-                className="avatar-img"
-              />
-
-              <img
-                src="https://i.pravatar.cc/40?img=3"
-                className="avatar-img"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <RoommateSection />
     </section>
   );
 };

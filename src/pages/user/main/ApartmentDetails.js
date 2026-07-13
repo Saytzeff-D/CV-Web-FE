@@ -124,7 +124,7 @@ const ApartmentDetails = () => {
               {property.resources.slice(0,4).map((src, i) => (
                 <div key={i} className="col-6 position-relative">
                   <img
-                    src={src}
+                    src={src.url}
                     alt={`thumb-${i}`}
                     onClick={() => setMainIndex(i)}
                     className={
@@ -259,7 +259,7 @@ const ApartmentDetails = () => {
               property.resources.map((src, index) => (
               <div key={index} className="col-lg-4 col-md-6 col-12">
                 <img
-                  src={src}
+                  src={src.url}
                   alt={`gallery-${index}`}
                   className="img-fluid"
                   style={{

@@ -29,7 +29,7 @@ const PropertyFiltersSidebar = () => {
     const fetchServerData = async () => {
       setIsSearching(true);
       
-      const apiQueryPath = `type=${selectedType}&instant_book=${instantBook}`;
+      const apiQueryPath = `type=${selectedType == 'apartment' ? 'house' : selectedType}&instant_book=${instantBook}`;
 
       try {
         const response = await axios.get(`${uri}property/all?${apiQueryPath}`, {
