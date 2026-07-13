@@ -43,7 +43,29 @@ import EditProfile from './pages/user/dashboard/Profile';
 import MyFavoritesPage from './pages/user/dashboard/MyFavoritesPage';
 import TransactionHistory from './pages/user/dashboard/TransactionHistory';
 import All from './pages/user/main/All';
+import ServerDown from './pages/ServerDown';
 
+// GLOBAL INTERCEPTOR FOR DIRECT AXIOS CALLS
+axios.interceptors.response.use(
+(response) => {
+  return response;
+},
+(error) => {
+  if (error.response) {
+    const status = error.response.status;
+
+    // Catch Rate Limiting (429) or Server Crashes (503/500)
+    if (status === 429 || status === 503) {
+      sessionStorage.setItem("lastAttemptedPath", window.location.pathname);
+      console.warn("Server rate limit or downtime caught globally.");
+      
+      // Use window.location to force an immediate escape from the blank screen
+      window.location.href = "/server-down"; 
+    }
+  }
+  return Promise.reject(error);
+}
+);
 function App() {
   const uri = useSelector(state=>state.UriReducer.uri)
   const dispatch = useDispatch()
@@ -101,6 +123,7 @@ function App() {
         </Route>
         <Route path='/property/results' element={<All />} />
         <Route path='*' element={<NotFound />} />
+        <Route path='/server-down' element={<ServerDown />} />
       </Routes>
       </BrowserRouter>
     </div>
