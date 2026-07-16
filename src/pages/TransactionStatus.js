@@ -43,7 +43,7 @@ const TransactionStatus = () => {
                     <p className="text-secondary fw-semibold h4 py-0">Your transaction is complete</p>
                     <small className="text-muted py-5 px-5">Thank you for the payment. We've received your payment and are processing your transaction</small>
                     <div className="pt-4">
-                        <button className='btn btn-success' onClick={()=>navigate('/client/dashboard')}>
+                        <button className='btn btn-success' onClick={()=>navigate('/user')}>
                             Go to Dashboard
                         </button>
                     </div>
@@ -59,7 +59,7 @@ const TransactionStatus = () => {
                         <button className='btn btn-success' onClick={()=>setTryAgain(!tryAgain)}>
                             Try Again
                         </button>
-                        <button className='btn btn-secondary ms-4' onClick={()=>navigate('/client/dashboard')}>
+                        <button className='btn btn-secondary ms-4' onClick={()=>navigate('/user')}>
                             Go Home
                         </button>
                     </div>

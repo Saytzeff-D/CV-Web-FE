@@ -45,7 +45,7 @@ const GrowYourBusiness = () => {
             </div>
 
             <div className="d-flex gap-3 mb-3 flex-wrap">
-              <button className="btn btn-success px-4 py-3 rounded-4">
+              <button onClick={()=> window.open('https://agent.cvproperties.co')} className="btn btn-success px-4 py-3 rounded-4">
                 Advertise Now →
               </button>
 

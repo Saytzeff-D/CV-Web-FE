@@ -2,8 +2,10 @@ import React from "react";
 import { Box, Typography, Button, Stack, Chip, Avatar } from "@mui/material";
 import { ArrowForwardOutlined, VerifiedUserOutlined, PeopleAltOutlined } from "@mui/icons-material";
 import BackdropImage from '../assets/roommate-img.jpg'
+import { useNavigate } from "react-router-dom";
 
 const RoommateSection = () => {
+  const navigate = useNavigate()
   return (
     <Box 
       className="container-fluid mt-5 position-relative text-white"
@@ -80,6 +82,7 @@ const RoommateSection = () => {
             sx={{ mb: 3 }}
           >
             <Button
+              onClick={()=> navigate('/buy/all')}
               variant="contained"
               endIcon={<ArrowForwardOutlined />}
               sx={{
@@ -100,6 +103,7 @@ const RoommateSection = () => {
             </Button>
 
             <Button
+              onClick={()=> window.open('https://agent.cvproperties.co')}
               variant="outlined"
               sx={{
                 color: "#ffffff",
