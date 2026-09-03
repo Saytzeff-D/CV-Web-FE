@@ -38,9 +38,14 @@ const Login = () => {
       setIsLoading(true);
       axios.post(`${uri}auth/login`, values)
       .then((res)=>{
-        sessionStorage.setItem('userToken', res.data.token);
-        res.data.role === 'customer' ? navigate('/user') : navigate('/agent/dashboard');
-        res.data.role === 'customer' ? sessionStorage.setItem('route', '/user/') : sessionStorage.setItem('route', '/agent/dashboard ');
+        if (res.data?.role == "customer") {
+          sessionStorage.setItem("userToken", res.data.token);
+          sessionStorage.setItem("route", "/user");
+          navigate("/user");
+        } else {
+          setIsLoading(false);
+          setError("Access restricted: This portal is exclusively for registered CV Properties Buyers or Renters.");
+        }        
       })
       .catch((err)=>{
         setIsLoading(false);

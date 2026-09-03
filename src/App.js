@@ -108,8 +108,8 @@ function App() {
         <Route path='/admin/property-manager' element={<PropertyManager />} />
         <Route path='/admin/add-property' element={<AddProperty />} />
         <Route path='/admin/view-agents' element={<AllUsers />} />        
-        <Route path='/agent/dashboard' element={<AgentDashboard />} />
-        <Route path='/agent/add-property' element={<AddProperty />} />
+        {/* <Route path='/agent/dashboard' element={<AgentDashboard />} />
+        <Route path='/agent/add-property' element={<AddProperty />} /> */}
         <Route path='/admin/add-blog' element={<AddBlog />} />
         <Route path='/admin/edit-property' element={<EditProperty />} />
         <Route path='/admin/edit-blog' element={<EditBlog />} />
