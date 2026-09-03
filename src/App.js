@@ -101,23 +101,10 @@ function App() {
         <Route path='/login' element={<Login />} />    
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/contact' element={<Contact />} />
-        <Route path='/admin/login' element={<AdminLogin />} />
-        <Route path='/admin/create' element={<CreateAdmin />} />
-        <Route path='/admin/dashboard' element={<AdminDashboard />} />
-        <Route path='/admin/property-manager' element={<PropertyManager />} />
-        <Route path='/admin/add-property' element={<AddProperty />} />
-        <Route path='/admin/view-agents' element={<AllUsers />} />        
-        {/* <Route path='/agent/dashboard' element={<AgentDashboard />} />
-        <Route path='/agent/add-property' element={<AddProperty />} /> */}
-        <Route path='/admin/add-blog' element={<AddBlog />} />
-        <Route path='/admin/edit-property' element={<EditProperty />} />
-        <Route path='/admin/edit-blog' element={<EditBlog />} />
-        <Route path='/admin/blog-manager' element={<BlogManager />} />
-        <Route path='/filterbar' element={<FilterBar />} />
+        <Route path='/contact' element={<Contact />} />        <Route path='/filterbar' element={<FilterBar />} />
         <Route path='/pay-now' element={<PayNow />} />
         <Route path='/payment/verify/' element={<TransactionStatus />} />
-        <Route path='/dashboard' element={<GoogleAuth />} />
+        <Route path='/google-auth' element={<GoogleAuth />} />
         <Route path='/privacy-policy' element={<PrivacyPolicy />} />
         <Route path='/terms-of-service' element={<TermsOfService />} />
         <Route path='/refund-policy' element={<RefundPolicy />} />

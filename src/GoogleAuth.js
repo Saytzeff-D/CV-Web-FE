@@ -21,10 +21,14 @@ const GoogleAuth = () => {
                 headers: { Authorization: `Bearer ${decodeURIComponent(tokenParam)}` }
             })
             .then((res)=>{   
-              sessionStorage.setItem('userToken', tokenParam)
-              res.data.account.role == 'customer' ? navigate('/client/dashboard') : navigate('/agent/dashboard')
-              res.data.account.role == 'customer' ? sessionStorage.setItem('route', ' /client/dashboard') : sessionStorage.setItem('route', '/agent/dashboard ')                             
-                setIsLoading(false);
+              if (res.data.account.role == 'customer'){
+                sessionStorage.setItem('userToken', tokenParam)
+                navigate('/user')
+                sessionStorage.setItem('route', ' /user')
+              } else {
+                window.location.href = "https://agent.cvproperties.co/google-auth?token=" + encodeURIComponent(tokenParam);
+              }              
+              setIsLoading(false);
             })
             .catch((err)=>{
               console.log(err);
