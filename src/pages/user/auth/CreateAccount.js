@@ -1,423 +1,617 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../../components/Navbar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import { createAccountSchema } from "../../../schemas";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Alert, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  CircularProgress,
+  Chip,
+} from "@mui/material";
+import {
+  MailOutline,
+  ArrowForward,
+  VerifiedUserOutlined,
+  ShieldOutlined,
+} from "@mui/icons-material";
+import { createAccountSchema } from "../../../schemas";
+
+const EyeIcon = ({ slash }) => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {slash ? (
+      <>
+        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+        <line x1="1" y1="1" x2="23" y2="23" />
+      </>
+    ) : (
+      <>
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+        <circle cx="12" cy="12" r="3" />
+      </>
+    )}
+  </svg>
+);
 
 const CreateAccount = () => {
-    const uri = useSelector(state=>state.UriReducer.uri)
-    const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [error, setError] = useState('');
-    const [err, setErr] = useState('');
-    const location = useLocation()
-    const [showRoleModal, setShowRoleModal] = useState(false);
-    
-    useEffect(() => {    
-        const params = new URLSearchParams(location.search);
-        const errorParam = params.get('error');    
-        if (errorParam) {
-          setErr(errorParam);
-        }
-    }, [location.search]);
+  const uri = useSelector((state) => state.UriReducer.uri);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const { handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const errorParam = params.get("error");
+    if (errorParam) setError(errorParam);
+  }, [location.search]);
+
+  const {
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    values,
+    errors,
+    touched,
+  } = useFormik({
     initialValues: {
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
       isAgent: false,
-      professional_type: '',
-      experience_level: '',
-      phone_number: ''
     },
     validationSchema: createAccountSchema,
-    onSubmit: (values) => {
-      setError('')
+    onSubmit: (formValues) => {
+      setError("");
       setIsSubmitting(true);
-      axios.post(`${uri}auth/register`, values)
-      .then((res)=>{
-        setIsSubmitting(false);
-        console.log(res.data);
-        sessionStorage.setItem('tempUserEmail', values.email);
-        navigate('/create-account/verify')
-      })
-      .catch((err)=>{
-        setIsSubmitting(false);
-        console.log(err);
-        err.response ? setError(err.response.data.message) : setError('An error occurred')
-      })
-    }
-  })  
+
+      const payload = {
+        firstname: formValues.firstname,
+        lastname: formValues.lastname,
+        email: formValues.email,
+        password: formValues.password,
+        role: "customer",
+      };
+
+      axios
+        .post(`${uri}auth/register`, payload)
+        .then(() => {
+          setIsSubmitting(false);
+          sessionStorage.setItem("tempUserEmail", formValues.email);
+          navigate("/create-account/verify");
+        })
+        .catch((err) => {
+          setIsSubmitting(false);
+          setError(
+            err.response?.data?.message ||
+              err.response?.data?.error ||
+              "Registration failed. Please try again."
+          );
+        });
+    },
+  });
 
   return (
-    <>     
-
-        <Dialog open={showRoleModal} maxWidth="xs" fullWidth onClose={() => setShowRoleModal(false)}>
-            <DialogTitle className="fw-bold">Sign Up With Google</DialogTitle>
-
-            <DialogContent>
-                <p className="">Select your account type</p>
-                <div className="d-flex justify-content-between">
-                    <div>
-                        <button
-                            onClick={() => {
-                                window.location.href = `${uri}auth/google/register?type=customer`;
-                            }}                    
-                            className="btn px-5 d-flex align-items-center justify-content-center border my-0"
-                            style={{
-                            borderRadius: "6px",
-                            backgroundColor: "#fafafa",
-                            fontWeight: 500,
-                            padding: "10px",
-                            }}
-                        >
-                            <img
-                            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                            alt="Google"
-                            style={{ height: "18px", marginRight: "8px" }}
-                            />
-                            Customer
-                        </button>
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => {
-                                window.location.href = `${uri}auth/google/register?type=agent`;
-                            }}
-                            className="btn px-5 d-flex align-items-center justify-content-center border my-0"
-                            style={{
-                            borderRadius: "6px",
-                            backgroundColor: "#fafafa",
-                            fontWeight: 500,
-                            padding: "10px",
-                            }}
-                        >
-                            <img
-                            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                            alt="Google"
-                            style={{ height: "18px", marginRight: "8px" }}
-                            />
-                            Agent
-                        </button>
-                    </div>
-                </div>                
-            </DialogContent>
-        </Dialog>
-   
-        <div
-            className="d-flex justify-content-center align-items-center py-1"
-            style={{ minHeight: "100vh" }}
+    <Box
+      sx={{
+        height: "100vh",
+        width: "100%",
+        display: "flex",
+        bgcolor: "#FFFFFF",
+        overflow: "hidden", // Prevents body/window scrolling
+      }}
+    >
+      {/* LEFT FORM COLUMN: ONLY THIS SCROLLS */}
+      <Box
+        sx={{
+          flex: { xs: "1", md: "0 0 520px", lg: "0 0 560px" },
+          height: "100vh",
+          overflowY: "auto", // Dedicated scroll container
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          p: { xs: 3.5, sm: 5, md: 6 },
+          boxSizing: "border-box",
+          "&::-webkit-scrollbar": { width: "6px" },
+          "&::-webkit-scrollbar-thumb": {
+            bgcolor: "#E2E8F0",
+            borderRadius: "10px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": { bgcolor: "#CBD5E1" },
+        }}
+      >
+        {/* Brand */}
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+            <Box
+              sx={{
+                width: 38,
+                height: 38,
+                borderRadius: "10px",
+                bgcolor: "#017E53",
+                color: "#FFFFFF",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 900,
+                fontSize: "18px",
+              }}
             >
-            <div
-                className=""
-                style={{                            
-                padding: "40px 32px",
-                width: "100%",
-                maxWidth: "420px",
+              CV
+            </Box>
+            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: "#0F172A", letterSpacing: "-0.5px" }}>
+              CV Properties
+            </Typography>
+          </Box>
+
+          <Chip
+            label="CLIENT SIGNUP"
+            size="small"
+            sx={{ bgcolor: "#F1F5F9", color: "#475569", fontWeight: 800, fontSize: "10px" }}
+          />
+        </Box>
+
+        {/* Form Body */}
+        <Box sx={{ maxWidth: 420, width: "100%", mx: "auto", my: "auto", py: 2 }}>
+          {/* Agent Banner Callout */}
+          <Box
+            sx={{
+              p: 1.5,
+              mb: 3,
+              borderRadius: "10px",
+              bgcolor: "#F0FDF4",
+              border: "1px solid #DCFCE7",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="caption" sx={{ color: "#047857", fontWeight: 600 }}>
+              Are you an agent or developer?
+            </Typography>
+            <Link
+              to="https://agent.cvproperties.co/register"
+              target="_blank"
+              style={{
+                color: "#017E53",
+                fontSize: "12px",
+                fontWeight: 800,
+                textDecoration: "none",
+              }}
+            >
+              Join Agent Portal →
+            </Link>
+          </Box>
+
+          <Typography variant="h4" sx={{ fontWeight: 800, color: "#0F172A", letterSpacing: "-1px", mb: 0.5 }}>
+            Create an Account
+          </Typography>
+          <Typography variant="body2" sx={{ color: "#64748B", mb: 3, fontSize: "14px" }}>
+            Sign up to save favorite listings, schedule inspections, and connect directly with verified property owners.
+          </Typography>
+
+          {/* Social Buttons */}
+          <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5, mb: 3 }}>
+            <button
+              type="button"
+              onClick={() => {
+                window.location.href = `${uri}auth/google/register?type=customer`;
+              }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "10px",
+                backgroundColor: "#F8FAFC",
+                border: "1px solid #E2E8F0",
+                borderRadius: "10px",
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "13px",
+                color: "#1E293B",
+              }}
+            >
+              <img
+                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                alt="Google"
+                style={{ height: "17px", marginRight: "8px" }}
+              />
+              Google
+            </button>
+
+            <button
+              type="button"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "10px",
+                backgroundColor: "#F8FAFC",
+                border: "1px solid #E2E8F0",
+                borderRadius: "10px",
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "13px",
+                color: "#1E293B",
+              }}
+            >
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+                alt="Apple"
+                style={{ height: "17px", marginRight: "8px" }}
+              />
+              Apple
+            </button>
+          </Box>
+
+          {/* Divider */}
+          <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+            <Box sx={{ flex: 1, height: "1px", bgcolor: "#E2E8F0" }} />
+            <Typography variant="caption" sx={{ px: 2, color: "#94A3B8", fontWeight: 600 }}>
+              OR SIGN UP WITH EMAIL
+            </Typography>
+            <Box sx={{ flex: 1, height: "1px", bgcolor: "#E2E8F0" }} />
+          </Box>
+
+          {error && (
+            <Alert severity="error" onClose={() => setError("")} sx={{ mb: 3, borderRadius: "10px" }}>
+              {error}
+            </Alert>
+          )}
+
+          <form onSubmit={handleSubmit} noValidate>
+            {/* First & Last Name */}
+            <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5, mb: 2 }}>
+              <Box>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, color: "#1E293B", marginBottom: "4px" }}>
+                  First Name
+                </label>
+                <TextField
+                  fullWidth
+                  size="small"
+                  name="firstname"
+                  placeholder="Temi"
+                  value={values.firstname}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={Boolean(touched.firstname && errors.firstname)}
+                  helperText={touched.firstname && errors.firstname}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                      bgcolor: "#F8FAFC",
+                      "& fieldset": { borderColor: "#E2E8F0" },
+                      "&.Mui-focused fieldset": { borderColor: "#017E53" },
+                    },
+                  }}
+                />
+              </Box>
+
+              <Box>
+                <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, color: "#1E293B", marginBottom: "4px" }}>
+                  Last Name
+                </label>
+                <TextField
+                  fullWidth
+                  size="small"
+                  name="lastname"
+                  placeholder="Falana"
+                  value={values.lastname}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={Boolean(touched.lastname && errors.lastname)}
+                  helperText={touched.lastname && errors.lastname}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                      bgcolor: "#F8FAFC",
+                      "& fieldset": { borderColor: "#E2E8F0" },
+                      "&.Mui-focused fieldset": { borderColor: "#017E53" },
+                    },
+                  }}
+                />
+              </Box>
+            </Box>
+
+            {/* Email */}
+            <Box sx={{ mb: 2 }}>
+              <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, color: "#1E293B", marginBottom: "4px" }}>
+                Email Address
+              </label>
+              <TextField
+                fullWidth
+                size="small"
+                name="email"
+                type="email"
+                placeholder="temi@example.com"
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={Boolean(touched.email && errors.email)}
+                helperText={touched.email && errors.email}
+                InputProps={{
+                  startAdornment: <MailOutline sx={{ color: "#94A3B8", fontSize: 18, mr: 1 }} />,
                 }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                    bgcolor: "#F8FAFC",
+                    "& fieldset": { borderColor: "#E2E8F0" },
+                    "&.Mui-focused fieldset": { borderColor: "#017E53" },
+                  },
+                }}
+              />
+            </Box>
+
+            {/* Password */}
+            <Box sx={{ mb: 2 }}>
+              <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, color: "#1E293B", marginBottom: "4px" }}>
+                Password
+              </label>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  bgcolor: "#F8FAFC",
+                  border: Boolean(touched.password && errors.password) ? "1.5px solid #d32f2f" : "1px solid #E2E8F0",
+                  borderRadius: "10px",
+                  px: 1.5,
+                  height: "40px",
+                  "&:focus-within": { bgcolor: "#FFFFFF", borderColor: "#017E53" },
+                }}
+              >
+                <input
+                  name="password"
+                  key={showPassword ? "pw-show" : "pw-hidden"}
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••••••"
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    outline: "none",
+                    backgroundColor: "transparent",
+                    fontSize: "13.5px",
+                    color: "#0F172A",
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: "4px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    color: showPassword ? "#017E53" : "#64748B",
+                  }}
+                >
+                  <EyeIcon slash={showPassword} />
+                  <span style={{ fontSize: "10px", fontWeight: 700 }}>
+                    {showPassword ? "HIDE" : "SHOW"}
+                  </span>
+                </button>
+              </Box>
+              {touched.password && errors.password && (
+                <Typography variant="caption" sx={{ color: "#d32f2f", fontSize: "11px", mt: 0.5, display: "block" }}>
+                  {errors.password}
+                </Typography>
+              )}
+            </Box>
+
+            {/* Confirm Password */}
+            <Box sx={{ mb: 3 }}>
+              <label style={{ display: "block", fontSize: "12.5px", fontWeight: 700, color: "#1E293B", marginBottom: "4px" }}>
+                Confirm Password
+              </label>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  bgcolor: "#F8FAFC",
+                  border: Boolean(touched.confirmPassword && errors.confirmPassword) ? "1.5px solid #d32f2f" : "1px solid #E2E8F0",
+                  borderRadius: "10px",
+                  px: 1.5,
+                  height: "40px",
+                  "&:focus-within": { bgcolor: "#FFFFFF", borderColor: "#017E53" },
+                }}
+              >
+                <input
+                  name="confirmPassword"
+                  key={showConfirmPassword ? "cpw-show" : "cpw-hidden"}
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="••••••••••••"
+                  value={values.confirmPassword}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    outline: "none",
+                    backgroundColor: "transparent",
+                    fontSize: "13.5px",
+                    color: "#0F172A",
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: "4px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    color: showConfirmPassword ? "#017E53" : "#64748B",
+                  }}
+                >
+                  <EyeIcon slash={showConfirmPassword} />
+                  <span style={{ fontSize: "10px", fontWeight: 700 }}>
+                    {showConfirmPassword ? "HIDE" : "SHOW"}
+                  </span>
+                </button>
+              </Box>
+              {touched.confirmPassword && errors.confirmPassword && (
+                <Typography variant="caption" sx={{ color: "#d32f2f", fontSize: "11px", mt: 0.5, display: "block" }}>
+                  {errors.confirmPassword}
+                </Typography>
+              )}
+            </Box>
+
+            <Button
+              type="submit"
+              fullWidth
+              disabled={isSubmitting}
+              variant="contained"
+              endIcon={!isSubmitting && <ArrowForward sx={{ fontSize: 16 }} />}
+              sx={{
+                py: 1.3,
+                borderRadius: "10px",
+                bgcolor: "#017E53",
+                color: "#FFFFFF",
+                fontSize: "14px",
+                fontWeight: 700,
+                textTransform: "none",
+                "&:hover": { bgcolor: "#016744" },
+              }}
             >
-                {/* Header */}
-                <h4 className="text-center fw-semibold mb-1">Create Account</h4>
-                <p
-                className="text-center text-muted mb-4"
-                style={{ fontSize: "14px" }}
-                >
-                Fill in the information to get started
-                </p>
+              {isSubmitting ? (
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <CircularProgress size={18} color="inherit" />
+                  <span>Creating Account...</span>
+                </Box>
+              ) : (
+                "Create Client Account"
+              )}
+            </Button>
+          </form>
 
-                {/* Social Buttons */}
-                <div className="d-grid gap-2 mb-3">
-                <button
-                    className="btn d-flex align-items-center justify-content-center border my-0"
-                    style={{
-                    borderRadius: "6px",
-                    backgroundColor: "#fafafa",
-                    fontWeight: 500,
-                    padding: "10px",
-                    }}
-                >
-                    <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
-                    alt="Apple"
-                    style={{ height: "18px", marginRight: "8px" }}
-                    />
-                    Apple
-                </button>
-                <button
-                    onClick={() => setShowRoleModal(true)}                    
-                    className="btn d-flex align-items-center justify-content-center border my-0"
-                    style={{
-                    borderRadius: "6px",
-                    backgroundColor: "#fafafa",
-                    fontWeight: 500,
-                    padding: "10px",
-                    }}
-                >
-                    <img
-                    src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                    alt="Google"
-                    style={{ height: "18px", marginRight: "8px" }}
-                    />
-                    Google
-                </button>
-                </div>
+          <Box sx={{ mt: 3, textAlign: "center" }}>
+            <Typography variant="body2" sx={{ color: "#64748B", fontSize: "13px" }}>
+              Already registered?{" "}
+              <Link to="/login" style={{ color: "#017E53", fontWeight: 700, textDecoration: "none" }}>
+                Sign in
+              </Link>
+            </Typography>
+          </Box>
+        </Box>
 
-                {/* Divider */}
-                <div
-                className="d-flex align-items-center text-muted mb-3"
-                style={{ fontSize: "13px" }}
-                >
-                    <div className="flex-grow-1 border-bottom" />
-                    <span className="px-2">or</span>
-                    <div className="flex-grow-1 border-bottom" />
-                </div>
+        <Typography variant="caption" sx={{ color: "#94A3B8", fontSize: "11px", mt: 2 }}>
+          © {new Date().getFullYear()} CV Properties Ltd. All rights reserved.
+        </Typography>
+      </Box>
 
-                {/* Form */}
-                <form>
-                    {error &&
-                        <Alert severity="error" className="mb-3">
-                            {error}
-                        </Alert>
-                    }
-                    {err && <Alert severity="error" className="mb-3">{err}</Alert>}
-                <div className="row">
-                    <div className="col-6 mb-3">
-                    <label className="form-label fw-medium" style={{ fontSize: "13px" }}>
-                        First Name
-                    </label>
-                    <input
-                        type="text"
-                        name="firstname"
-                        className={`form-control ${touched.firstname && errors.firstname ? 'is-invalid' : ''}`}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        placeholder="Temi"
-                        style={{
-                        border: "1px solid #e9e9e9",
-                        height: "42px",
-                        fontSize: "14px",
-                        }}
-                    />
-                    </div>
-                    <div className="col-6 mb-3">
-                    <label className="form-label fw-medium" style={{ fontSize: "13px" }}>
-                        Last Name
-                    </label>
-                    <input
-                        type="text"
-                        name="lastname"
-                        className={`form-control ${touched.lastname && errors.lastname ? 'is-invalid' : ''}`}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        placeholder="Falana"
-                        style={{
-                        border: "1px solid #e9e9e9",
-                        height: "42px",
-                        fontSize: "14px",
-                        }}
-                    />
-                    </div>
-                </div>
+      {/* RIGHT HERO COLUMN: FIXED & PINNED */}
+      <Box
+        sx={{
+          display: { xs: "none", md: "flex" },
+          flex: 1,
+          height: "100vh",
+          position: "sticky",
+          top: 0,
+          bgcolor: "#064E3B",
+          backgroundImage:
+            "linear-gradient(rgba(4, 47, 36, 0.75), rgba(4, 47, 36, 0.85)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          p: 8,
+          flexDirection: "column",
+          justifyContent: "space-between",
+          color: "#FFFFFF",
+          boxSizing: "border-box",
+        }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Box
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 1,
+              px: 2,
+              py: 1,
+              borderRadius: "20px",
+              bgcolor: "rgba(255, 255, 255, 0.12)",
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(255, 255, 255, 0.15)",
+            }}
+          >
+            <VerifiedUserOutlined sx={{ fontSize: 16, color: "#34D399" }} />
+            <Typography variant="caption" sx={{ fontWeight: 700 }}>
+              100% VERIFIED LISTINGS
+            </Typography>
+          </Box>
+        </Box>
 
-                <div className="mb-3">
-                    <label className="form-label fw-medium" style={{ fontSize: "13px" }}>
-                    Email Address
-                    </label>
-                    <input
-                    type="email"
-                    name="email"                
-                    className={`form-control ${touched.email && errors.email ? 'is-invalid' : ''}`}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="falanayemi.com"
-                    style={{
-                        border: "1px solid #e9e9e9",
-                        height: "42px",
-                        fontSize: "14px",
-                    }}
-                    />
-                </div>
+        <Box sx={{ maxWidth: 480 }}>
+          <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: "-1.5px", lineHeight: 1.15, mb: 2 }}>
+            Find your next space with total confidence.
+          </Typography>
+          <Typography variant="body1" sx={{ color: "rgba(255, 255, 255, 0.8)", lineHeight: 1.6, fontSize: "15px", mb: 4 }}>
+            Explore verified apartments, homes, and commercial venues across Nigeria with direct agent booking and zero middleman hassles.
+          </Typography>
 
-                <div className="mb-3 position-relative">
-                    <label className="form-label fw-medium" style={{ fontSize: "13px" }}>
-                    Password
-                    </label>
-                    <input
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    className={`form-control ${touched.password && errors.password ? 'is-invalid' : ''}`}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="••••••••"
-                    style={{
-                        border: "1px solid #e9e9e9",
-                        height: "42px",
-                        fontSize: "14px",
-                    }}
-                    />
-                    <i
-                    className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
-                    onClick={() => setShowPassword(!showPassword)}
-                    style={{
-                        position: "absolute",
-                        right: "12px",
-                        top: "36px",
-                        cursor: "pointer",
-                        color: "#aaa",
-                    }}
-                    ></i>
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label fw-medium" style={{ fontSize: "13px" }}>
-                    Confirm Password
-                    </label>
-                    <input
-                    type="password"
-                    name="confirmPassword"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={`form-control ${touched.confirmPassword && errors.confirmPassword ? 'is-invalid' : ''}`}
-                    placeholder="••••••••"
-                    style={{
-                        border: "1px solid #e9e9e9",
-                        height: "42px",
-                        fontSize: "14px",
-                    }}
-                    />
-                </div>
-
-                {/* TOGGLE SWITCH */}
-                <div className="form-check form-switch mb-3">
-                    <input
-                    className="form-check-input"
-                    type="checkbox"
-                    name="isAgent"
-                    id="agentSwitch"
-                    checked={values.isAgent}
-                    onChange={handleChange}
-                    style={{
-                        width: "42px",
-                        height: "22px",
-                        cursor: "pointer",
-                    }}
-                    />
-                    <label
-                    className="form-check-label ms-2 fw-medium"
-                    htmlFor="agentSwitch"
-                    style={{ fontSize: "13px" }}
-                    >
-                        Become an agent?
-                    </label>
-                </div>
-
-                {/* CONDITIONAL FIELDS */}
-                {values.isAgent && (
-                    <>
-                    <div className="mb-3">
-                        <label
-                        className="form-label fw-medium"
-                        style={{ fontSize: "13px" }}
-                        >
-                        Professional Type
-                        </label>
-                        <select
-                        name="professional_type"
-                        className={`form-select ${touched.professional_type && errors.professional_type ? 'is-invalid' : ''}`}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        style={{
-                            border: "1px solid #e9e9e9",
-                            height: "42px",
-                            fontSize: "14px",
-                        }}
-                        >
-                        <option defaultValue value={''}>Select your category</option>
-                        <option value={'real_estate_agent'}>Real Estate Agent</option>
-                        <option value={'property_manager'}>Property Manager</option>
-                        <option value={'developer'}>Developer</option>
-                        </select>
-                    </div>
-
-                    <div className="mb-3">
-                        <label
-                        className="form-label fw-medium"
-                        style={{ fontSize: "13px" }}
-                        >
-                        Experience Level
-                        </label>
-                        <select
-                        name="experience_level"
-                        className={`form-select ${touched.experience_level && errors.experience_level ? 'is-invalid' : ''}`}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        style={{
-                            border: "1px solid #e9e9e9",
-                            height: "42px",
-                            fontSize: "14px",
-                        }}
-                        >
-                        <option defaultValue value={''}>Select level</option>
-                        <option value={'Beginner'}>Beginner</option>
-                        <option value={'Intermediate'}>Intermediate</option>
-                        <option value={'Expert'}>Expert</option>
-                        </select>
-                    </div>
-                    <div className="mb-4">
-                        <label className="form-label fw-medium" style={{ fontSize: "13px" }}>
-                        Phone Number
-                        </label>
-                        <input
-                        name="phone_number"
-                        type="tel"
-                        className={`form-control ${touched.phone_number && errors.phone_number ? 'is-invalid' : ''}`}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        placeholder="+234..."
-                        style={{
-                            border: "1px solid #e9e9e9",
-                            height: "42px",
-                            fontSize: "14px",
-                        }}
-                        />
-                    </div>
-                    </>
-                )}
-
-
-                <button
-                    onClick={handleSubmit}
-                    type="submit"
-                    className="btn w-100 fw-semibold"
-                    disabled={isSubmitting}
-                    style={{
-                    backgroundColor: "#004225",
-                    color: "#fff",
-                    borderRadius: "6px",
-                    height: "45px",
-                    }}
-                >
-                    {isSubmitting ? 'Please wait...' : 'Create Account'}
-                </button>
-
-                <p className="text-center mt-3 mb-0" style={{ fontSize: "13px" }}>
-                    Do you have an account?{" "}
-                    <Link to={'/login'} className="fw-semibold text-decoration-none">
-                        Sign in
-                    </Link>
-                </p>
-                </form>
+          <Box
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 2,
+              p: 2,
+              borderRadius: "14px",
+              bgcolor: "rgba(0, 0, 0, 0.35)",
+              backdropFilter: "blur(12px)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+            }}
+          >
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: "10px",
+                bgcolor: "#017E53",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <ShieldOutlined sx={{ fontSize: 22 }} />
+            </Box>
+            <div>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                Inspection Guarantee
+              </Typography>
+              <Typography variant="caption" sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
+                Direct contact with accredited landlords & verified agents
+              </Typography>
             </div>
-            </div>
-    </>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
-}
+};
 
 export default CreateAccount;

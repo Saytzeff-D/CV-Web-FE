@@ -43,6 +43,7 @@ import EditProfile from './pages/user/dashboard/Profile';
 import MyFavoritesPage from './pages/user/dashboard/MyFavoritesPage';
 import TransactionHistory from './pages/user/dashboard/TransactionHistory';
 import All from './pages/user/main/All';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ServerDown from './pages/ServerDown';
 
 // GLOBAL INTERCEPTOR FOR DIRECT AXIOS CALLS
@@ -69,6 +70,11 @@ axios.interceptors.response.use(
 function App() {
   const uri = useSelector(state=>state.UriReducer.uri)
   const dispatch = useDispatch()
+  const theme = createTheme({
+    typography: {
+      fontFamily: "'Poppins', sans-serif",
+    },
+  });
   useEffect(()=>{
     axios.post(`${uri}payment/update-rates`).then((res)=>{
       let { usd, gbp, eur } = res.data.data
@@ -79,6 +85,7 @@ function App() {
   }, [])
   return (
     <div className="App">
+      <ThemeProvider theme={theme}>
       <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />} />
@@ -126,6 +133,7 @@ function App() {
         <Route path='/server-down' element={<ServerDown />} />
       </Routes>
       </BrowserRouter>
+      </ThemeProvider>
     </div>
   );
 }
