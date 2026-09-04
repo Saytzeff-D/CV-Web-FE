@@ -137,7 +137,7 @@ const Login = () => {
             </button>
             <button
               type="button"
-              onClick={() => window.location.href = `${uri}auth/google/login`}
+              onClick={() => window.location.href = `${uri}auth/google/login?type=customer&origin=${encodeURIComponent(window.location.origin)}`}
               className="btn d-flex align-items-center justify-content-center border my-0"
               style={{
                 borderRadius: "6px",

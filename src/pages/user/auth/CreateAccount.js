@@ -19,6 +19,7 @@ import {
   ShieldOutlined,
 } from "@mui/icons-material";
 import { createAccountSchema } from "../../../schemas";
+import icon from "../../../assets/icon.png"
 
 const EyeIcon = ({ slash }) => (
   <svg
@@ -141,20 +142,24 @@ const CreateAccount = () => {
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
             <Box
+              src={icon}
+              alt="CV Properties Logo"
+              component="img"
               sx={{
-                width: 38,
-                height: 38,
-                borderRadius: "10px",
-                bgcolor: "#017E53",
-                color: "#FFFFFF",
+                width: 35,
+                height: 35,
+                // borderRadius: "10px",
+                // bgcolor: "#017E53",
+                // color: "#FFFFFF",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontWeight: 900,
                 fontSize: "18px",
+                // filter: "brightness(0) invert(1)"
               }}
             >
-              CV
+              {/* <img src={icon} alt="CV Properties Logo" width="24" height="24" /> */}
             </Box>
             <Typography variant="subtitle1" sx={{ fontWeight: 800, color: "#0F172A", letterSpacing: "-0.5px" }}>
               CV Properties
@@ -162,7 +167,7 @@ const CreateAccount = () => {
           </Box>
 
           <Chip
-            label="CLIENT SIGNUP"
+            label="CUSTOMER"
             size="small"
             sx={{ bgcolor: "#F1F5F9", color: "#475569", fontWeight: 800, fontSize: "10px" }}
           />
@@ -212,7 +217,7 @@ const CreateAccount = () => {
             <button
               type="button"
               onClick={() => {
-                window.location.href = `${uri}auth/google/register?type=customer`;
+                window.location.href = `${uri}auth/google/register?type=customer&origin=${encodeURIComponent(window.location.origin)}`;
               }}
               style={{
                 display: "flex",
@@ -505,7 +510,7 @@ const CreateAccount = () => {
                   <span>Creating Account...</span>
                 </Box>
               ) : (
-                "Create Client Account"
+                "Create Customer Account"
               )}
             </Button>
           </form>

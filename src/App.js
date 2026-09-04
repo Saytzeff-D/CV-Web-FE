@@ -15,18 +15,7 @@ import Login from './pages/user/auth/Login';
 import VerifyEmail from './pages/user/auth/VerifyEmail';
 import ForgotPassword from './pages/user/auth/ForgotPassword';
 import ResetPassword from './pages/user/auth/ResetPassword';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminLogin from './pages/admin/Login';
-import CreateAdmin from './pages/admin/CreateAdmin';
-import AllUsers from './pages/admin/AllUsers';
-import PropertyManager from './pages/admin/PropertyManager';
-import AddProperty from './pages/admin/AddProperty';
-import AgentDashboard from './pages/user/dashboard/AgentDashboard';
 import FilterBar from './components/Filterbar';
-import AddBlog from './pages/admin/AddBlog';
-import BlogManager from './pages/admin/BlogManager';
-import EditProperty from './pages/admin/EditProperty';
-import EditBlog from './pages/admin/EditBlog';
 import GoogleAuth from './GoogleAuth';
 import PayNow from './pages/PayNow';
 import TransactionStatus from './pages/TransactionStatus';
@@ -101,7 +90,8 @@ function App() {
         <Route path='/login' element={<Login />} />    
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/contact' element={<Contact />} />        <Route path='/filterbar' element={<FilterBar />} />
+        <Route path='/contact' element={<Contact />} />        
+        <Route path='/filterbar' element={<FilterBar />} />
         <Route path='/pay-now' element={<PayNow />} />
         <Route path='/payment/verify/' element={<TransactionStatus />} />
         <Route path='/google-auth' element={<GoogleAuth />} />
