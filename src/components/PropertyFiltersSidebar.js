@@ -29,7 +29,7 @@ const PropertyFiltersSidebar = () => {
     const fetchServerData = async () => {
       setIsSearching(true);
       
-      const apiQueryPath = `type=${selectedType == 'apartment' ? 'house' : selectedType}&instant_book=${instantBook}`;
+      const apiQueryPath = `type=${selectedType}&instant_book=${instantBook}`;
 
       try {
         const response = await axios.get(`${uri}property/all?${apiQueryPath}`, {
@@ -62,24 +62,23 @@ const PropertyFiltersSidebar = () => {
 
   // 5. STEP 3: SAVE STATE AND ROUTE TO NEW PAGE
   const handleApplyFilters = () => {
-    if (currentFilteredResults.length === 0) {
-      alert("No properties found matching these criteria.");
-      return;
+    const params = new URLSearchParams();
+
+    if (selectedType) {
+      params.set("type", selectedType);
+    }
+    if (priceRange[0] > 0) {
+      params.set("min_price", priceRange[0]);
+    }
+    if (priceRange[1] < 500000000) {
+      params.set("max_price", priceRange[1]);
+    }
+    if (instantBook) {
+      params.set("instant_book", "true");
     }
 
-    // A. Save to sessionStorage to prevent loss on browser refresh
-    sessionStorage.setItem("filteredProperties", JSON.stringify(currentFilteredResults));
-
-    // B. Save to Redux Reducer (Optional: uncomment and update action matching your store setup)
-    /* 
-    dispatch({ 
-      type: "SET_FILTERED_PROPERTIES", 
-      payload: currentFilteredResults 
-    });
-    */
-
-    // C. Route the user to your dedicated properties listing/results page
-    navigate("/property/results"); // Update this string to match your layout router path (e.g., /properties or /buy)
+    // Redirect to property catalog page with filters
+    navigate(`/properties?${params.toString()}`);
   };
 
   const handleResetFilters = () => {

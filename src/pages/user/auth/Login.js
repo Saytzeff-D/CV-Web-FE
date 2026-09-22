@@ -18,6 +18,7 @@ const Login = () => {
 
   // Replace this with your actual agent subdomain endpoint URL
   const AGENT_SUBDOMAIN_URL = "https://agent.cvproperties.co"; 
+  const from = location.state?.returnUrl || "/user";
 
   useEffect(() => {    
     const params = new URLSearchParams(location.search);
@@ -39,9 +40,8 @@ const Login = () => {
       axios.post(`${uri}auth/login`, values)
       .then((res)=>{
         if (res.data?.role == "customer") {
-          sessionStorage.setItem("userToken", res.data.token);
-          sessionStorage.setItem("route", "/user");
-          navigate("/user");
+          sessionStorage.setItem("userToken", res.data.token);          
+          navigate(from, { replace: true, state: { autoSave: location.state?.autoSave } });
         } else {
           setIsLoading(false);
           setError("Access restricted: This portal is exclusively for registered CV Properties Buyers or Renters.");

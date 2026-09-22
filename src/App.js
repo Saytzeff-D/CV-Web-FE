@@ -1,15 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Home from './pages/user/main/Home';
-import About from './pages/user/main/About';
-import Contact from './pages/user/main/Contact';
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
-import Blog from './pages/user/main/Blog';
-import Buy from './pages/user/main/Buy';
-import Rent from './pages/user/main/Rent';
-import Shortlet from './pages/user/main/Shortlet';
-import ApartmentDetails from './pages/user/main/ApartmentDetails';
-import LandDetails from './pages/user/main/LandDetails';
+import Blog from './pages/Blog';
 import CreateAccount from './pages/user/auth/CreateAccount';
 import Login from './pages/user/auth/Login';
 import VerifyEmail from './pages/user/auth/VerifyEmail';
@@ -31,9 +26,10 @@ import HeroSection from './pages/user/dashboard/HeroSection';
 import EditProfile from './pages/user/dashboard/Profile';
 import MyFavoritesPage from './pages/user/dashboard/MyFavoritesPage';
 import TransactionHistory from './pages/user/dashboard/TransactionHistory';
-import All from './pages/user/main/All';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ServerDown from './pages/ServerDown';
+import PropertyCatalogMain from './pages/properties/catalog/PropertyCatalogMain';
+import PropertyDetailsMain from './pages/properties/details/PropertyDetailsMain';
 
 // GLOBAL INTERCEPTOR FOR DIRECT AXIOS CALLS
 axios.interceptors.response.use(
@@ -80,11 +76,8 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/blog' element={<Blog />} />
-        <Route path='/buy/:type' element={<Buy />} />        
-        <Route path='/rent/:type' element={<Rent />} />        
-        <Route path='/shortlet/:type' element={<Shortlet />} />   
-        <Route path='/apartment/:type/:id' element={<ApartmentDetails />} />
-        <Route path='/land/:type/:id' element={<LandDetails />} />  
+        <Route path='/properties' element={<PropertyCatalogMain />} />
+        <Route path='/property/:id' element={<PropertyDetailsMain />} />        
         <Route path='/create-account' element={<CreateAccount />} />  
         <Route path='/create-account/verify' element={<VerifyEmail />} /> 
         <Route path='/login' element={<Login />} />    
@@ -104,8 +97,7 @@ function App() {
           <Route path='/user/saved-searches' element={<MyFavoritesPage />} />
           <Route path='/user/profile' element={<EditProfile />} />
           <Route path='/user/transactions' element={<TransactionHistory />} />
-        </Route>
-        <Route path='/property/results' element={<All />} />
+        </Route>        
         <Route path='*' element={<NotFound />} />
         <Route path='/server-down' element={<ServerDown />} />
       </Routes>

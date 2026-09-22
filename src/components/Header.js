@@ -4,7 +4,7 @@ import {
   SearchOutlined, LocationOnOutlined, KeyboardArrowDownOutlined, MenuOutlined, 
   HomeOutlined, KeyOutlined, ApartmentOutlined, CorporateFareOutlined, 
   HotelOutlined, RoomServiceOutlined, InfoOutlined, BookOutlined, AlternateEmailOutlined,
-  LaunchOutlined
+  LaunchOutlined, DashboardOutlined
 } from "@mui/icons-material";
 import Logo from '../assets/icon.png'
 import { useDispatch, useSelector } from "react-redux";
@@ -191,36 +191,30 @@ const Header = () => {
             
             <Menu anchorEl={menuAnchor} open={isMenuOpen} onClose={() => setMenuAnchor(null)} TransitionComponent={Fade} anchorOrigin={{ vertical: "bottom", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} slotProps={{ paper: { sx: { mt: 1.5, borderRadius: "16px", width: "240px", p: 1 } } }}>
               <Typography variant="caption" sx={{ px: 2, py: 1, display: "block", color: "#9CA3AF", fontWeight: 700 }}>MARKETPLACE</Typography>
-              <MenuItem onClick={() => navigate('/buy/all')} sx={{ py: 1, borderRadius: "8px" }}>
+              <MenuItem onClick={() => navigate('/properties')} sx={{ py: 1, borderRadius: "8px" }}>
                 <ListItemIcon>
                   <HomeOutlined fontSize="small" />
-                </ListItemIcon> Buy Properties
-              </MenuItem>
-              <MenuItem onClick={() => navigate('/rent/all')} sx={{ py: 1, borderRadius: "8px" }}>
-                <ListItemIcon>
-                  <KeyOutlined fontSize="small" />
-                </ListItemIcon> Rent Listings
-              </MenuItem>
-              <MenuItem onClick={() => navigate('/shortlet/all')} sx={{ py: 1, borderRadius: "8px" }}>
+                </ListItemIcon> Explore All Properties
+              </MenuItem>              
+              <MenuItem onClick={() => navigate('/services')} sx={{ py: 1, borderRadius: "8px" }}>
                 <ListItemIcon>
                   <ApartmentOutlined fontSize="small" />
-                </ListItemIcon> Shortlets
+                </ListItemIcon> Verified Services
               </MenuItem>
-              {/* <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}>
+              <Divider sx={{ my: 1 }} />
+              <Typography variant="caption" sx={{ px: 2, py: 1, display: "block", color: "#9CA3AF", fontWeight: 700 }}>
+                PORTALS & DASHBOARDS
+              </Typography>
+              <MenuItem onClick={() => window.open('https://agent.cvproperties.co')} sx={{ py: 1, borderRadius: "8px" }}>
                 <ListItemIcon>
-                  <CorporateFareOutlined fontSize="small" />
-                </ListItemIcon> Hostels
+                  <DashboardOutlined fontSize="small" />
+                </ListItemIcon> Agent Portal
               </MenuItem>
-              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}>
+              <MenuItem onClick={() => navigate('/user/bookings')} sx={{ py: 1, borderRadius: "8px" }}>
                 <ListItemIcon>
-                  <HotelOutlined fontSize="small" />
-                </ListItemIcon> Hotels & Resorts
-              </MenuItem>
-              <MenuItem onClick={() => setMenuAnchor(null)} sx={{ py: 1, borderRadius: "8px" }}>
-                <ListItemIcon>
-                  <RoomServiceOutlined fontSize="small" />
-                </ListItemIcon> Premium Services
-              </MenuItem> */}
+                  <BookOutlined fontSize="small" />
+                </ListItemIcon> My Bookings
+              </MenuItem>              
               <Divider sx={{ my: 1 }} />
               <Typography variant="caption" sx={{ px: 2, py: 1, display: "block", color: "#9CA3AF", fontWeight: 700 }}>
                 COMPANY

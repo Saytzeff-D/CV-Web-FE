@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material";
 
 import HeroImage from "../../../assets/hero-image.png" // your image
-import GridDashboard from "../../../components/client-dashboard/GridDashboard";
+import GridDashboard from "../../../layouts/GridDashboard";
 import DashboardFooter from "../../../components/DashboardFooter";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";

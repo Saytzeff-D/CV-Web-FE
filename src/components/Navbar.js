@@ -71,37 +71,15 @@ const Navbar = () => {
                             About
                         </Link>
                     </li>
-                    <li className="nav-item px-md-3 dropdown">
-                        <Link className={`nav-link dropdown-toggle ${pathname.startsWith("/buy") ? "active-link" : ""}`} to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Buy
+                    <li className="nav-item px-md-3">
+                        <Link className={`nav-link ${pathname === "/properties" ? "active-link" : ""}`} to="/properties">
+                            Properties
                         </Link>
-                        <ul className="dropdown-menu">
-                            <li><Link className="dropdown-item" to="/buy/land">Land for sale</Link></li>
-                            <li><Link className="dropdown-item" to="/buy/house">Apartments for sale</Link></li>                            
-                            <li><Link className="dropdown-item" to="/buy/hostel">Hostels for sale</Link></li>
-                            <li><Link className="dropdown-item" to="/buy/all">All properties for sale</Link></li>
-                        </ul>
                     </li>
-                    <li className="nav-item px-md-3 dropdown">
-                        <Link className={`nav-link dropdown-toggle ${pathname.startsWith("/rent") ? "active-link" : ""}`} to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Rent
+                    <li className="nav-item px-md-3">
+                        <Link className={`nav-link ${pathname === "/services" ? "active-link" : ""}`} to="/services">
+                            Services
                         </Link>
-                        <ul className="dropdown-menu">                            
-                            <li><Link className="dropdown-item" to="/rent/house">Apartments for rent</Link></li>                            
-                            <li><Link className="dropdown-item" to="/rent/hostel">Hostels for rent</Link></li>
-                            <li><Link className="dropdown-item" to="/rent/all">All properties for rent</Link></li>
-                        </ul>
-                    </li>
-                    <li className="nav-item px-md-3 dropdown">
-                        <Link className={`nav-link dropdown-toggle ${pathname.startsWith("/shortlet") ? "active-link" : ""}`} to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Shortlet
-                        </Link>
-                        <ul className="dropdown-menu">
-                            <li><Link className="dropdown-item" to="/shortlet/oyo">Shortlet in Oyo</Link></li>
-                            <li><Link className="dropdown-item" to="/shortlet/abuja">Shortlet in Abuja</Link></li>                            
-                            <li><Link className="dropdown-item" to="/shortlet/lagos">Shortlet in Lagos</Link></li>
-                            <li><Link className="dropdown-item" to="/shortlet/all">All Shortlet</Link></li>
-                        </ul>
                     </li>
                     <li className="nav-item px-md-3">
                         <Link className={`nav-link ${pathname === "/blog" ? "active-link" : ""}`} to={'/blog'}>
