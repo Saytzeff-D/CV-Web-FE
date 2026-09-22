@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Chip, CircularProgress } from "@mui/material";
 import { LocationOnOutlined, AccessTime } from "@mui/icons-material";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
@@ -14,42 +14,94 @@ import PropertySidebarBooking from "./components/PropertySidebarBooking";
 import PropertyLocationAndTrust from "./components/PropertyLocationAndTrust";
 import Navbar from "../../../components/Navbar";
 
+// Import your unused PropertyNotFound component
+import PropertyNotFound from "./components/PropertyNotFound"; // <-- Update this import path to match your file location
+
 const PropertyDetailsMain = () => {
-  const { id } = useParams();
+  const { id } = useParams();  
   const uri = useSelector((state) => state.UriReducer?.uri);
 
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const [property, setProperty] = useState(null);
 
   useEffect(() => {
-    if (id) {
-      const realId = decodePropertyId(id);
-      fetchPropertyDetails(realId);
+    if (!id) {
+      setNotFound(true);
+      setLoading(false);
+      return;
     }
-  }, [id]);
 
-  // Unauthenticated public request
+    try {
+      const realId = decodePropertyId(id);
+
+      // If the ID was tampered with and decodePropertyId returned null/undefined/NaN
+      if (!realId || isNaN(Number(realId))) {
+        setNotFound(true);
+        setLoading(false);
+        return;
+      }
+
+      fetchPropertyDetails(realId);
+    } catch (decodeErr) {
+      console.warn("Invalid or tampered property ID parameter:", decodeErr);
+      setNotFound(true);
+      setLoading(false);
+    }
+  }, [id, uri]);
+
   const fetchPropertyDetails = async (propertyId) => {
     try {
       setLoading(true);
+      setNotFound(false);
+      
       const res = await axios.get(`${uri}property/${propertyId}`);
-      setProperty(res.data?.data || res.data);
+
+      const propData = res.data?.data || res.data;
+
+      if (!propData) {
+        setNotFound(true);
+      } else {
+        setProperty(propData);
+      }
     } catch (err) {
       console.error("Failed to load property details:", err);
+
+      // 404 (Not Found), 400 (Bad Request), or 422 (Unprocessable) -> Trigger Not Found
+      if (err.response?.status === 404 || err.response?.status === 400 || err.response?.status === 422) {
+        setNotFound(true);        
+      } else {
+        // Other unexpected errors (e.g. 500 server down) can also route to not-found
+        setNotFound(true);
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading && !property) {
+  // 1. Loading State
+  if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "80vh" }}>
+      <Box sx={{ minHeight: "100vh", bgcolor: "#FFFFFF" }}>
         <Navbar />
-        <CircularProgress sx={{ color: "#017E53" }} />
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "70vh" }}>
+          <CircularProgress sx={{ color: "#017E53" }} />
+        </Box>
       </Box>
     );
   }
 
+  // 2. Tampered ID or Property Not Found
+  if (notFound || !property) {
+    return (
+      <Box sx={{ minHeight: "100vh", bgcolor: "#FAFBFC" }}>
+        <Navbar />
+        <PropertyNotFound />
+      </Box>
+    );
+  }
+
+  // 3. Regular Property Details
   const type = (property?.type || "").toLowerCase().trim();
   const isHotel = type === "hotel";
   const isEventCenter = type === "event_center" || type === "event center";
@@ -69,7 +121,7 @@ const PropertyDetailsMain = () => {
     >
       <Navbar />
 
-      {/* 1. Header & Image Gallery with Save Feature */}
+      {/* 1. Header & Image Gallery */}
       <PropertyDetailsGallery property={property} />
 
       {/* 2. Main Details & Sidebar Layout */}
@@ -83,7 +135,6 @@ const PropertyDetailsMain = () => {
       >
         {/* Left Section */}
         <Box sx={{ minWidth: 0 }}>
-          {/* Top Pill and Availability Indicator */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1, flexWrap: "wrap" }}>
             <Chip
               label={
@@ -102,12 +153,10 @@ const PropertyDetailsMain = () => {
             </Typography>
           </Box>
 
-          {/* Property Name */}
           <Typography variant="h4" sx={{ fontWeight: 900, color: "#0F172A", fontSize: { xs: "24px", sm: "32px" }, mb: 1 }}>
             {property?.name}
           </Typography>
 
-          {/* Address */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.6, color: "#64748B", mb: 3.5 }}>
             <LocationOnOutlined sx={{ fontSize: 16, color: "#017E53" }} />
             <Typography variant="body2" sx={{ fontSize: "13px", fontWeight: 500 }}>
@@ -115,13 +164,10 @@ const PropertyDetailsMain = () => {
             </Typography>
           </Box>
 
-          {/* Dynamic Property Highlights Grid */}
           <PropertyHighlightsGrid property={property} />
 
-          {/* Hotel Specific: Room Types & Pricing */}
           {isHotel && <HotelRoomTypesSection rooms={property.room_types} />}
 
-          {/* Description Section */}
           <Box sx={{ mb: 4 }}>
             <Typography variant="h6" sx={{ fontWeight: 800, color: "#0F172A", fontSize: "16px", mb: 2 }}>
               {descriptionTitle}
@@ -146,14 +192,12 @@ const PropertyDetailsMain = () => {
             </Box>
           </Box>
 
-          {/* Dynamic Categorized or Pill Amenities */}
           {!isHotel && <CategorizedAmenitiesSection property={property} />}
 
-          {/* Location Map Insight & Trust Badge */}
           <PropertyLocationAndTrust property={property} />
         </Box>
 
-        {/* Right Section: Type-Specific Sidebar */}
+        {/* Right Section */}
         <PropertySidebarBooking property={property} />
       </Box>
     </Box>
