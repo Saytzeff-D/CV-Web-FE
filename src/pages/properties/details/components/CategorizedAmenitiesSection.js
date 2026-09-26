@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import {
   LightbulbOutlined,
   WaterDropOutlined,
@@ -10,146 +10,185 @@ import {
   LocalParkingOutlined,
   PoolOutlined,
   ElevatorOutlined,
+  AcUnitOutlined,
+  Wifi,
+  TvOutlined,
+  FitnessCenterOutlined,
+  LocalLaundryServiceOutlined,
+  CheckCircleOutline,
+  BalconyOutlined,
+  SpeakerOutlined,
+  BathtubOutlined,
+  LocalBarOutlined,
 } from "@mui/icons-material";
 
-const CATEGORIZED_DEFAULT = [
+// Categorization keyword rules
+const CATEGORY_MAP = [
   {
-    category: "COMFORT",
-    items: [
-      { name: "Smart Lighting System", icon: <LightbulbOutlined /> },
-      { name: "Water Heater & Treatment", icon: <WaterDropOutlined /> },
-      { name: "Fully Fitted Kitchen", icon: <KitchenOutlined /> },
+    category: "COMFORT & LIVING",
+    keywords: [
+      "air conditioning", "ac", "heater", "water heater", "kitchen", "refrigerator",
+      "microwave", "light", "lighting", "balcony", "furnished", "bed", "living", "bath", "bathroom"
     ],
   },
   {
     category: "SAFETY & UTILITIES",
-    items: [
-      { name: "24/7 Power Supply", icon: <Bolt /> },
-      { name: "CCTV Surveillance", icon: <VideocamOutlined /> },
-      { name: "Uniformed Security", icon: <SecurityOutlined /> },
+    keywords: [
+      "power", "electricity", "generator", "solar", "cctv", "security",
+      "guard", "water treatment", "water supply", "smoke detector", "fire extinguisher"
     ],
   },
   {
-    category: "ACCESS & FACILITIES",
-    items: [
-      { name: "Dedicated Underground Parking", icon: <LocalParkingOutlined /> },
-      { name: "Infinity Swimming Pool", icon: <PoolOutlined /> },
-      { name: "Private Elevator", icon: <ElevatorOutlined /> },
+    category: "ACCESS & RECREATION",
+    keywords: [
+      "parking", "pool", "swimming", "gym", "fitness", "elevator", "lift",
+      "wifi", "internet", "tv", "dstv", "sound", "speaker", "bar", "lounge", "laundry", "washing"
     ],
   },
 ];
 
+// Contextual Icon mapping based on amenity name
+const getAmenityIcon = (name = "") => {
+  const lower = name.toLowerCase();
+
+  if (lower.includes("ac") || lower.includes("air condition")) return <AcUnitOutlined />;
+  if (lower.includes("wifi") || lower.includes("internet")) return <Wifi />;
+  if (lower.includes("power") || lower.includes("electricity") || lower.includes("generator") || lower.includes("solar")) return <Bolt />;
+  if (lower.includes("cctv") || lower.includes("surveillance") || lower.includes("camera")) return <VideocamOutlined />;
+  if (lower.includes("security") || lower.includes("guard")) return <SecurityOutlined />;
+  if (lower.includes("pool") || lower.includes("swimming")) return <PoolOutlined />;
+  if (lower.includes("parking") || lower.includes("garage")) return <LocalParkingOutlined />;
+  if (lower.includes("gym") || lower.includes("fitness")) return <FitnessCenterOutlined />;
+  if (lower.includes("kitchen") || lower.includes("microwave") || lower.includes("fridge")) return <KitchenOutlined />;
+  if (lower.includes("elevator") || lower.includes("lift")) return <ElevatorOutlined />;
+  if (lower.includes("water")) return <WaterDropOutlined />;
+  if (lower.includes("light")) return <LightbulbOutlined />;
+  if (lower.includes("tv") || lower.includes("dstv") || lower.includes("cable")) return <TvOutlined />;
+  if (lower.includes("laundry") || lower.includes("washer") || lower.includes("dryer")) return <LocalLaundryServiceOutlined />;
+  if (lower.includes("balcony") || lower.includes("terrace")) return <BalconyOutlined />;
+  if (lower.includes("sound") || lower.includes("speaker") || lower.includes("audio")) return <SpeakerOutlined />;
+  if (lower.includes("bar") || lower.includes("lounge")) return <LocalBarOutlined />;
+  if (lower.includes("bath") || lower.includes("shower") || lower.includes("tub")) return <BathtubOutlined />;
+
+  return <CheckCircleOutline />;
+};
+
+// Auto-group flat array of strings into mapped categories
+const categorizeAmenities = (items) => {
+  const groups = {
+    "COMFORT & LIVING": [],
+    "SAFETY & UTILITIES": [],
+    "ACCESS & RECREATION": [],
+    "OTHER AMENITIES": [],
+  };
+
+  items.forEach((item) => {
+    const rawName = typeof item === "string" ? item : item?.name;
+    if (!rawName) return;
+
+    const lower = rawName.toLowerCase();
+    let matchedCategory = null;
+
+    for (const rule of CATEGORY_MAP) {
+      if (rule.keywords.some((k) => lower.includes(k))) {
+        matchedCategory = rule.category;
+        break;
+      }
+    }
+
+    if (matchedCategory) {
+      groups[matchedCategory].push(rawName);
+    } else {
+      groups["OTHER AMENITIES"].push(rawName);
+    }
+  });
+
+  // Filter out categories that have no items
+  return Object.entries(groups)
+    .filter(([_, groupItems]) => groupItems.length > 0)
+    .map(([category, groupItems]) => ({ category, items: groupItems }));
+};
+
 const CategorizedAmenitiesSection = ({ property }) => {
+  const rawList = property?.amenities || [];
   const type = (property?.type || "").toLowerCase().trim();
-  const amenitiesList = property?.amenities || [];
-  const isApartment = type === "apartment" || type === "house";
 
-  const title = type === "event_center" ? "Event Facilities & Amenities" : "Amenities";
+  // Clean strings
+  const stringAmenities = rawList
+    .map((item) => (typeof item === "string" ? item.trim() : item?.name?.trim()))
+    .filter(Boolean);
 
-  if (isApartment) {
-    return (
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ fontWeight: 800, color: "#0F172A", fontSize: "16px", mb: 2.5 }}>
-          {title}
-        </Typography>
-
-        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" }, gap: 3 }}>
-          {CATEGORIZED_DEFAULT.map((cat, idx) => (
-            <Box key={idx}>
-              <Typography
-                variant="caption"
-                sx={{ color: "#017E53", fontWeight: 800, fontSize: "11px", letterSpacing: "0.5px", display: "block", mb: 1.5 }}
-              >
-                {cat.category}
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                {cat.items.map((item, i) => (
-                  <Box key={i} sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
-                    <Box sx={{ color: "#017E53", display: "flex", "& svg": { fontSize: 18 } }}>{item.icon}</Box>
-                    <Typography variant="body2" sx={{ color: "#334155", fontSize: "12.5px", fontWeight: 600 }}>
-                      {item.name}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          ))}
-        </Box>
-
-        <Button
-          variant="outlined"
-          size="small"
-          sx={{
-            mt: 3,
-            textTransform: "none",
-            color: "#334155",
-            borderColor: "#CBD5E1",
-            borderRadius: "10px",
-            fontWeight: 700,
-            fontSize: "12px",
-            px: 2,
-            py: 0.8,
-            "&:hover": { borderColor: "#94A3B8" },
-          }}
-        >
-          Show all 18 amenities
-        </Button>
-      </Box>
-    );
+  // Return nothing or clean notice if the API sends empty array
+  if (stringAmenities.length === 0) {
+    return null;
   }
 
-  // Standard Pill Layout (Event Centers, Hostels, Hotels)
-  const fallbackList = [
-    "24/7 Electricity",
-    "Bar",
-    "Bridal Suite",
-    "Catering Kitchen",
-    "CCTV Surveillance",
-    "Dance Floor",
-    "Air Conditioning",
-    "Sound System",
-  ];
+  const title =
+    type === "event_center" || type === "event center"
+      ? "Event Facilities & Amenities"
+      : "Amenities & Features";
 
-  const displayList = amenitiesList.length > 0 ? amenitiesList.map((a) => (typeof a === "string" ? a : a.name)) : fallbackList;
+  const groupedAmenities = categorizeAmenities(stringAmenities);
 
   return (
     <Box sx={{ mb: 4 }}>
-      <Typography variant="h6" sx={{ fontWeight: 800, color: "#0F172A", fontSize: "16px", mb: 2 }}>
-        {title}
+      <Typography variant="h6" sx={{ fontWeight: 800, color: "#0F172A", fontSize: "16px", mb: 2.5 }}>
+        {title} ({stringAmenities.length})
       </Typography>
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }, gap: 1.5 }}>
-        {displayList.map((item, idx) => (
-          <Box
-            key={idx}
-            sx={{
-              p: 1.6,
-              borderRadius: "14px",
-              bgcolor: "#F8FAFC",
-              display: "flex",
-              alignItems: "center",
-              gap: 1.2,
-              border: "1px solid #F1F5F9",
-            }}
-          >
-            <Box
+
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: groupedAmenities.length > 1 ? "repeat(2, 1fr)" : "1fr",
+            md: groupedAmenities.length >= 3 ? "repeat(3, 1fr)" : `repeat(${groupedAmenities.length}, 1fr)`,
+          },
+          gap: 3,
+        }}
+      >
+        {groupedAmenities.map((group, idx) => (
+          <Box key={idx}>
+            <Typography
+              variant="caption"
               sx={{
-                width: 28,
-                height: 28,
-                borderRadius: "50%",
-                bgcolor: "#ECFDF5",
                 color: "#017E53",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "12px",
                 fontWeight: 800,
+                fontSize: "11px",
+                letterSpacing: "0.5px",
+                display: "block",
+                mb: 1.5,
               }}
             >
-              ✓
-            </Box>
-            <Typography variant="body2" sx={{ fontWeight: 700, color: "#334155", fontSize: "12.5px" }}>
-              {item}
+              {group.category}
             </Typography>
+
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+              {group.items.map((itemName, i) => (
+                <Box key={i} sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
+                  <Box
+                    sx={{
+                      color: "#017E53",
+                      display: "flex",
+                      alignItems: "center",
+                      "& svg": { fontSize: 18 },
+                    }}
+                  >
+                    {getAmenityIcon(itemName)}
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#334155",
+                      fontSize: "13px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {itemName}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
           </Box>
         ))}
       </Box>

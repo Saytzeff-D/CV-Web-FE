@@ -10,12 +10,14 @@ import {
   ChevronRight,
   BookmarkBorder,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const formatNgn = (val) => `₦${Math.round(Number(val || 0)).toLocaleString("en-NG")}`;
 
 const PropertySidebarBooking = ({ property }) => {
   const type = (property?.type || "").toLowerCase().trim();
   const price = property?.total_price || property?.base_price || 500000;
+  const navigate = useNavigate()
   const cautionFee = property?.caution_fee || property?.caution_deposit || property?.security_deposit || 150000;
 
   const ownerName = [property?.owner_firstname, property?.owner_lastname].filter(Boolean).join(" ") || "Segun Arinze";
@@ -274,7 +276,7 @@ const PropertySidebarBooking = ({ property }) => {
         <Typography variant="body2" sx={{ color: "#64748B", fontSize: "12px", mb: 2 }}>
           Explore 24+ similar luxury listings in the Lagos.
         </Typography>
-        <Button endIcon={<ChevronRight />} sx={{ color: "#017E53", fontWeight: 800, fontSize: "12.5px", textTransform: "none", p: 0 }}>
+        <Button onClick={()=> navigate(`/properties?type=${property.type}`)} endIcon={<ChevronRight />} sx={{ color: "#017E53", fontWeight: 800, fontSize: "12.5px", textTransform: "none", p: 0 }}>
           View Comparable Units
         </Button>
       </Paper>

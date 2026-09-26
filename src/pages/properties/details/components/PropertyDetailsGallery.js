@@ -18,13 +18,13 @@ import {
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { RWebShare } from "react-web-share";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 const PropertyDetailsGallery = ({ property }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const dispatch = useDispatch();
   const currency = useSelector((state) => state.CurrencyReducer.currency);
   const rates = useSelector((state) => state.CurrencyReducer.rates);
   const uri = useSelector((state) => state.UriReducer?.uri);
@@ -38,6 +38,7 @@ const PropertyDetailsGallery = ({ property }) => {
 
   // Synchronize count and inspect the backend's injected saved array
   useEffect(() => {
+    const savedList = property?.saved_by_users || [];        
     if (location.state?.autoSave && token && property?.id) {
       handleSaveToggle();
       // Clear history state so a page refresh doesn't trigger it again
@@ -47,34 +48,30 @@ const PropertyDetailsGallery = ({ property }) => {
       setSavesCount(property.saves_count);
     }
     
-    if (!token || !currentUser?.id) {
+    if (!token) {
       setIsSaved(false);
       return;
     }
+    axios.get(`${uri}auth/me`, {
+        headers: { Authorization: `Bearer ${token}` }
+    })
+    .then((res)=>{                        
+        dispatch({ type: 'SET_USER_INFO', payload: res.data.account })       
+        const hasSaved = Array.isArray(savedList)
+          ? savedList.some((item) => Number(item) === currentUser.id)
+          : Boolean(property?.is_saved ?? property?.saved);
+        setIsSaved(hasSaved);        
+    })
+    .catch((err)=>{
+        console.error("Error fetching user info:", err);
+        sessionStorage.removeItem('userToken')
+        sessionStorage.removeItem('avatar')        
+    })
 
     // Injected array from backend: supports numbers [1, 2], strings ['1', '2'], or objects [{ user_id: 1 }]
-    const savedList =
-      property?.saved_by_users ||
-      property?.saved_users ||
-      property?.saved_by ||
-      [];
 
-    const currentUserId = Number(currentUser.id);
-
-    const hasSaved = Array.isArray(savedList)
-      ? savedList.some((item) => {
-          if (typeof item === "number" || typeof item === "string") {
-            return Number(item) === currentUserId;
-          }
-          return (
-            Number(item?.user_id || item?.id) === currentUserId ||
-            item?.email === currentUser.email
-          );
-        })
-      : Boolean(property?.is_saved ?? property?.saved);
-
-    setIsSaved(hasSaved);
-  }, [property, currentUser]);
+      
+  }, [property, dispatch, location.state?.autoSave, token, uri, axios]);
 
   // Handle Save / Unsave Action
   const handleSaveToggle = async () => {   

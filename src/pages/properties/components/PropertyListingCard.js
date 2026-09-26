@@ -139,7 +139,7 @@ const PropertyListingCard = ({ property }) => {
   // Suffix formatting matching Figma
   const priceSuffix =
     pricing_type
-      ? `/ per ${pricing_type}`
+      ? `/ ${pricing_type}`
       : category === "rent"
       ? "/ per year"
       : category === "shortlet"

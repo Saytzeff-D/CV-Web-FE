@@ -120,7 +120,7 @@ const DashboardHeader = () => {
               {currentUser?.firstname} {currentUser?.lastname}
             </Typography>
             <Typography fontSize={12} color="text.secondary">
-              Pro Member
+              {currentUser?.role.charAt(0).toUpperCase() + currentUser?.role.slice(1)}
             </Typography>
           </Box>
 

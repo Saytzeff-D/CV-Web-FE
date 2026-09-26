@@ -70,9 +70,7 @@ const Bookings = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        console.log(res.data)
-        // Fallback protections to secure execution if data layout properties vary
-        setBookings(res.data.bookings);        
+        setBookings(res.data.bookings || []);        
         if (res.data.metrics) {
           setMetrics(res.data.metrics);
         }
@@ -105,7 +103,7 @@ const Bookings = () => {
   const stats = [
     {
       title: "TOTAL BOOKINGS",
-      value: metrics?.total_bookings?.count,
+      value: metrics?.total_bookings?.count ?? 0,
       icon: <CalendarMonthOutlined />,
       iconColor: "#2563EB",
       trend: metrics?.total_bookings?.change,
@@ -114,7 +112,7 @@ const Bookings = () => {
     },
     {
       title: "UPCOMING CHECK-INS",
-      value: metrics?.upcoming_checkins?.count,
+      value: metrics?.upcoming_checkins?.count ?? 0,
       icon: <AccessTimeOutlined />,
       iconColor: "#F97316",
       trend: metrics?.upcoming_checkins?.change,
@@ -123,7 +121,7 @@ const Bookings = () => {
     },
     {
       title: "PENDING REQUESTS",
-      value: metrics?.pending_requests?.count,
+      value: metrics?.pending_requests?.count ?? 0,
       icon: <ChatBubbleOutlineRounded />,
       iconColor: "#A855F7",
       trend: metrics?.pending_requests?.change,
@@ -132,7 +130,7 @@ const Bookings = () => {
     },
     {
       title: "COMPLETED THIS MONTH",
-      value: metrics?.completed_this_month?.count,
+      value: metrics?.completed_this_month?.count ?? 0,
       icon: <CheckCircleOutlineRounded />,
       iconColor: "#16A34A",
       trend: metrics?.completed_this_month?.change,
@@ -143,7 +141,7 @@ const Bookings = () => {
 
   // 5. CLIENT-SIDE FILTER TIMELINE EVALUATION
   const filteredBookings = bookings.filter((item) => {
-    if (filterTime === "Today") return true; // Adjust matching parameters if your API passes detailed timestamp fields
+    if (filterTime === "Today") return true;
     return true; 
   });
 
@@ -165,7 +163,7 @@ const Bookings = () => {
   const handleTabChange = (tab) => {
     setFilterTime(tab);
     setPage(1);
-    setSelectedRows([]); // Clear checks on navigation view mutation loops
+    setSelectedRows([]);
   };
 
   // 7. LOADING FEEDBACK GATEWAY GUARD
@@ -178,18 +176,34 @@ const Bookings = () => {
   }
 
   return (
-    <div className="mt-4 wrapper-box">
-      <Typography variant="h4" fontWeight={700}>
+    <Box
+      className="mt-4 wrapper-box"
+      sx={{
+        width: "100%",
+        maxWidth: "100vw", // Enforces strict screen bounds
+        overflowX: "hidden", // Cuts off negative margins from Bootstrap .row
+        boxSizing: "border-box",
+        px: { xs: 1.5, sm: 2, md: 0 }, // Prevents cards touching edge on mobile
+      }}
+    >
+      <Typography variant="h4" fontWeight={700} sx={{ fontSize: { xs: "22px", sm: "28px" } }}>
         Bookings
       </Typography>
-      <Typography color="text.secondary" mb={4}>
+      <Typography color="text.secondary" mb={3} sx={{ fontSize: { xs: "13px", sm: "14px" } }}>
         Manage and track all property reservations and service requests.
       </Typography>
 
-      {/* METRIC CARDS OVERVIEW PANEL */}
-      <div className="row g-4">
+      {/* METRIC CARDS: Use m: 0 and gutter padding to eliminate Bootstrap negative margins */}
+      <Box
+        className="row g-3"
+        sx={{
+          mx: 0,
+          width: "100%",
+          mb: 3,
+        }}
+      >
         {stats.map((item) => (
-          <div className="col-lg-3 col-md-6" key={item.title}>
+          <div className="col-12 col-sm-6 col-lg-3 px-1" key={item.title}>
             <Card
               elevation={0}
               sx={{
@@ -200,46 +214,79 @@ const Bookings = () => {
                 "&:hover": { boxShadow: "0 8px 24px rgba(0,0,0,.08)" },
               }}
             >
-              <CardContent>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
-                  <Avatar sx={{ bgcolor: `${item.iconColor}15`, color: item.iconColor, width: 46, height: 46 }}>
+              <CardContent sx={{ p: 2 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
+                  <Avatar sx={{ bgcolor: `${item.iconColor}15`, color: item.iconColor, width: 42, height: 42 }}>
                     {item.icon}
                   </Avatar>
-                  <Chip
-                    size="small"
-                    label={item.trend}
-                    icon={item.trendIcon || undefined}
-                    sx={{
-                      bgcolor: item.trendColor === "#16A34A" ? "#ECFDF3" : "#F3F4F6",
-                      color: item.trendColor,
-                      fontWeight: 600,
-                      fontSize: 11,
-                    }}
-                  />
+                  {item.trend && (
+                    <Chip
+                      size="small"
+                      label={item.trend}
+                      icon={item.trendIcon || undefined}
+                      sx={{
+                        bgcolor: item.trendColor === "#16A34A" ? "#ECFDF3" : "#F3F4F6",
+                        color: item.trendColor,
+                        fontWeight: 600,
+                        fontSize: 11,
+                      }}
+                    />
+                  )}
                 </Stack>
                 <Typography variant="caption" sx={{ color: "#98A2B3", fontWeight: 700, letterSpacing: ".5px" }}>
                   {item.title}
                 </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 700, mt: .5, color: "#111827" }}>
+                <Typography variant="h5" sx={{ fontWeight: 700, mt: 0.5, color: "#111827" }}>
                   {item.value}
                 </Typography>
               </CardContent>
             </Card>
           </div>
         ))}
-      </div>
+      </Box>
 
-      {/* ACTION FILTERS TOOLBAR BAR CONTAINER */}
-      <Box sx={{ bgcolor: "#fff", border: "1px solid #ECECEC", borderRadius: "16px", p: 2, my: 4 }}>
-        <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 2 }}>
-          <Box sx={{ bgcolor: "#F9FAFB", p: 0.5, borderRadius: "50px", display: "flex", gap: 0.5 }}>
+      {/* ACTION FILTERS TOOLBAR CONTAINER */}
+      <Box
+        sx={{
+          bgcolor: "#fff",
+          border: "1px solid #ECECEC",
+          borderRadius: "16px",
+          p: { xs: 1.5, sm: 2 },
+          mb: 3,
+          width: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            justifyContent: "space-between",
+            alignItems: { xs: "stretch", sm: "center" },
+            gap: 1.5,
+          }}
+        >
+          {/* Scrollable pill filter bar on mobile */}
+          <Box
+            sx={{
+              bgcolor: "#F9FAFB",
+              p: 0.5,
+              borderRadius: "50px",
+              display: "flex",
+              gap: 0.5,
+              overflowX: "auto",
+              maxWidth: "100%",
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
             {["Today", "This week", "This month"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}
-                className="btn rounded-pill px-3 py-1.5 border-0"
+                className="btn rounded-pill px-3 py-1 border-0"
                 style={{
-                  fontSize: "13px",
+                  fontSize: "12px",
+                  whiteSpace: "nowrap",
                   fontWeight: filterTime === tab ? "600" : "400",
                   backgroundColor: filterTime === tab ? "#fff" : "transparent",
                   color: filterTime === tab ? "#111827" : "#6B7280",
@@ -251,160 +298,230 @@ const Bookings = () => {
             ))}
           </Box>
 
-          <Box sx={{ display: "flex", gap: 2 }}>
-            {/* <button className="btn btn-outline-dark rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-semibold border-light-subtle" style={{ fontSize: "14px" }}>
-              <FileDownloadOutlined fontSize="small" /> Export CSV
-            </button> */}
-            <button className="btn btn-dark rounded-pill px-4 py-2 d-flex align-items-center gap-2 fw-semibold" style={{ fontSize: "14px" }}>
-              <Add fontSize="small" /> Delete Selected
-            </button>
-          </Box>
+          <button
+            className="btn btn-dark rounded-pill px-3 py-1.5 d-flex align-items-center justify-content-center gap-1.5 fw-semibold"
+            style={{ fontSize: "12.5px" }}
+            disabled={selectedRows.length === 0}
+          >
+            <Add fontSize="small" /> Delete Selected ({selectedRows.length})
+          </button>
         </Box>
       </Box>
 
-      {/* CORE DATA TABLE WITH ENABLED SWIPING OVERFLOW */}
-      <TableContainer
-        component={Paper}
-        elevation={0}
-        sx={{ width: "100%", overflowX: "auto", borderRadius: "16px", border: "1px solid #ECECEC", mb: 5 }}
+      {/* ISOLATED TABLE OVERFLOW WRAPPER */}
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "100%",
+          minWidth: 0, // CRITICAL: forces flex child to respect parent width rather than table child width
+          overflow: "hidden",
+          borderRadius: "16px",
+          border: "1px solid #ECECEC",
+          bgcolor: "#FFFFFF",
+          mb: 5,
+        }}
       >
-        <Table sx={{ minWidth: 850 }}>
-          <TableHead sx={{ bgcolor: "#FAFAFA" }}>
-            <TableRow sx={{ borderBottom: "1px solid #ECECEC" }}>
-              <TableCell padding="checkbox" sx={{ pl: 3, width: "50px" }}>
-                <Checkbox
-                  size="small"
-                  checked={paginatedBookings.length > 0 && selectedRows.length === paginatedBookings.length}
-                  indeterminate={selectedRows.length > 0 && selectedRows.length < paginatedBookings.length}
-                  onChange={handleSelectAll}
-                  sx={{ color: "#D1D5DB", "&.Mui-checked": { color: "#111827" } }}
-                />
-              </TableCell>
-              <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>BOOKING INFO</TableCell>
-              <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>TYPE</TableCell>
-              <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>AGENT</TableCell>
-              <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>DATE & TIME</TableCell>
-              <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>AMOUNT</TableCell>
-              <TableCell sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280" }}>STATUS</TableCell>
-              {/* <TableCell align="right" sx={{ fontSize: "12px", fontWeight: 700, color: "#6B7280", pr: 3 }}>ACTIONS</TableCell> */}
-            </TableRow>
-          </TableHead>
+        <TableContainer
+          sx={{
+            width: "100%",
+            maxWidth: "100%",
+            overflowX: "auto",
+            display: "block",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          <Table sx={{ minWidth: 700, width: "100%" }}>
+            <TableHead sx={{ bgcolor: "#FAFAFA" }}>
+              <TableRow sx={{ borderBottom: "1px solid #ECECEC" }}>
+                <TableCell padding="checkbox" sx={{ pl: 2, width: "40px" }}>
+                  <Checkbox
+                    size="small"
+                    checked={paginatedBookings.length > 0 && selectedRows.length === paginatedBookings.length}
+                    indeterminate={selectedRows.length > 0 && selectedRows.length < paginatedBookings.length}
+                    onChange={handleSelectAll}
+                    sx={{ color: "#D1D5DB", "&.Mui-checked": { color: "#111827" } }}
+                  />
+                </TableCell>
+                <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", whiteSpace: "nowrap" }}>BOOKING INFO</TableCell>
+                <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", whiteSpace: "nowrap" }}>TYPE</TableCell>
+                <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", whiteSpace: "nowrap" }}>AGENT</TableCell>
+                <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", whiteSpace: "nowrap" }}>DATE & TIME</TableCell>
+                <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", whiteSpace: "nowrap" }}>AMOUNT</TableCell>
+                <TableCell sx={{ fontSize: "11px", fontWeight: 700, color: "#6B7280", whiteSpace: "nowrap" }}>STATUS</TableCell>
+              </TableRow>
+            </TableHead>
 
-          <TableBody>
-            {paginatedBookings.length > 0 ? (
-              paginatedBookings.map((row) => {
-                const isChecked = selectedRows.includes(row.id);
-                const statusTheme = getStatusStyles(row.status);
+            <TableBody>
+              {paginatedBookings.length > 0 ? (
+                paginatedBookings.map((row) => {
+                  const isChecked = selectedRows.includes(row.id);
+                  const statusTheme = getStatusStyles(row.status);
 
-                return (
-                  <TableRow key={row.id} hover selected={isChecked} sx={{ borderBottom: "1px solid #F9FAFB" }}>
-                    <TableCell padding="checkbox" sx={{ pl: 3 }}>
-                      <Checkbox
-                        size="small"
-                        checked={isChecked}
-                        onChange={() => handleSelectRow(row.id)}
-                        sx={{ color: "#D1D5DB", "&.Mui-checked": { color: "#111827" } }}
-                      />
-                    </TableCell>
+                  return (
+                    <TableRow key={row.id} hover selected={isChecked} sx={{ borderBottom: "1px solid #F9FAFB" }}>
+                      <TableCell padding="checkbox" sx={{ pl: 2 }}>
+                        <Checkbox
+                          size="small"
+                          checked={isChecked}
+                          onChange={() => handleSelectRow(row.id)}
+                          sx={{ color: "#D1D5DB", "&.Mui-checked": { color: "#111827" } }}
+                        />
+                      </TableCell>
 
-                    <TableCell sx={{ py: 2 }}>
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        <Box sx={{ width: 44, height: 44, bgcolor: "#E5E7EB", borderRadius: "8px", flexShrink: 0, backgroundImage: `url(${row.image})`, backgroundSize: 'cover' }} />
-                        <Box>
-                          <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#111827", fontSize: "14px", lineHeight: 1.2 }}>
-                            {row.display_name}
-                          </Typography>
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "#9CA3AF", mt: 0.5 }}>
-                            <LocationOnOutlined sx={{ fontSize: 14 }} />
-                            <Typography variant="caption" sx={{ fontSize: "12px" }}>{row.location}</Typography>
+                      <TableCell sx={{ py: 1.5, minWidth: 200 }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                          <Box
+                            sx={{
+                              width: 40,
+                              height: 40,
+                              bgcolor: "#E5E7EB",
+                              borderRadius: "8px",
+                              flexShrink: 0,
+                              backgroundImage: `url(${row.image})`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                            }}
+                          />
+                          <Box sx={{ minWidth: 0 }}>
+                            <Typography
+                              variant="subtitle2"
+                              sx={{
+                                fontWeight: 700,
+                                color: "#111827",
+                                fontSize: "13px",
+                                lineHeight: 1.2,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                maxWidth: 160,
+                              }}
+                            >
+                              {row.display_name}
+                            </Typography>
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "#9CA3AF", mt: 0.3 }}>
+                              <LocationOnOutlined sx={{ fontSize: 13, flexShrink: 0 }} />
+                              <Typography variant="caption" sx={{ fontSize: "11px" }} noWrap>
+                                {row.location}
+                              </Typography>
+                            </Box>
                           </Box>
                         </Box>
-                      </Box>
-                    </TableCell>
+                      </TableCell>
 
-                    <TableCell>
-                      <Box component="span" sx={{ px: 1.5, py: 0.5, borderRadius: "50px", fontSize: "11px", fontWeight: 700, backgroundColor: row.typeColor || "#F3F4F6", color: row.typeTextColor || "#4B5563" }}>
-                        {row.type}
-                      </Box>
-                    </TableCell>
+                      <TableCell sx={{ whiteSpace: "nowrap" }}>
+                        <Box
+                          component="span"
+                          sx={{
+                            px: 1.5,
+                            py: 0.4,
+                            borderRadius: "50px",
+                            fontSize: "11px",
+                            fontWeight: 700,
+                            backgroundColor: row.typeColor || "#F3F4F6",
+                            color: row.typeTextColor || "#4B5563",
+                          }}
+                        >
+                          {row.type}
+                        </Box>
+                      </TableCell>
 
-                    <TableCell>
-                      <Box>
-                        <Typography variant="body2" sx={{ fontWeight: 700, color: "#111827", fontSize: "14px" }}>
-                          {row.agent.name}
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: "#9CA3AF", display: "block" }}>
-                          {row.agent.email}
-                        </Typography>
-                      </Box>
-                    </TableCell>
+                      <TableCell sx={{ minWidth: 150 }}>
+                        <Box sx={{ minWidth: 0 }}>
+                          <Typography variant="body2" sx={{ fontWeight: 700, color: "#111827", fontSize: "12.5px" }} noWrap>
+                            {row.agent?.name}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: "#9CA3AF", display: "block", fontSize: "10.5px" }} noWrap>
+                            {row.agent?.email}
+                          </Typography>
+                        </Box>
+                      </TableCell>
 
-                    <TableCell sx={{ color: "#4B5563", fontSize: "14px" }}>{row.date_time}</TableCell>
-                    <TableCell sx={{ fontWeight: 700, color: "#111827", fontSize: "14px" }}>{row.amount}</TableCell>
+                      <TableCell sx={{ color: "#4B5563", fontSize: "12.5px", whiteSpace: "nowrap" }}>
+                        {row.date_time}
+                      </TableCell>
 
-                    <TableCell>
-                      <Box>
-                        <Chip label={row.status} size="small" sx={{ fontSize: "11px", fontWeight: 600, height: "22px", backgroundColor: statusTheme.bg, color: statusTheme.text }} />                        
-                      </Box>
-                    </TableCell>
+                      <TableCell sx={{ fontWeight: 700, color: "#111827", fontSize: "12.5px", whiteSpace: "nowrap" }}>
+                        {row.amount}
+                      </TableCell>
 
-                    {/* <TableCell align="right" sx={{ pr: 3 }}>
-                      <IconButton size="small" sx={{ color: "#9CA3AF" }}>
-                        <ChevronRight fontSize="small" />
-                      </IconButton>
-                    </TableCell> */}
-                  </TableRow>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={8} align="center" sx={{ py: 8 }}>
-                  <Typography color="text.secondary">No reservations found matching your specifications.</Typography>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+                      <TableCell sx={{ whiteSpace: "nowrap" }}>
+                        <Chip
+                          label={row.status}
+                          size="small"
+                          sx={{
+                            fontSize: "10.5px",
+                            fontWeight: 600,
+                            height: "22px",
+                            backgroundColor: statusTheme.bg,
+                            color: statusTheme.text,
+                          }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={7} align="center" sx={{ py: 6 }}>
+                    <Typography color="text.secondary" sx={{ fontSize: "13px" }}>
+                      No reservations found matching your specifications.
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-        {/* DYNAMIC CALCULATION PAGINATION SLIDER ROW CONTROLS */}
-        <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", px: 3, py: 2, bgcolor: "#ffffff", borderTop: "1px solid #ECECEC", gap: 2 }}>
-          <Typography variant="body2" sx={{ color: "#6B7280", fontSize: "14px" }}>
-            Rows per page: <Box component="span" sx={{ color: "#111827", fontWeight: 600, mr: 4 }}>{rowsPerPage}</Box>
-            Showing {filteredBookings.length === 0 ? 0 : startIndex + 1}-{Math.min(startIndex + rowsPerPage, filteredBookings.length)} of {filteredBookings.length} results
+        {/* PAGINATION */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            justifyContent: "space-between",
+            alignItems: "center",
+            px: { xs: 2, sm: 3 },
+            py: 2,
+            bgcolor: "#ffffff",
+            borderTop: "1px solid #ECECEC",
+            gap: 1.5,
+          }}
+        >
+          <Typography variant="body2" sx={{ color: "#6B7280", fontSize: "12px" }}>
+            Showing {filteredBookings.length === 0 ? 0 : startIndex + 1}-
+            {Math.min(startIndex + rowsPerPage, filteredBookings.length)} of {filteredBookings.length} results
           </Typography>
-          
+
           {totalPages > 1 && (
-            <Box>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={(e, value) => setPage(value)}
-                shape="rounded"
-                size="medium"
-                sx={{
-                  "& .MuiPaginationItem-root": {
-                    fontWeight: 600,
-                    fontSize: "13px",
-                    borderRadius: "8px",
-                    border: "1px solid #E5E7EB",
-                    mx: 0.5,
-                    background: "#fff",
-                    "&.Mui-selected": {
-                      backgroundColor: "#000000",
-                      color: "#ffffff",
-                      borderColor: "#000000",
-                      "&:hover": { backgroundColor: "#1F2937" },
-                    },
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={(e, value) => setPage(value)}
+              shape="rounded"
+              size="small"
+              sx={{
+                "& .MuiPaginationItem-root": {
+                  fontWeight: 600,
+                  fontSize: "12px",
+                  borderRadius: "8px",
+                  border: "1px solid #E5E7EB",
+                  mx: 0.3,
+                  background: "#fff",
+                  "&.Mui-selected": {
+                    backgroundColor: "#000000",
+                    color: "#ffffff",
+                    borderColor: "#000000",
+                    "&:hover": { backgroundColor: "#1F2937" },
                   },
-                }}
-              />
-            </Box>
+                },
+              }}
+            />
           )}
         </Box>
-      </TableContainer>
+      </Box>
 
       <DashboardFooter />
-    </div>
+    </Box>
   );
 };
 
